@@ -39,6 +39,8 @@ dependencies:
   get_it: ^8.0.3
   shared_preferences: ^2.5.3
   either_dart: ^1.0.0
+  equatable: ^2.0.7
+  bloc: ^9.0.0
 
 dev_dependencies:
   flutter_test:
