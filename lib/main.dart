@@ -1,6 +1,18 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+import 'core/di/service_locator.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  if (kReleaseMode) {
+    await dotenv.load(fileName: '.env.prod');
+  } else {
+    await dotenv.load(fileName: '.env.dev');
+  }
+
+  setupServiceLocator();
   runApp(const MyApp());
 }
 
