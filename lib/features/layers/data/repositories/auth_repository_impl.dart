@@ -24,9 +24,9 @@ class AuthenticationRepositoryImpl implements IAuthenticationRepository {
 
   @override
   Future<Either<String, String>> register(String email, String password,
-      String confirmPassword, String name) async {
+      String name) async {
     try {
-      await _datasource.register(email, password, confirmPassword, name);
+      await _datasource.register(email, password, name);
       return Right('Done');
     } on ApiException catch (ex) {
       return Left("${ex.message}");

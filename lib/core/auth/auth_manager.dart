@@ -11,6 +11,22 @@ class AuthManager {
     authChangeNotifier.value = token;
   }
 
+  static void saveId(String id) async {
+    _sharedPreferences.setString('user_id', id);
+  }
+
+  static String getId() {
+    return _sharedPreferences.getString('user_id') ?? '';
+  }
+
+  static void saveUsername(String username) {
+    _sharedPreferences.setString('username', username);
+  }
+
+  static String getUsername() {
+    return _sharedPreferences.getString('username') ?? '';
+  }
+
   static String readAuth() {
     return _sharedPreferences.getString('access_token') ?? '';
   }
@@ -18,5 +34,10 @@ class AuthManager {
   static void logout() {
     _sharedPreferences.clear();
     authChangeNotifier.value = null;
+  }
+
+  static bool isLogedin() {
+    String token = readAuth();
+    return token.isNotEmpty;
   }
 }

@@ -13,7 +13,6 @@ class AuthRegisterRequest extends AuthEvent {
   String email;
   String username;
   String password;
-  String confirmPassword;
   
-  AuthRegisterRequest(this.email, this.username, this.password, this.confirmPassword);
+  AuthRegisterRequest(this.email, this.username, this.password);
 }

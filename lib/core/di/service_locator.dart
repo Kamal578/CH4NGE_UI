@@ -20,14 +20,12 @@ setupServiceLocator() async {
 
   // Register the AuthenticationRemote datasource
   serviceLocator
-      .registerFactory(<IAuthenticationDatasource>() => AuthenticationRemote());
+      .registerFactory<IAuthenticationDatasource>(() => AuthenticationRemote());
 
   // Repositories
   serviceLocator.registerLazySingleton<IAuthenticationRepository>(
       () => AuthenticationRepositoryImpl());
 
   // Blocs
-  serviceLocator.registerLazySingleton(() => AuthBloc(
-      serviceLocator(),
-    ));
+  serviceLocator.registerLazySingleton(() => AuthBloc());
 }
