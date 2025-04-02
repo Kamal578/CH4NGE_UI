@@ -1,4 +1,5 @@
 import 'package:ch4nge/features/layers/presentation/screens/authentication/auth.dart';
+import 'package:ch4nge/features/layers/presentation/screens/home/view/home_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: AuthPage(),
+        home: HomePage(),
       ),
     );
   }
