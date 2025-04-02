@@ -29,6 +29,8 @@ class _HomePageState extends State<HomePage> {
               _buildTitleWidget(),
               _buildStreakWidget(),
               _buildWeeklyChallengeWidget(),
+              SizedBox(height: 8.h),
+              _buildActionListButtonWidget(),
             ],
           ),
         ),
@@ -127,8 +129,8 @@ class _HomePageState extends State<HomePage> {
   _buildWeeklyChallengeWidget() {
     return Container(
       width: double.maxFinite,
-      height: 90.h,
-      padding: EdgeInsets.fromLTRB(16, 12, 16, 0),
+      height: 95.h,
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.r),
         border: Border.all(
@@ -151,7 +153,6 @@ class _HomePageState extends State<HomePage> {
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                       ),
-                      
                     ),
                     Text(
                       "75 KM on a bicycle in 7 Days!",
@@ -249,6 +250,83 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
+    );
+  }
+
+  _buildActionListButtonWidget() {
+    return Container(
+      width: double.maxFinite,
+      height: 85.h,
+      padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 8.h),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 125, 211, 52),
+        borderRadius: BorderRadius.circular(24.r),
+        border: Border.all(
+          color: const Color.fromARGB(255, 144, 152, 177),
+          width: 0.5,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  "Make a step to Greener Future!",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  "Record a sustainable action to gain points and reach weekly goals. See the list of actions.",
+                  style: TextStyle(
+                    fontSize: 10.sp,
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ],
+            ),
+          ),
+          SizedBox(width: 8.w),
+          Container(
+            width: 40.w,
+            height: 40.h,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: const Color.fromARGB(255, 125, 211, 52),
+              border: Border.all(
+                color: Colors.white,
+                width: 1.5,
+              ),
+            ),
+            child: Center(
+              child: IconButton(
+                onPressed: () {
+                  // Handle button press
+                },
+                icon: const Icon(
+                  Icons.chevron_right_rounded,
+                  color: Colors.white,
+                  weight: 48,
+                ),
+                
+                iconSize: 24.sp,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
