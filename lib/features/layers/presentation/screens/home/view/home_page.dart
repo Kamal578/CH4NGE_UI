@@ -1,3 +1,4 @@
+import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -24,6 +25,7 @@ class _HomePageState extends State<HomePage> {
             top: 8.h,
             right: 16.h,
           ),
+          color: Colors.white,
           child: Column(
             children: [
               _buildTitleWidget(),
@@ -31,6 +33,9 @@ class _HomePageState extends State<HomePage> {
               _buildWeeklyChallengeWidget(),
               SizedBox(height: 8.h),
               _buildActionListButtonWidget(),
+              SizedBox(height: 8.h),
+              _buildNextAchievementWidget(),
+              SizedBox(height: 8.h),
             ],
           ),
         ),
@@ -203,15 +208,13 @@ class _HomePageState extends State<HomePage> {
             ],
           ),
           SizedBox(height: 8.h),
-          SizedBox(
-            child: _buildCompletedWeeklyAchievementWidget(context),
-          ),
+          SizedBox(child: _buildCompletedWeeklyAchievementBar(context)),
         ],
       ),
     );
   }
 
-  _buildCompletedWeeklyAchievementWidget(BuildContext context) {
+  _buildCompletedWeeklyAchievementBar(BuildContext context) {
     // Calculate the percentage of completed credits
     double percentageCompleted = 45.75 / 75;
 
@@ -320,7 +323,6 @@ class _HomePageState extends State<HomePage> {
                   color: Colors.white,
                   weight: 48,
                 ),
-                
                 iconSize: 24.sp,
               ),
             ),
@@ -329,4 +331,91 @@ class _HomePageState extends State<HomePage> {
       ),
     );
   }
+
+  _buildNextAchievementWidget() {
+    return Container(
+      width: double.maxFinite,
+      height: 115.h,
+      padding: EdgeInsets.fromLTRB(16, 12, 16, 4),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24.r),
+        border: Border.all(
+          color: const Color.fromARGB(255, 144, 152, 177),
+          width: 0.5,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Keep going! Next Goal: ",
+            style: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          Divider(
+            color: const Color.fromARGB(128, 144, 152, 177),
+          ),
+          Row(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  // Vertical line (stick) above
+                  Container(
+                    width: 2,
+                    height: 8,
+                    color: const Color.fromARGB(128, 144, 152, 177),
+                  ),
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: const Color.fromARGB(128, 144, 152, 177),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  // Vertical line (stick) below
+                  Container(
+                    width: 2,
+                    height: 8,
+                    color: const Color.fromARGB(128, 144, 152, 177),
+                  ),
+                ],
+              ),
+              SizedBox(width: 8.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Stealthy Water Warrior",
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Text(
+                      "Saving 1,000+ liters of water in a month through mindful habits",
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: const Color.fromARGB(128, 144, 152, 177),
+                        height: 1.4,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+
 }
