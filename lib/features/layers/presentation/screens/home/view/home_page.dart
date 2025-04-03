@@ -36,6 +36,7 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 8.h),
               _buildNextAchievementWidget(),
               SizedBox(height: 8.h),
+              _buildCustomNavbarWidget(),
             ],
           ),
         ),
@@ -335,7 +336,7 @@ class _HomePageState extends State<HomePage> {
   _buildNextAchievementWidget() {
     return Container(
       width: double.maxFinite,
-      height: 115.h,
+      height: 110.h,
       padding: EdgeInsets.fromLTRB(16, 12, 16, 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.r),
@@ -417,5 +418,9 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-
+  _buildCustomNavbarWidget() {
+    return CustomBottomNavBar(
+      selectedIndex: 2,
+    );
+  }
 }

@@ -1,9 +1,14 @@
 import 'package:ch4nge/features/layers/presentation/screens/authentication/auth.dart';
+import 'package:ch4nge/features/layers/presentation/screens/challenges/challenges_page.dart';
+import 'package:ch4nge/features/layers/presentation/screens/feed/feed_page.dart';
 import 'package:ch4nge/features/layers/presentation/screens/home/view/home_page.dart';
+import 'package:ch4nge/features/layers/presentation/screens/leaderboard/leaderboard_page.dart';
+import 'package:ch4nge/features/layers/presentation/screens/map/map_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 import 'core/di/service_locator.dart';
 
 void main() async {
@@ -23,15 +28,47 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GoRouter router = GoRouter(
+      initialLocation: '/',
+      routes: [
+        GoRoute(
+          path: '/',
+          builder: (context, state) => HomePage(),
+        ),
+        GoRoute(
+          path: '/auth',
+          builder: (context, state) => AuthPage(),
+        ),
+        GoRoute(
+          path: '/leaderboard',
+          builder: (context, state) => const LeaderboardPage(),
+        ),
+        GoRoute(
+          path: '/feed',
+          builder: (context, state) => const FeedPage(),
+        ),
+        GoRoute(
+          path: '/challenges',
+          builder: (context, state) => const ChallengesPage(),
+        ),
+        GoRoute(
+          path: '/map',
+          builder: (context, state) => const MapPage(),
+        ),
+      ],
+    );
+
     return ScreenUtilInit(
-      builder: (context, child) => MaterialApp(
+      builder: (context, child) => MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'Flutter Demo',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           useMaterial3: true,
         ),
-        home: HomePage(),
+        routeInformationParser: router.routeInformationParser,
+        routerDelegate: router.routerDelegate,
+        routeInformationProvider: router.routeInformationProvider,
       ),
     );
   }
