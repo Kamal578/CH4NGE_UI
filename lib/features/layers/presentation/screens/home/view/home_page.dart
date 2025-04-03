@@ -1,3 +1,4 @@
+import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,6 +15,8 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: _buildCustomAppbarWidget(),
         resizeToAvoidBottomInset: false,
         body: Container(
           padding:
@@ -22,7 +25,6 @@ class _HomePageState extends State<HomePage> {
               EdgeInsets.only(
             // Add custom padding on Android
             left: 16.h,
-            top: 8.h,
             right: 16.h,
           ),
           color: Colors.white,
@@ -31,11 +33,11 @@ class _HomePageState extends State<HomePage> {
               _buildTitleWidget(),
               _buildStreakWidget(),
               _buildWeeklyChallengeWidget(),
-              SizedBox(height: 8.h),
+              SizedBox(height: 6.h),
               _buildActionListButtonWidget(),
-              SizedBox(height: 8.h),
+              SizedBox(height: 6.h),
               _buildNextAchievementWidget(),
-              SizedBox(height: 8.h),
+              SizedBox(height: 6.h),
               _buildCustomNavbarWidget(),
             ],
           ),
@@ -47,7 +49,7 @@ class _HomePageState extends State<HomePage> {
   _buildTitleWidget() {
     return Container(
       width: double.maxFinite,
-      height: 48.h,
+      height: 20.h,
       alignment: Alignment.centerLeft,
       child: Text(
         "Hello Dima!",
@@ -135,7 +137,7 @@ class _HomePageState extends State<HomePage> {
   _buildWeeklyChallengeWidget() {
     return Container(
       width: double.maxFinite,
-      height: 95.h,
+      height: 90.h,
       padding: EdgeInsets.fromLTRB(16, 12, 16, 4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.r),
@@ -223,7 +225,7 @@ class _HomePageState extends State<HomePage> {
       children: [
         // Background bar
         Container(
-          height: 20.h,
+          height: 18.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24.r),
             color: const Color.fromARGB(128, 144, 152, 177),
@@ -233,7 +235,7 @@ class _HomePageState extends State<HomePage> {
         FractionallySizedBox(
           widthFactor: percentageCompleted,
           child: Container(
-            height: 20.h,
+            height: 18.h,
             alignment: Alignment.center,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24.r),
@@ -260,7 +262,7 @@ class _HomePageState extends State<HomePage> {
   _buildActionListButtonWidget() {
     return Container(
       width: double.maxFinite,
-      height: 85.h,
+      height: 84.h,
       padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 8.h),
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 125, 211, 52),
@@ -421,6 +423,29 @@ class _HomePageState extends State<HomePage> {
   _buildCustomNavbarWidget() {
     return CustomBottomNavBar(
       selectedIndex: 2,
+    );
+  }
+
+  _buildCustomAppbarWidget() {
+    return CustomAppBar(
+      actions: [
+        GestureDetector(
+          onTap: () {},
+          child: Image.asset(
+            "assets/icons/notifications_icon.png",
+            width: 28.w,
+            height: 28.h,
+          ),
+        ),
+        GestureDetector(
+          onTap: () {},
+          child: Image.asset(
+            "assets/icons/settings_icon.png",
+            width: 28.w,
+            height: 28.h,
+          ),
+        ),
+      ],
     );
   }
 }

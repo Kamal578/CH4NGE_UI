@@ -80,6 +80,8 @@ flutter:
     - assets/icons/lightning-fill-svgrepo-com.svg
     - assets/icons/tree-svgrepo-com.svg
     - assets/icons/trophy-material-7-svgrepo-com.svg
+    - assets/icons/settings_icon.png
+    - assets/icons/notifications_icon.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
