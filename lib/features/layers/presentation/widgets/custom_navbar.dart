@@ -45,8 +45,8 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 80.h, 
-      padding: EdgeInsets.only(bottom: 10.h),
+      height: 90.h,
+      padding: EdgeInsets.only(bottom: 12.h),
       child: CustomNavbar(
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
@@ -84,65 +84,67 @@ class CustomNavbar extends StatelessWidget {
   });
 
   @override
-Widget build(BuildContext context) {
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16.w),
-    child: Container(
-      height: 80.h,
-      decoration: BoxDecoration(
-        color: backgroundColor,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 16,
-            spreadRadius: 2,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Row(
-        children: List.generate(iconPaths.length, (index) {
-          return Expanded(
-            child: GestureDetector(
-              onTap: () => onTap(index),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  // Increased space above icon
-                  SizedBox(height: 10.h),
-                  SizedBox(
-                    height: 24.h,
-                    width: 50.w,
-                    child: SvgPicture.asset(
-                      iconPaths[index],
-                      fit: BoxFit.contain,
-                      colorFilter: ColorFilter.mode(
-                        currentIndex == index
-                            ? selectedItemColor
-                            : unselectedItemColor,
-                        BlendMode.srcIn,
-                      ),
-                    ),
-                  ),
-                  // Reduced space between icon and line
-                  SizedBox(height: 12.h),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 200),
-                    height: 2.h,
-                    width: 60.w,
-                    color: currentIndex == index
-                        ? selectedItemColor
-                        : Colors.transparent,
-                  ),
-                ],
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 10.h),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 12.w),
+          height: 80.h,
+          decoration: BoxDecoration(
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withValues(alpha: 0.1),
+                blurRadius: 16,
+                spreadRadius: 2,
+                offset: const Offset(0, 4),
               ),
-            ),
-          );
-        }),
+            ],
+          ),
+          child: Row(
+            children: List.generate(iconPaths.length, (index) {
+              return Expanded(
+                child: GestureDetector(
+                  onTap: () => onTap(index),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 10.h),
+                      SizedBox(
+                        height: 24.h,
+                        width: 50.w,
+                        child: SvgPicture.asset(
+                          iconPaths[index],
+                          fit: BoxFit.contain,
+                          colorFilter: ColorFilter.mode(
+                            currentIndex == index
+                                ? selectedItemColor
+                                : unselectedItemColor,
+                            BlendMode.srcIn,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 12.h),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        height: 2.h,
+                        width: 60.w,
+                        color: currentIndex == index
+                            ? selectedItemColor
+                            : Colors.transparent,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }),
+          ),
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }
