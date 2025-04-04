@@ -29,9 +29,9 @@ class _ChallengesPageState extends State<ChallengesPage> {
               _buildTitleWidget(),
               SizedBox(height: 20.h),
               _buildWeeklyChallengeWidget(),
-              SizedBox(height: 6.h),
+              SizedBox(height: 8.h),
               _buildAchievementsWidget(),
-              SizedBox(height: 6.h),
+              SizedBox(height: 8.h),
               _buildMiniChallengesWidget(),
             ],
           ),
@@ -182,166 +182,184 @@ class _ChallengesPageState extends State<ChallengesPage> {
   }
 
   Widget _buildAchievementsWidget() {
-  return Container(
-    width: double.maxFinite,
-    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(24.r),
-      border: Border.all(
-        color: const Color.fromARGB(255, 144, 152, 177),
-        width: 0.5.w,
+    return Container(
+      width: double.maxFinite,
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24.r),
+        border: Border.all(
+          color: const Color.fromARGB(255, 144, 152, 177),
+          width: 0.5.w,
+        ),
       ),
-    ),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header Row
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Text(
+                  "Achievements Progress",
+                  style: TextStyle(
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.chevron_right_rounded,
+                  size: 24.sp,
+                  color: const Color.fromARGB(255, 144, 152, 177),
+                ),
+                padding: EdgeInsets.zero,
+                constraints: BoxConstraints(),
+              ),
+            ],
+          ),
+
+          // Divider
+          Divider(
+            color: const Color.fromARGB(128, 144, 152, 177),
+            height: 16.h,
+            thickness: 0.5.h,
+          ),
+
+          // First Achievement Item
+          _buildAchievementItem(
+            topLineColor: Color.fromARGB(128, 125, 211, 52),
+            circleColor: Color.fromARGB(128, 125, 211, 52),
+            bottomLineColor: Color.fromARGB(128, 125, 211, 52),
+            titleColor: Colors.black.withAlpha(128),
+          ),
+
+          // Second Achievement Item
+          _buildAchievementItem(
+            topLineColor: Color.fromARGB(128, 125, 211, 52),
+            circleColor: Color.fromARGB(255, 125, 211, 52),
+            bottomLineColor: Color.fromARGB(128, 144, 152, 177),
+            titleColor: Colors.black,
+          ),
+
+          // Third Achievement Item
+          _buildAchievementItem(
+            topLineColor: Color.fromARGB(128, 144, 152, 177),
+            circleColor: Color.fromARGB(128, 144, 152, 177),
+            bottomLineColor: Color.fromARGB(128, 144, 152, 177),
+            titleColor: Colors.black,
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAchievementItem({
+    required Color topLineColor,
+    required Color circleColor,
+    required Color bottomLineColor,
+    required Color titleColor,
+  }) {
+    return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Header Row
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        // Vertical lines and circle
+        Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
-            Flexible(
-              child: Text(
-                "Achievements Progress",
+            Container(
+              width: 2.w,
+              height: 4.h,
+              color: topLineColor,
+            ),
+            Container(
+              width: 50.r,
+              height: 50.r,
+              decoration: BoxDecoration(
+                color: circleColor,
+                shape: BoxShape.circle,
+              ),
+            ),
+            Container(
+              width: 2.w,
+              height: 4.h,
+              color: bottomLineColor,
+            ),
+          ],
+        ),
+
+        SizedBox(width: 12.w),
+
+        // Text Content
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                "Stealthy Water Warrior",
                 style: TextStyle(
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w600,
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.bold,
+                  color: titleColor,
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
               ),
-            ),
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.chevron_right_rounded,
-                size: 24.sp,
-                color: const Color.fromARGB(255, 144, 152, 177),
+              Text(
+                "Saving 1,000+ liters of water in a month through mindful habits",
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  color: Color.fromARGB(128, 144, 152, 177),
+                  height: 1.2,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-              padding: EdgeInsets.zero,
-              constraints: BoxConstraints(),
-            ),
-          ],
-        ),
-
-        // Divider
-        Divider(
-          color: const Color.fromARGB(128, 144, 152, 177),
-          height: 16.h,
-          thickness: 0.5.h,
-        ),
-
-        // First Achievement Item
-        _buildAchievementItem(
-          topLineColor: Color.fromARGB(128, 125, 211, 52),
-          circleColor: Color.fromARGB(128, 125, 211, 52),
-          bottomLineColor: Color.fromARGB(128, 125, 211, 52),
-          titleColor: Colors.black.withAlpha(128),
-        ),
-
-
-        // Second Achievement Item
-        _buildAchievementItem(
-          topLineColor: Color.fromARGB(128, 125, 211, 52),
-          circleColor: Color.fromARGB(255, 125, 211, 52),
-          bottomLineColor: Color.fromARGB(128, 144, 152, 177),
-          titleColor: Colors.black,
-        ),
-
-
-        // Third Achievement Item
-        _buildAchievementItem(
-          topLineColor: Color.fromARGB(128, 144, 152, 177),
-          circleColor: Color.fromARGB(128, 144, 152, 177),
-          bottomLineColor: Color.fromARGB(128, 144, 152, 177),
-          titleColor: Colors.black,
+            ],
+          ),
         ),
       ],
-    ),
-  );
-}
-
-Widget _buildAchievementItem({
-  required Color topLineColor,
-  required Color circleColor,
-  required Color bottomLineColor,
-  required Color titleColor,
-}) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      // Vertical lines and circle
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            width: 2.w,
-            height: 4.h,
-            color: topLineColor,
-          ),
-          Container(
-            width: 50.r,
-            height: 50.r,
-            decoration: BoxDecoration(
-              color: circleColor,
-              shape: BoxShape.circle,
-            ),
-          ),
-          Container(
-            width: 2.w,
-            height: 4.h,
-            color: bottomLineColor,
-          ),
-        ],
-      ),
-      
-      SizedBox(width: 12.w),
-
-      // Text Content
-      Expanded(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              "Stealthy Water Warrior",
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.bold,
-                color: titleColor,
-              ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
-            ),
-            Text(
-              "Saving 1,000+ liters of water in a month through mindful habits",
-              style: TextStyle(
-                fontSize: 12.sp,
-                color: Color.fromARGB(128, 144, 152, 177),
-                height: 1.2,
-              ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            ),
-          ],
-        ),
-      ),
-    ],
-  );
-}
+    );
+  }
 
   _buildMiniChallengesWidget() {
     return Container(
       width: double.maxFinite,
-      height: 230.h,
+      height: 250.h,
       padding: EdgeInsets.fromLTRB(16, 12, 16, 4),
-      decoration: BoxDecoration(
-        color: Colors.black,
-        borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(
-          color: const Color.fromARGB(255, 144, 152, 177),
-          width: 0.5,
-        ),
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Mini Challenges",
+            style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          SizedBox(height: 10.h),
+          SizedBox(
+            height: 200.h,
+            child: CarouselView(
+              itemExtent: 200,
+              children: List.generate(
+                10,
+                (index) {
+                  return Container(
+                    color: Color.fromARGB(255, 125, 211, 52),
+                  );
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
