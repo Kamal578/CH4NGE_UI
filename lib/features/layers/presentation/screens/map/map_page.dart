@@ -8,6 +8,7 @@ class MapPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
+      bottomNavigationBar: _buildCustomNavbarWidget(),
       body: Center(
         child: Column(
           children: [
@@ -15,7 +16,6 @@ class MapPage extends StatelessWidget {
           'Map Page',
           style: TextStyle(fontSize: 24),
         ),
-        _buildCustomNavbarWidget(),
           ],
 
         )

@@ -44,46 +44,21 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 75.h,
-      child: Stack(
-        children: [
-          // Background container
-          Container(
-            height: 75.h,
-            color: Colors.white,
-          ),
-          // Floating navbar container
-          Container(
-            height: 80.h,
-            padding: const EdgeInsets.symmetric(vertical: 12),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(12),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
-                  blurRadius: 10,
-                  spreadRadius: 2,
-                  offset: Offset(0, 4),
-                ),
-              ],
-            ),
-            child: CustomNavbar(
-              currentIndex: _currentIndex,
-              onTap: _onItemTapped,
-              backgroundColor: Colors.white,
-              selectedItemColor: const Color.fromARGB(255, 125, 211, 52),
-              unselectedItemColor: const Color.fromARGB(255, 144, 152, 177),
-              iconPaths: [
-                'assets/icons/earth-13-svgrepo-com.svg',
-                'assets/icons/trophy-material-7-svgrepo-com.svg',
-                'assets/icons/leaf-svgrepo-com.svg',
-                'assets/icons/lightning-fill-svgrepo-com.svg',
-                'assets/icons/tree-svgrepo-com.svg',
-              ],
-            ),
-          ),
+    return Container(
+      height: 80.h, 
+      padding: EdgeInsets.only(bottom: 10.h),
+      child: CustomNavbar(
+        currentIndex: _currentIndex,
+        onTap: _onItemTapped,
+        backgroundColor: Colors.white,
+        selectedItemColor: const Color(0xFF7DD334),
+        unselectedItemColor: const Color(0xFF9098B1),
+        iconPaths: [
+          'assets/icons/earth-13-svgrepo-com.svg',
+          'assets/icons/trophy-material-7-svgrepo-com.svg',
+          'assets/icons/leaf-svgrepo-com.svg',
+          'assets/icons/lightning-fill-svgrepo-com.svg',
+          'assets/icons/tree-svgrepo-com.svg',
         ],
       ),
     );
@@ -109,22 +84,37 @@ class CustomNavbar extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 75.h,
-      padding: EdgeInsets.symmetric(vertical: 5.h),
-      color: backgroundColor,
+Widget build(BuildContext context) {
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16.w),
+    child: Container(
+      height: 80.h,
+      decoration: BoxDecoration(
+        color: backgroundColor,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 16,
+            spreadRadius: 2,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
       child: Row(
         children: List.generate(iconPaths.length, (index) {
           return Expanded(
             child: GestureDetector(
               onTap: () => onTap(index),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // Increased space above icon
+                  SizedBox(height: 10.h),
                   SizedBox(
                     height: 24.h,
-                    width: 50.w, // Assigns equal maximum width to all icons
+                    width: 50.w,
                     child: SvgPicture.asset(
                       iconPaths[index],
                       fit: BoxFit.contain,
@@ -136,11 +126,12 @@ class CustomNavbar extends StatelessWidget {
                       ),
                     ),
                   ),
-                  SizedBox(height: 8.h), // Adds spacing
-                  Container(
+                  // Reduced space between icon and line
+                  SizedBox(height: 12.h),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
                     height: 2.h,
-                    width:
-                        50.w, // Ensures underline width matches the icon width
+                    width: 60.w,
                     color: currentIndex == index
                         ? selectedItemColor
                         : Colors.transparent,
@@ -151,6 +142,7 @@ class CustomNavbar extends StatelessWidget {
           );
         }),
       ),
-    );
-  }
+    ),
+  );
+}
 }

@@ -17,6 +17,7 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: _buildCustomAppbarWidget(),
+        bottomNavigationBar: _buildCustomNavbarWidget(),
         resizeToAvoidBottomInset: false,
         body: Container(
           padding:
@@ -38,7 +39,6 @@ class _HomePageState extends State<HomePage> {
               SizedBox(height: 6.h),
               _buildNextAchievementWidget(),
               SizedBox(height: 6.h),
-              _buildCustomNavbarWidget(),
             ],
           ),
         ),
@@ -49,7 +49,7 @@ class _HomePageState extends State<HomePage> {
   _buildTitleWidget() {
     return Container(
       width: double.maxFinite,
-      height: 20.h,
+      height: 32.h,
       alignment: Alignment.centerLeft,
       child: Text(
         "Hello Dima!",
@@ -65,7 +65,7 @@ class _HomePageState extends State<HomePage> {
   _buildStreakWidget() {
     return Container(
       width: double.maxFinite,
-      height: 235.h,
+      height: 180.h,
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
         image: const DecorationImage(
@@ -79,7 +79,7 @@ class _HomePageState extends State<HomePage> {
             child: Text(
               "23",
               style: TextStyle(
-                fontSize: 96.sp,
+                fontSize: 64.sp,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
@@ -89,7 +89,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Container(
                 width: double.maxFinite,
-                height: 180.h,
+                height: 140.h,
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(left: 16.h),
                 child: FittedBox(
@@ -100,7 +100,7 @@ class _HomePageState extends State<HomePage> {
               Align(
                 alignment: Alignment.centerRight,
                 child: Container(
-                  width: 160.w,
+                  width: 140.w,
                   height: 30.h,
                   alignment: Alignment.centerRight,
                   decoration: BoxDecoration(
@@ -119,7 +119,7 @@ class _HomePageState extends State<HomePage> {
                       child: Text(
                         "Keep your streak alive!",
                         style: TextStyle(
-                          fontSize: 16.sp,
+                          fontSize: 12.sp,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -262,7 +262,7 @@ class _HomePageState extends State<HomePage> {
   _buildActionListButtonWidget() {
     return Container(
       width: double.maxFinite,
-      height: 84.h,
+      height: 80.h,
       padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 8.h),
       decoration: BoxDecoration(
         color: const Color.fromARGB(255, 125, 211, 52),
@@ -290,7 +290,6 @@ class _HomePageState extends State<HomePage> {
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
-                SizedBox(height: 4.h),
                 Text(
                   "Record a sustainable action to gain points and reach weekly goals. See the list of actions.",
                   style: TextStyle(
