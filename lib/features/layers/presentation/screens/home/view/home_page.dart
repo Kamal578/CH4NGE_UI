@@ -33,12 +33,13 @@ class _HomePageState extends State<HomePage> {
             children: [
               _buildTitleWidget(),
               _buildStreakWidget(),
+              SizedBox(height: 2.h),
               _buildWeeklyChallengeWidget(),
-              SizedBox(height: 6.h),
+              SizedBox(height: 8.h),
               _buildActionListButtonWidget(),
-              SizedBox(height: 6.h),
+              SizedBox(height: 8.h),
               _buildNextAchievementWidget(),
-              SizedBox(height: 6.h),
+              SizedBox(height: 8.h),
             ],
           ),
         ),
@@ -89,7 +90,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Container(
                 width: double.maxFinite,
-                height: 140.h,
+                height: 130.h,
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(left: 16.h),
                 child: FittedBox(
@@ -134,290 +135,319 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _buildWeeklyChallengeWidget() {
-    return Container(
-      width: double.maxFinite,
-      height: 90.h,
-      padding: EdgeInsets.fromLTRB(16, 12, 16, 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(
-          color: const Color.fromARGB(255, 144, 152, 177),
-          width: 0.5,
-        ),
+Widget _buildWeeklyChallengeWidget() {
+  return Container(
+    width: double.maxFinite,
+    constraints: BoxConstraints(minHeight: 90.h), // Use constraints instead of fixed height
+    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(24.r),
+      border: Border.all(
+        color: const Color.fromARGB(255, 144, 152, 177),
+        width: 0.5.w, // Make border width responsive
       ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Pedal Power Challenge",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
+    ),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Pedal Power Challenge",
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
                     ),
-                    Text(
-                      "75 KM on a bicycle in 7 Days!",
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400,
-                        color: const Color.fromARGB(255, 144, 152, 177),
-                      ),
-                      overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    "75 KM on a bicycle in 7 Days!",
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      color: const Color.fromARGB(255, 144, 152, 177),
                     ),
-                  ],
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(width: 8.w),
+            Container(
+              constraints: BoxConstraints(
+                minWidth: 90.w,
+                maxWidth: 120.w, // Allow container to grow slightly
+              ),
+              padding: EdgeInsets.symmetric(
+                horizontal: 4.w,
+                vertical: 4.h,
+              ),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.r),
+                border: Border.all(
+                  color: const Color.fromARGB(255, 144, 152, 177),
+                  width: 0.5.w,
                 ),
               ),
-              SizedBox(width: 8.w),
-              Container(
-                width: 90.w,
-                padding: EdgeInsets.symmetric(
-                  horizontal: 4.w,
-                  vertical: 4.h,
-                ),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(8.r),
-                  border: Border.all(
-                    color: const Color.fromARGB(255, 144, 152, 177),
-                    width: 0.5,
-                  ),
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  FittedBox( // Ensure time text scales down
+                    child: Text(
                       "05 : 13 : 24",
                       style: TextStyle(
-                        fontSize: 16.sp,
+                        fontSize: 14.sp, // Reduced base size
                         fontWeight: FontWeight.w400,
                       ),
+                      maxLines: 1,
                     ),
-                    Text(
-                      "days hrs min",
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: const Color.fromARGB(255, 217, 217, 217),
-                      ),
+                  ),
+                  SizedBox(height: 2.h),
+                  Text(
+                    "days hrs min",
+                    style: TextStyle(
+                      fontSize: 10.sp,
+                      color: const Color.fromARGB(255, 217, 217, 217),
                     ),
-                  ],
-                ),
+                    maxLines: 1,
+                    overflow: TextOverflow.visible,
+                  ),
+                ],
               ),
-            ],
-          ),
-          SizedBox(height: 8.h),
-          SizedBox(child: _buildCompletedWeeklyAchievementBar(context)),
-        ],
-      ),
-    );
-  }
+            ),
+          ],
+        ),
+        SizedBox(height: 8.h),
+        _buildCompletedWeeklyAchievementBar(context),
+      ],
+    ),
+  );
+}
 
-  _buildCompletedWeeklyAchievementBar(BuildContext context) {
-    // Calculate the percentage of completed credits
-    double percentageCompleted = 45.75 / 75;
+Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
+  double percentageCompleted = 45.75 / 75;
 
-    return Stack(
+  return SizedBox(
+    height: 18.h,
+    child: Stack(
       children: [
         // Background bar
         Container(
-          height: 18.h,
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(24.r),
             color: const Color.fromARGB(128, 144, 152, 177),
           ),
         ),
-        // Foreground bar representing progress
-        FractionallySizedBox(
-          widthFactor: percentageCompleted,
-          child: Container(
-            height: 18.h,
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24.r),
-              color: const Color.fromARGB(255, 5, 149, 186),
-            ),
-            child: Container(
-              padding: EdgeInsets.only(left: 16.w),
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "45.75 / 75",
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.white,
+        // Progress bar
+        LayoutBuilder(
+          builder: (context, constraints) {
+            return AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
+              width: constraints.maxWidth * percentageCompleted,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(24.r),
+                color: const Color.fromARGB(255, 5, 149, 186),
+              ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 8.w),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "45.75 / 75",
+                    style: TextStyle(
+                      fontSize: 10.sp, // Reduced font size
+                      fontWeight: FontWeight.w500,
+                      color: Colors.white,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.fade,
+                  ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ],
-    );
-  }
+    ),
+  );
+}
 
-  _buildActionListButtonWidget() {
-    return Container(
-      width: double.maxFinite,
-      height: 80.h,
-      padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 8.h),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 125, 211, 52),
-        borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(
-          color: const Color.fromARGB(255, 144, 152, 177),
-          width: 0.5,
-        ),
+Widget _buildActionListButtonWidget() {
+  return Container(
+    width: double.maxFinite,
+    constraints: BoxConstraints(minHeight: 80.h),
+    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+    decoration: BoxDecoration(
+      color: const Color(0xFF7DD334),
+      borderRadius: BorderRadius.circular(24.r),
+      border: Border.all(
+        color: const Color(0xFF9098B1),
+        width: 0.5.w,
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  "Make a step to Greener Future!",
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.white,
-                  ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Text(
-                  "Record a sustainable action to gain points and reach weekly goals. See the list of actions.",
-                  style: TextStyle(
-                    fontSize: 10.sp,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white,
-                  ),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ),
-          SizedBox(width: 8.w),
-          Container(
-            width: 40.w,
-            height: 40.h,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: const Color.fromARGB(255, 125, 211, 52),
-              border: Border.all(
-                color: Colors.white,
-                width: 1.5,
-              ),
-            ),
-            child: Center(
-              child: IconButton(
-                onPressed: () {
-                  // Handle button press
-                },
-                icon: const Icon(
-                  Icons.chevron_right_rounded,
-                  color: Colors.white,
-                  weight: 48,
-                ),
-                iconSize: 24.sp,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  _buildNextAchievementWidget() {
-    return Container(
-      width: double.maxFinite,
-      height: 110.h,
-      padding: EdgeInsets.fromLTRB(16, 12, 16, 4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24.r),
-        border: Border.all(
-          color: const Color.fromARGB(255, 144, 152, 177),
-          width: 0.5,
-        ),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Keep going! Next Goal: ",
-            style: TextStyle(
-              fontSize: 20.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          Divider(
-            color: const Color.fromARGB(128, 144, 152, 177),
-          ),
-          Row(
+    ),
+    child: Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Expanded(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  // Vertical line (stick) above
-                  Container(
-                    width: 2,
-                    height: 8,
-                    color: const Color.fromARGB(128, 144, 152, 177),
-                  ),
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      color: const Color.fromARGB(128, 144, 152, 177),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  // Vertical line (stick) below
-                  Container(
-                    width: 2,
-                    height: 8,
-                    color: const Color.fromARGB(128, 144, 152, 177),
-                  ),
-                ],
-              ),
-              SizedBox(width: 8.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "Stealthy Water Warrior",
-                      style: TextStyle(
-                        fontSize: 16.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black,
-                      ),
-                    ),
-                    Text(
-                      "Saving 1,000+ liters of water in a month through mindful habits",
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: const Color.fromARGB(128, 144, 152, 177),
-                        height: 1.4,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
+              Text(
+                "Make a step to Greener Future!",
+                style: TextStyle(
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
                 ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              SizedBox(height: 4.h),
+              Text(
+                "Record a sustainable action to gain points and reach weekly goals. See the list of actions.",
+                style: TextStyle(
+                  fontSize: 12.sp, // Increased from 10.sp
+                  fontWeight: FontWeight.w400,
+                  color: Colors.white,
+                  height: 1.2,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ],
           ),
-        ],
+        ),
+        SizedBox(width: 8.w),
+        Container(
+          width: 40.w,
+          height: 40.w, // Keep square aspect ratio
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: const Color(0xFF7DD334),
+            border: Border.all(
+              color: Colors.white,
+              width: 1.5.w, // Made responsive
+            ),
+          ),
+          child: IconButton(
+            onPressed: () {},
+            icon: Icon(
+              Icons.chevron_right_rounded,
+              color: Colors.white,
+              size: 24.sp,
+            ),
+            padding: EdgeInsets.zero,
+          ),
+        ),
+      ],
+    ),
+  );
+}
+
+Widget _buildNextAchievementWidget() {
+  return Container(
+    width: double.maxFinite,
+    constraints: BoxConstraints(minHeight: 110.h),
+    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+    decoration: BoxDecoration(
+      borderRadius: BorderRadius.circular(24.r),
+      border: Border.all(
+        color: const Color(0xFF9098B1),
+        width: 0.5.w,
       ),
-    );
-  }
+    ),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Keep going! Next Goal:",
+          style: TextStyle(
+            fontSize: 18.sp, // Reduced from 20.sp
+            fontWeight: FontWeight.w600,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        Divider(
+          color: const Color(0x809098B1),
+          height: 16.h,
+          thickness: 0.5.h,
+        ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 2.w,
+                  height: 8.h,
+                  color: const Color(0x809098B1),
+                ),
+                Container(
+                  width: 50.r, // Responsive radius-based size
+                  height: 50.r,
+                  decoration: BoxDecoration(
+                    color: const Color(0x809098B1),
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                Container(
+                  width: 2.w,
+                  height: 8.h,
+                  color: const Color(0x809098B1),
+                ),
+              ],
+            ),
+            SizedBox(width: 12.w),
+            Expanded(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Stealthy Water Warrior",
+                    style: TextStyle(
+                      fontSize: 14.sp, // Reduced from 16.sp
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    "Saving 1,000+ liters of water in a month through mindful habits",
+                    style: TextStyle(
+                      fontSize: 12.sp, // Increased from 10.sp
+                      color: const Color(0x809098B1),
+                      height: 1.3,
+                    ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    ),
+  );
+}
 
   _buildCustomNavbarWidget() {
     return CustomBottomNavBar(
