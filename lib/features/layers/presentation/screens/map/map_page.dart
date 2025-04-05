@@ -24,11 +24,7 @@ class _MapPageState extends State<MapPage> {
         body: Stack(
           children: [
             GHGMap(),
-            Column(
-              children: [
-                _buildTitleWidget(),
-              ],
-            ),
+            _buildTitleWidget(),
             FriendsActivitySheet(),
           ],
         ),
