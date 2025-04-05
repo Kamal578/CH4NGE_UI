@@ -13,6 +13,9 @@ class LeaderboardPage extends StatefulWidget {
 
 class _LeaderboardPageState extends State<LeaderboardPage> {
   final List<LeaderboardEntry> leaderboardData = [
+    LeaderboardEntry(rank: 1, name: 'Lynn Mcclain', points: 40),
+    LeaderboardEntry(rank: 2, name: 'Marsha Fisher', points: 39),
+    LeaderboardEntry(rank: 3, name: 'Juanita Cormier', points: 38),
     LeaderboardEntry(rank: 4, name: 'Marsha Fisher', points: 36),
     LeaderboardEntry(rank: 5, name: 'Juanita Cormier', points: 35),
     LeaderboardEntry(rank: 6, name: 'You', points: 34, isCurrentUser: true),
@@ -38,7 +41,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
         body: Stack(
           children: [
             _buildTitleWidget(),
-            LeaderboardSheet(entries: leaderboardData),
+            _buildTopUserWidget(),
+            LeaderboardSheet(entries: leaderboardData.sublist(3)),
           ],
         ),
       ),
@@ -61,6 +65,53 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             color: Colors.black,
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTopUserWidget() {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center, // Center the main row
+        crossAxisAlignment: CrossAxisAlignment.end, // Align items at the bottom
+        children: [
+          // Second place (left)
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(top: 40.h), // Push down from top
+                child: TopUserContainer(
+                  entry: leaderboardData[1],
+                ),
+              ),
+            ),
+          ),
+
+          // First place (center)
+          Expanded(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: TopUserContainer(
+                entry: leaderboardData[0],
+              ),
+            ),
+          ),
+
+          // Third place (right)
+          Expanded(
+            child: Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(top: 40.h), // Push down from top
+                child: TopUserContainer(
+                  entry: leaderboardData[2],
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -133,7 +184,7 @@ class LeaderboardSheet extends StatelessWidget {
   }
 }
 
-// 1. Data Model
+// 2. Data Model
 class LeaderboardEntry {
   final int rank;
   final String name;
@@ -148,7 +199,7 @@ class LeaderboardEntry {
   });
 }
 
-// 2. Individual Item Widget
+// 3. Individual Item Widget
 class LeaderboardItem extends StatelessWidget {
   final LeaderboardEntry entry;
   final Color? backgroundColor;
@@ -233,7 +284,7 @@ class LeaderboardItem extends StatelessWidget {
   }
 }
 
-// 3. List Widget
+// 4. List Widget
 class LeaderboardList extends StatelessWidget {
   final List<LeaderboardEntry> entries;
   final Color? separatorColor;
@@ -260,6 +311,102 @@ class LeaderboardList extends StatelessWidget {
           entry: entries[index],
         );
       },
+    );
+  }
+}
+
+// Top User Container
+class TopUserContainer extends StatelessWidget {
+  final LeaderboardEntry entry;
+
+  const TopUserContainer({
+    super.key,
+    required this.entry,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 110.h,
+      padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 8.w),
+      color: Colors.transparent,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Stack(
+            alignment: Alignment.center,
+            children: [
+              Column(
+                children: [
+                  CircleAvatar(
+                    radius: 45.r,
+                    backgroundColor: Color(0xFF7DD334),
+                    child: CircleAvatar(
+                      radius: 42.r,
+                      backgroundColor: Colors.white,
+                      child: Icon(
+                        Icons.person,
+                        color: Colors.black,
+                        size: 16.r,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 14.h,
+                  ),
+                ],
+              ),
+              Positioned(
+                bottom: 0.h,
+                right: 0,
+                left: 0,
+                child: CircleAvatar(
+                  radius: 14.r,
+                  backgroundColor: Color(0xFF7DD334),
+                  child: Text(
+                    '${entry.rank}',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 10.h),
+          Text(
+            entry.name,
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Colors.black,
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          SizedBox(height: 4.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                Icons.eco,
+                color: Color(0xFF7DD334),
+                size: 20.sp,
+              ),
+              SizedBox(width: 4.w),
+              Text(
+                '${entry.points} pts',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
