@@ -1,6 +1,7 @@
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/draggable_bottomsheet.dart';
+import 'package:ch4nge/features/layers/presentation/widgets/map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -22,6 +23,7 @@ class _MapPageState extends State<MapPage> {
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
+            GHGMap(),
             Column(
               children: [
                 _buildTitleWidget(),
@@ -35,46 +37,40 @@ class _MapPageState extends State<MapPage> {
   }
 
   _buildTitleWidget() {
-    return Column(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w),
-          child: Container(
-            width: double.maxFinite,
-            height: 32.h,
-            color: Colors.white,
-            alignment: Alignment.centerLeft,
-            child: Text(
-              "Your Friends' Activities",
-              style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w600,
-                color: Colors.black,
-              ),
-            ),
-          ),
+    return Container(
+      padding: EdgeInsets.only(bottom: 12.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(12.r),
+          bottomRight: Radius.circular(12.r),
         ),
-        SizedBox(height: 6.h),
-        Container(
-          height: 10.h,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 224),
+            blurRadius: 3,
+            spreadRadius: 0.5,
+            offset: const Offset(0, 5),
+          )
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16.w),
+        child: Container(
           width: double.maxFinite,
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(12.r),
-              bottomRight: Radius.circular(12.r),
+          height: 32.h,
+          color: Colors.white,
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "Your Friends' Activities",
+            style: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w600,
+              color: Colors.black,
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: 224),
-                blurRadius: 3,
-                spreadRadius: 0.5,
-                offset: const Offset(0, 5),
-              )
-            ],
           ),
         ),
-      ],
+      ),
     );
   }
 
@@ -114,7 +110,6 @@ class FriendsActivitySheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return DraggableBottomSheet(
       minHeightRatio: 0.25,
-      maxHeightRatio: 0.95,
       backgroundColor: Colors.white,
       headerText: "See Friends' Activities",
       builder: (context, sheetPosition) {

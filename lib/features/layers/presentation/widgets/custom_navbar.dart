@@ -47,6 +47,9 @@ class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
     return Container(
       height: 90.h,
       padding: EdgeInsets.only(bottom: 12.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+      ),
       child: CustomNavbar(
         currentIndex: _currentIndex,
         onTap: _onItemTapped,
