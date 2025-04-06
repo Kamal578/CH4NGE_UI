@@ -28,12 +28,33 @@ class _FeedPageState extends State<FeedPage> {
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Column(
                 children: [
-                  SizedBox(height: 32.h),
-                  _buildFeedPostCard(),
+                  SizedBox(height: 40.h),
+                  _buildFeedPostCard(
+                    profilePicUrl:
+                        "https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE",
+                    username: "Kamush Skibidi",
+                    postImageUrl:
+                        "https://www.vintagetreecare.com/wp-content/uploads/2023/06/planting-tree.jpg",
+                    likeCount: 100,
+                    shareCount: 50,
+                    authorComment: "This is a sample comment.",
+                    fitWidth: true,
+                  ),
                   SizedBox(height: 16.h),
                   _buildTopCommentWidget(),
                   SizedBox(height: 16.h),
-                  _buildFeedPostCard(),
+                  _buildFeedPostCard(
+                    profilePicUrl:
+                        "https://media.licdn.com/dms/image/v2/C4E03AQGrdlO8sT78ug/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1663355766652?e=1749081600&v=beta&t=wKnfP2SW9E27yg6owE7tjLAPKOx5GlAhzqMN5BOWC-w",
+                    username: "Freaky Pavel",
+                    postImageUrl:
+                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl0C0pHDJx6DmOlaUmH5Igsk72aM2n7dDRBA&s",
+                    likeCount: 200,
+                    shareCount: 80,
+                    authorComment:
+                        "Long long long long long long long long long long sample comment.",
+                    fitWidth: false,
+                  ),
                   SizedBox(height: 16.h),
                 ],
               ),
@@ -64,18 +85,23 @@ class _FeedPageState extends State<FeedPage> {
     );
   }
 
-  _buildFeedPostCard() {
+  _buildFeedPostCard({
+    required String profilePicUrl,
+    required String username,
+    required String postImageUrl,
+    required int likeCount,
+    required int shareCount,
+    required String authorComment,
+    required bool fitWidth,
+  }) {
     return FeedPostCard(
-      profilePicUrl:
-          "https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE",
-      username: "Kamush Skibidi",
-      postImageUrl:
-          "https://www.vintagetreecare.com/wp-content/uploads/2023/06/planting-tree-1024x683.jpg",
-      likeCount: 120,
-      shareCount: 45,
-      onLike: () {
-        // Handle like action
-      },
+      profilePicUrl: profilePicUrl,
+      username: username,
+      postImageUrl: postImageUrl,
+      likeCount: likeCount,
+      shareCount: shareCount,
+      authorComment: authorComment,
+      fitWidth: fitWidth,
       onShare: () {
         // Handle share action
       },
@@ -179,25 +205,54 @@ class _FeedPageState extends State<FeedPage> {
   }
 }
 
-class FeedPostCard extends StatelessWidget {
+class FeedPostCard extends StatefulWidget {
   final String profilePicUrl;
   final String username;
   final String postImageUrl;
   final int likeCount;
   final int shareCount;
-  final VoidCallback onLike;
+  final String authorComment;
+  final bool fitWidth;
   final VoidCallback onShare;
 
   const FeedPostCard({
-    Key? key,
+    super.key,
     required this.profilePicUrl,
     required this.username,
     required this.postImageUrl,
     required this.likeCount,
     required this.shareCount,
-    required this.onLike,
+    required this.authorComment,
+    required this.fitWidth,
     required this.onShare,
-  }) : super(key: key);
+  });
+
+  @override
+  _FeedPostCardState createState() => _FeedPostCardState();
+}
+
+class _FeedPostCardState extends State<FeedPostCard> {
+  late bool _isLiked;
+  late int _currentLikeCount;
+
+  @override
+  void initState() {
+    super.initState();
+    _isLiked = false;
+    _currentLikeCount = widget.likeCount;
+  }
+
+  void _toggleLike() {
+    setState(() {
+      if (_isLiked) {
+        _isLiked = false;
+        _currentLikeCount--;
+      } else {
+        _isLiked = true;
+        _currentLikeCount++;
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -221,11 +276,11 @@ class FeedPostCard extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 18,
-                    backgroundImage: NetworkImage(profilePicUrl),
+                    backgroundImage: NetworkImage(widget.profilePicUrl),
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    username,
+                    widget.username,
                     style: const TextStyle(
                       fontWeight: FontWeight.w600,
                     ),
@@ -234,35 +289,67 @@ class FeedPostCard extends StatelessWidget {
               ),
             ),
 
-            /// Post image
+            /// Post image with adaptive fitting
             const SizedBox(height: 8),
             ClipRRect(
-              child: Image.network(
-                postImageUrl,
-                height: 200,
-                width: double.infinity,
-                fit: BoxFit.cover,
-              ),
+              child: widget.fitWidth
+                  ? Container(
+                      color: Colors.black,
+                      child: Image.network(
+                        widget.postImageUrl,
+                        width: double.infinity,
+                        fit: BoxFit.fitWidth,
+                      ),
+                    )
+                  : Image.network(
+                      widget.postImageUrl,
+                      width: double.infinity,
+                      fit: BoxFit.cover,
+                    ),
             ),
 
-            /// Like/Share row
+            /// Like/Share row with stateful like button
             const SizedBox(height: 8),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 12.w),
               child: Row(
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.favorite_border),
-                    onPressed: onLike,
+                    icon: Icon(
+                      _isLiked ? Icons.favorite : Icons.favorite_border,
+                      color: _isLiked ? Colors.red : null,
+                    ),
+                    onPressed: _toggleLike,
                   ),
-                  Text('$likeCount'),
+                  Text('$_currentLikeCount'),
                   const SizedBox(width: 16),
                   IconButton(
                     icon: const Icon(Icons.share),
-                    onPressed: onShare,
+                    onPressed: widget.onShare,
                   ),
-                  Text('$shareCount'),
+                  Text('${widget.shareCount}'),
                 ],
+              ),
+            ),
+
+            /// Author Comment row
+            const SizedBox(height: 8),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 12.w),
+              child: Text.rich(
+                TextSpan(
+                  children: [
+                    TextSpan(
+                      text: widget.username,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    const TextSpan(text: ' '),
+                    TextSpan(
+                      text: widget.authorComment,
+                      style: const TextStyle(fontWeight: FontWeight.normal),
+                    ),
+                  ],
+                ),
               ),
             ),
           ],
@@ -279,12 +366,12 @@ class TopCommentWidget extends StatelessWidget {
   final int shares;
 
   const TopCommentWidget({
-    Key? key,
+    super.key,
     required this.title,
     required this.commentText,
     required this.likes,
     required this.shares,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -307,7 +394,7 @@ class TopCommentWidget extends StatelessWidget {
           width: double.infinity,
           padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 228, 249, 223),
+            color: const Color(0xFF7DD334),
             borderRadius: BorderRadius.circular(12),
           ),
           child: Column(
@@ -318,7 +405,7 @@ class TopCommentWidget extends StatelessWidget {
                 commentText,
                 style: const TextStyle(
                   fontSize: 14,
-                  color: Colors.black87,
+                  color: Colors.white,
                 ),
               ),
 
@@ -330,19 +417,19 @@ class TopCommentWidget extends StatelessWidget {
                 children: [
                   Icon(
                     Icons.favorite,
-                    color: Colors.red.shade400,
+                    color: Colors.red,
                     size: 20,
                   ),
                   const SizedBox(width: 4),
-                  Text('$likes'),
+                  Text('$likes', style: const TextStyle(color: Colors.white)),
                   const SizedBox(width: 16),
                   Icon(
                     Icons.share,
-                    color: Colors.blue.shade400,
+                    color: Colors.blue,
                     size: 20,
                   ),
                   const SizedBox(width: 4),
-                  Text('$shares'),
+                  Text('$shares', style: const TextStyle(color: Colors.white)),
                 ],
               ),
             ],
@@ -357,9 +444,9 @@ class UploadPostButton extends StatelessWidget {
   final VoidCallback onPressed;
 
   const UploadPostButton({
-    Key? key,
+    super.key,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
