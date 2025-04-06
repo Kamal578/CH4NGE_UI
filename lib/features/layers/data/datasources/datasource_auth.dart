@@ -13,7 +13,7 @@ class AuthenticationRemote extends IAuthenticationDatasource {
   final _mockUser = {
     'user_id': '12345',
     'email': 'd.kuramshin@ufaz.az',
-    'password': 'Qwerty123',
+    'password': 'Qwerty123@',
     'username': 'Dima',
     'token': 'mock_jwt_token_12345'
   };

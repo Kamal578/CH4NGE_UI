@@ -71,15 +71,27 @@ class _SignInPageState extends State<SignInPage> {
                     state.response.fold((left) {
                       emailController.text = '';
                       passwordController.text = '';
-                      var snackbar = SnackBar(
+                        var snackbar = SnackBar(
                         content: Text(
                           left,
-                          style: TextStyle(fontFamily: 'dana', fontSize: 14),
+                          style: TextStyle(
+                          fontFamily: 'dana',
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                          ),
                         ),
-                        backgroundColor: Colors.black,
+                        backgroundColor:  Colors.red,
                         behavior: SnackBarBehavior.floating,
-                        duration: Duration(seconds: 1),
-                      );
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                        margin: EdgeInsets.symmetric(
+                          horizontal: 16.w,
+                          vertical: 8.h,
+                        ),
+                        duration: const Duration(seconds: 2),
+                        );
                       ScaffoldMessenger.of(context).showSnackBar(snackbar);
                     }, (right) {
                       context.go('/');
@@ -88,7 +100,16 @@ class _SignInPageState extends State<SignInPage> {
                 },
                 builder: (context, state) {
                   if (state is AuthLoadingState) {
-                    return CircularProgressIndicator();
+                    return Stack(
+                      children: [
+                        _signInButton(emailController, passwordController),
+                        Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    );
                   }
                   if (state is AuthInitState) {
                     return _signInButton(emailController, passwordController);
@@ -205,12 +226,6 @@ class _SignInPageState extends State<SignInPage> {
         ),
         errorMaxLines: 3,
       ),
-      validator: (value) {
-        if (value == null || (!isValidPassword(value, isRequired: true))) {
-          return "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character (!@#\$&*~).";
-        }
-        return null;
-      },
       obscureText: passwordVisible,
     );
   }
@@ -219,8 +234,10 @@ class _SignInPageState extends State<SignInPage> {
       TextEditingController passwordController) {
     return ElevatedButton(
       onPressed: () {
-        BlocProvider.of<AuthBloc>(context).add(
-            AuthLoginRequest(emailController.text, passwordController.text));
+        if (_formKey.currentState!.validate()) {
+          BlocProvider.of<AuthBloc>(context).add(
+              AuthLoginRequest(emailController.text, passwordController.text));
+        }
       },
       style: ElevatedButton.styleFrom(
         elevation: 3,
@@ -263,7 +280,7 @@ class _SignInPageState extends State<SignInPage> {
                 fontSize: 12.sp,
                 fontWeight: FontWeight.w400,
                 color: const Color(0xFF7DD334),
-              ), // Modify theme later
+              ),
             ),
           ],
         ),
