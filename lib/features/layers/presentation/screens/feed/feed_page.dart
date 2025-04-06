@@ -11,6 +11,32 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
+  List<PostCardData> postCardData = [
+    PostCardData(
+      profilePicUrl:
+          "https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE",
+      username: "Kamush Skibidi",
+      postImageUrl:
+          "https://www.vintagetreecare.com/wp-content/uploads/2023/06/planting-tree.jpg",
+      likeCount: 100,
+      shareCount: 50,
+      authorComment: "This is a sample comment.",
+      fitWidth: true,
+    ),
+    PostCardData(
+      profilePicUrl:
+          "https://media.licdn.com/dms/image/v2/C4E03AQGrdlO8sT78ug/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1663355766652?e=1749081600&v=beta&t=wKnfP2SW9E27yg6owE7tjLAPKOx5GlAhzqMN5BOWC-w",
+      username: "Freaky Pavel",
+      postImageUrl:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl0C0pHDJx6DmOlaUmH5Igsk72aM2n7dDRBA&s",
+      likeCount: 200,
+      shareCount: 80,
+      authorComment:
+          "Long long long long long long long long long long sample comment.",
+      fitWidth: false,
+    ),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -19,7 +45,7 @@ class _FeedPageState extends State<FeedPage> {
         appBar: _buildCustomAppbarWidget(),
         bottomNavigationBar: _buildCustomNavbarWidget(),
         floatingActionButton: _buildNewPostWidget(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
@@ -30,32 +56,34 @@ class _FeedPageState extends State<FeedPage> {
                 children: [
                   SizedBox(height: 40.h),
                   _buildFeedPostCard(
-                    profilePicUrl:
-                        "https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE",
-                    username: "Kamush Skibidi",
-                    postImageUrl:
-                        "https://www.vintagetreecare.com/wp-content/uploads/2023/06/planting-tree.jpg",
-                    likeCount: 100,
-                    shareCount: 50,
-                    authorComment: "This is a sample comment.",
-                    fitWidth: true,
+                    profilePicUrl: postCardData[0].profilePicUrl,
+                    username: postCardData[0].username,
+                    postImageUrl: postCardData[0].postImageUrl,
+                    likeCount: postCardData[0].likeCount,
+                    shareCount: postCardData[0].shareCount,
+                    authorComment: postCardData[0].authorComment,
+                    fitWidth: postCardData[0].fitWidth,
                   ),
                   SizedBox(height: 16.h),
                   _buildTopCommentWidget(),
                   SizedBox(height: 16.h),
-                  _buildFeedPostCard(
-                    profilePicUrl:
-                        "https://media.licdn.com/dms/image/v2/C4E03AQGrdlO8sT78ug/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1663355766652?e=1749081600&v=beta&t=wKnfP2SW9E27yg6owE7tjLAPKOx5GlAhzqMN5BOWC-w",
-                    username: "Freaky Pavel",
-                    postImageUrl:
-                        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl0C0pHDJx6DmOlaUmH5Igsk72aM2n7dDRBA&s",
-                    likeCount: 200,
-                    shareCount: 80,
-                    authorComment:
-                        "Long long long long long long long long long long sample comment.",
-                    fitWidth: false,
+                  ...List.generate(
+                    postCardData.length - 1,
+                    (index) => Column(
+                      children: [
+                        _buildFeedPostCard(
+                          profilePicUrl: postCardData[index + 1].profilePicUrl,
+                          username: postCardData[index + 1].username,
+                          postImageUrl: postCardData[index + 1].postImageUrl,
+                          likeCount: postCardData[index + 1].likeCount,
+                          shareCount: postCardData[index + 1].shareCount,
+                          authorComment: postCardData[index + 1].authorComment,
+                          fitWidth: postCardData[index + 1].fitWidth,
+                        ),
+                        SizedBox(height: 16.h),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 16.h),
                 ],
               ),
             ),
@@ -120,57 +148,9 @@ class _FeedPageState extends State<FeedPage> {
 
   _buildNewPostWidget() {
     return UploadPostButton(
-      onPressed: () {
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          builder: (BuildContext context) {
-            return Padding(
-              padding: MediaQuery.of(context).viewInsets,
-              child: SizedBox(
-                height: 300,
-                child: Column(
-                  children: [
-                    const SizedBox(height: 16),
-                    const Text(
-                      "Upload New Post",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    TextField(
-                      decoration: const InputDecoration(
-                        labelText: "Post Title",
-                        border: OutlineInputBorder(),
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    ElevatedButton.icon(
-                      icon: const Icon(Icons.photo_camera),
-                      label: const Text("Choose Image"),
-                      onPressed: () {
-                        // Handle picking an image
-                      },
-                    ),
-                    const Spacer(),
-                    ElevatedButton(
-                      onPressed: () {
-                        // Handle upload
-                      },
-                      child: const Text("Post"),
-                    ),
-                    const SizedBox(height: 16),
-                  ],
-                ),
-              ),
-            );
-          },
-        );
+      onUpload: (comment, fitWidth, imageData) {
+        // Handle the upload logic, e.g., send data to your provider or backend.
+        print("Comment: $comment, FitWidth: $fitWidth, Image: $imageData");
       },
     );
   }
@@ -441,22 +421,162 @@ class TopCommentWidget extends StatelessWidget {
 }
 
 class UploadPostButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  final Function(String comment, bool fitWidth, dynamic imageData) onUpload;
 
   const UploadPostButton({
     super.key,
-    required this.onPressed,
+    required this.onUpload,
   });
 
   @override
   Widget build(BuildContext context) {
-    return FloatingActionButton(
-      backgroundColor: Colors.green,
-      onPressed: onPressed,
-      child: const Icon(
-        Icons.add,
-        color: Colors.white,
+    return Container(
+      width: 50.w,
+      height: 50.h,
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        color: const Color(0xFF7DD334),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withAlpha((0.2 * 255).toInt()),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Center(
+        child: IconButton(
+          icon: Icon(Icons.add_rounded),
+          color: Colors.white,
+          onPressed: () {
+            _showUploadSheet(context);
+          },
+        ),
       ),
     );
   }
+
+  void _showUploadSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+      ),
+      builder: (BuildContext context) {
+        return Padding(
+          padding: MediaQuery.of(context).viewInsets,
+          child: UploadPostSheet(onUpload: onUpload),
+        );
+      },
+    );
+  }
+}
+
+class UploadPostSheet extends StatefulWidget {
+  final Function(String comment, bool fitWidth, dynamic imageData) onUpload;
+  const UploadPostSheet({Key? key, required this.onUpload}) : super(key: key);
+
+  @override
+  _UploadPostSheetState createState() => _UploadPostSheetState();
+}
+
+class _UploadPostSheetState extends State<UploadPostSheet> {
+  final TextEditingController _commentController = TextEditingController();
+  bool _fitWidth = false;
+  dynamic _imageData; // Placeholder for image data
+
+  @override
+  Widget build(BuildContext context) {
+    final sheetHeight = MediaQuery.of(context).size.height * 0.8;
+    return Container(
+      height: sheetHeight,
+      padding: EdgeInsets.all(16.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Create New Post",
+            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
+          ),
+          SizedBox(height: 16.h),
+          TextField(
+            controller: _commentController,
+            maxLines: 3,
+            decoration: const InputDecoration(
+              labelText: "Post Comment",
+              border: OutlineInputBorder(),
+            ),
+          ),
+          SizedBox(height: 16.h),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              ElevatedButton.icon(
+                onPressed: _pickImage,
+                icon: const Icon(Icons.photo_camera),
+                label: const Text("Upload Photo"),
+              ),
+              Row(
+                children: [
+                  const Text("Fit Width"),
+                  Switch(
+                    value: _fitWidth,
+                    onChanged: (value) {
+                      setState(() {
+                        _fitWidth = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+          const Spacer(),
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                widget.onUpload(
+                  _commentController.text,
+                  _fitWidth,
+                  _imageData,
+                );
+                Navigator.pop(context);
+              },
+              child: const Text("Post"),
+            ),
+          ),
+          SizedBox(height: 16.h),
+        ],
+      ),
+    );
+  }
+
+  void _pickImage() async {
+    // Placeholder for image picking.
+    // Replace this with an image picker call (e.g., using the image_picker package).
+    setState(() {
+      _imageData = "dummy_image_data"; // Simulated image data
+    });
+  }
+}
+
+class PostCardData {
+  String profilePicUrl;
+  String username;
+  String postImageUrl;
+  int likeCount;
+  int shareCount;
+  String authorComment;
+  bool fitWidth;
+
+  PostCardData({
+    required this.profilePicUrl,
+    required this.username,
+    required this.postImageUrl,
+    required this.likeCount,
+    required this.shareCount,
+    required this.authorComment,
+    required this.fitWidth,
+  });
 }
