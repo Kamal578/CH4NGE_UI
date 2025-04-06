@@ -1,5 +1,6 @@
+import 'package:ch4nge/core/utils/validation_functions.dart';
 import 'package:ch4nge/features/layers/presentation/screens/authentication/bloc/auth_bloc.dart';
-import 'package:ch4nge/features/layers/presentation/screens/home/view/home_page.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -44,10 +45,25 @@ class _SignUpPageState extends State<SignUpPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              _buildLogo(),
               SizedBox(height: 16.h),
-              Text("Let's Get Started!", style: TextStyle(fontSize: 16)),
+              Text(
+                "Let's Get Started!",
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20.sp,
+                  color: Colors.black,
+                ),
+              ),
               SizedBox(height: 8.h),
-              Text("Create a new account", style: TextStyle(fontSize: 12)),
+              Text(
+                "Create a new account",
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                  color: Color.fromARGB(255, 112, 112, 112),
+                ),
+              ),
               SizedBox(height: 18.h),
               _usernameInput(usernameController),
               SizedBox(height: 8.h),
@@ -64,8 +80,15 @@ class _SignUpPageState extends State<SignUpPage> {
                         passwordController, confirmPasswordController);
                   }
                   if (state is AuthLoadingState) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
+                    return Stack(
+                      children: [
+                        _signUpButton(usernameController, emailController, passwordController, confirmPasswordController),
+                        Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
                     );
                   }
                   if (state is AuthRequestSuccessState) {
@@ -75,7 +98,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           emailController,
                           passwordController,
                           confirmPasswordController),
-                      (right) => Text(right),
+                      (right) => Text(''),
                     );
                   }
                   return _signUpButton(usernameController, emailController,
@@ -113,6 +136,16 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
+  Widget _buildLogo() {
+    return Center(
+      child: SizedBox(
+        width: 200,
+        height: 150,
+        child: Image.asset('assets/images/logo.jpeg'),
+      ),
+    );
+  }
+
   Widget _usernameInput(TextEditingController usernameController) {
     return TextFormField(
       controller: usernameController,
@@ -125,10 +158,17 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.green, // Modify theme later
+            color: const Color.fromARGB(128, 144, 152, 177),
             width: 1.h,
           ),
-          borderRadius: BorderRadius.circular(8.h), // Modify theme later
+          borderRadius: BorderRadius.all(Radius.circular(8.r)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: const Color(0xFF9098B1),
+            width: 1.5,
+          ),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.h),
@@ -149,22 +189,28 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.green, // Modify theme later
+            color: const Color.fromARGB(128, 144, 152, 177),
             width: 1.h,
           ),
-          borderRadius: BorderRadius.circular(8.h), // Modify theme later
+          borderRadius: BorderRadius.all(Radius.circular(8.r)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: const Color(0xFF9098B1),
+            width: 1.5,
+          ),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.h),
         ),
       ),
-      // TODO: Add email validation
-      // validator: (value) {
-      //   if (value == null || (!(isValidEmail(value, isRequired: true)))) {
-      //     return "Please enter valid email";
-      //   }
-      //   return null;
-      // },
+      validator: (value) {
+        if (value == null || (!EmailValidator.validate(value))) {
+          return "Please enter valid email";
+        }
+        return null;
+      },
     );
   }
 
@@ -182,10 +228,17 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.green, // Modify theme later
+            color: const Color.fromARGB(128, 144, 152, 177),
             width: 1.h,
           ),
-          borderRadius: BorderRadius.circular(8.h), // Modify theme later
+          borderRadius: BorderRadius.all(Radius.circular(8.r)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: const Color(0xFF9098B1),
+            width: 1.5,
+          ),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.h),
@@ -193,7 +246,7 @@ class _SignUpPageState extends State<SignUpPage> {
         suffixIcon: IconButton(
           icon: Icon(
             passwordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Colors.green, // Modify theme later
+            color: const Color(0xFF9098B1),
           ),
           onPressed: () {
             setState(() {
@@ -203,13 +256,12 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         errorMaxLines: 3,
       ),
-      // TODO: Add password validation
-      // validator: (value) {
-      //   if (value == null || (!isValidPassword(value, isRequired: true))) {
-      //     return "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character (!@#\$&*~).";
-      //   }
-      //   return null;
-      // },
+      validator: (value) {
+        if (value == null || (!isValidPassword(value, isRequired: true))) {
+          return "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character (!@#\$&*~).";
+        }
+        return null;
+      },
       obscureText: passwordVisible,
     );
   }
@@ -219,7 +271,7 @@ class _SignUpPageState extends State<SignUpPage> {
     return TextFormField(
       controller: confirmPasswordController,
       decoration: InputDecoration(
-        hintText: 'Password',
+        hintText: 'Confirm Password',
         prefixIcon: const Icon(Icons.lock_outline),
         contentPadding: EdgeInsets.fromLTRB(
           16.h,
@@ -229,18 +281,25 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.green, // Modify theme later
+            color: const Color.fromARGB(128, 144, 152, 177),
             width: 1.h,
           ),
-          borderRadius: BorderRadius.circular(8.h), // Modify theme later
+          borderRadius: BorderRadius.all(Radius.circular(8.r)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: const Color(0xFF9098B1),
+            width: 1.5,
+          ),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.h),
         ),
         suffixIcon: IconButton(
           icon: Icon(
-            passwordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Colors.green, // Modify theme later
+            confirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+            color: const Color(0xFF9098B1),
           ),
           onPressed: () {
             setState(() {
@@ -277,10 +336,22 @@ class _SignUpPageState extends State<SignUpPage> {
           );
         }
       },
-      // style: CustomButtonStyle.fillPrimary, // Modify theme later
+      style: ElevatedButton.styleFrom(
+        elevation: 3,
+        backgroundColor: const Color(0xFF7DD334),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.h),
+        ),
+        padding: EdgeInsets.all(20.h),
+        fixedSize: Size(double.maxFinite, 50.h),
+      ),
       child: Text(
         "Sign Up",
-        // style: CustomTextStyles.elevatedButtonOnPrimary, // Modify theme later
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 16.sp,
+          color: Colors.white,
+        ),
       ),
     );
   }
@@ -297,12 +368,20 @@ class _SignUpPageState extends State<SignUpPage> {
           children: [
             TextSpan(
               text: 'Don\'t have an account? ',
-              // style: CustomTextStyles.bodySmallOnSecondaryContainer,
+              style: TextStyle(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w400,
+                color: const Color.fromARGB(255, 144, 152, 177),
+              ),
             ),
             const TextSpan(text: " "),
             TextSpan(
               text: 'Sign In',
-              // style: CustomTextStyles.labelSmallPrimary,
+              style: TextStyle(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w400,
+                color: const Color(0xFF7DD334),
+              ),
             ),
           ],
         ),

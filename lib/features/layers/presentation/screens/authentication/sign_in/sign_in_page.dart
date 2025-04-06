@@ -120,7 +120,7 @@ class _SignInPageState extends State<SignInPage> {
                       widget =
                           _signInButton(emailController, passwordController);
                     }, (r) {
-                      widget = Text(r);
+                      widget = Text('');
                     });
                     return widget;
                   }
@@ -129,7 +129,7 @@ class _SignInPageState extends State<SignInPage> {
               ),
               const Expanded(child: SizedBox()),
               _signUpGestureDetector(context),
-              SizedBox(height: 24.h)
+              SizedBox(height: 20.h)
             ],
           ),
         ),
