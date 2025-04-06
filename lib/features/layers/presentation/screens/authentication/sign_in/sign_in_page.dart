@@ -1,8 +1,10 @@
+import 'package:ch4nge/core/utils/validation_functions.dart';
 import 'package:ch4nge/features/layers/presentation/screens/authentication/bloc/auth_bloc.dart';
-import 'package:ch4nge/features/layers/presentation/screens/home/view/home_page.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class SignInPage extends StatefulWidget {
   final VoidCallback show;
@@ -39,17 +41,30 @@ class _SignInPageState extends State<SignInPage> {
           ),
           child: Column(
             children: [
+              _buildLogo(),
               SizedBox(height: 16.h),
-              Text("Welcome!",
-                  style: TextStyle(fontSize: 16)), // Modify theme later
+              Text(
+                "Welcome!",
+                style: TextStyle(
+                  fontWeight: FontWeight.w700,
+                  fontSize: 20.sp,
+                  color: Colors.black,
+                ),
+              ),
               SizedBox(height: 8.h),
-              Text("Sign in to continue",
-                  style: TextStyle(fontSize: 12)), // Modify theme later
+              Text(
+                "Sign in to continue",
+                style: TextStyle(
+                  fontSize: 12.sp,
+                  fontWeight: FontWeight.w400,
+                  color: Color.fromARGB(255, 112, 112, 112),
+                ),
+              ), // Modify theme later
               SizedBox(height: 18.h),
               _emailInput(emailController),
               SizedBox(height: 10.h),
               _passwordInput(passwordController),
-              SizedBox(height: 16.h),
+              SizedBox(height: 12.h),
               BlocConsumer<AuthBloc, AuthState>(
                 listener: (context, state) {
                   if (state is AuthRequestSuccessState) {
@@ -67,8 +82,7 @@ class _SignInPageState extends State<SignInPage> {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snackbar);
                     }, (right) {
-                      Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(builder: (context) => HomePage()));
+                      context.go('/');
                     });
                   }
                 },
@@ -102,6 +116,16 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
+  Widget _buildLogo() {
+    return Center(
+      child: SizedBox(
+        width: 200,
+        height: 150,
+        child: Image.asset('assets/images/logo.jpeg'),
+      ),
+    );
+  }
+
   Widget _emailInput(TextEditingController emailController) {
     return TextFormField(
       controller: emailController,
@@ -114,23 +138,28 @@ class _SignInPageState extends State<SignInPage> {
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.green, // Modify theme later
+            color: const Color.fromARGB(128, 144, 152, 177),
             width: 1.h,
           ),
-          borderRadius:
-              BorderRadius.all(Radius.circular(8.r)), // Modify theme later
+          borderRadius: BorderRadius.all(Radius.circular(8.r)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: const Color(0xFF9098B1),
+            width: 1.5,
+          ),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.h),
         ),
       ),
-      // TODO: Add email validation
-      // validator: (value) {
-      //   if (value == null || (!(isValidEmail(value, isRequired: true)))) {
-      //     return "Please enter valid email";
-      //   }
-      //   return null;
-      // },
+      validator: (value) {
+        if (value == null || (!EmailValidator.validate(value))) {
+          return "Please enter valid email";
+        }
+        return null;
+      },
     );
   }
 
@@ -148,10 +177,17 @@ class _SignInPageState extends State<SignInPage> {
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.green, // Modify theme later
+            color: const Color.fromARGB(128, 144, 152, 177),
             width: 1.h,
           ),
-          borderRadius: BorderRadius.circular(8), // // Modify theme later
+          borderRadius: BorderRadius.all(Radius.circular(8.r)),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
+            color: const Color(0xFF9098B1),
+            width: 1.5,
+          ),
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.h),
@@ -159,7 +195,7 @@ class _SignInPageState extends State<SignInPage> {
         suffixIcon: IconButton(
           icon: Icon(
             passwordVisible ? Icons.visibility : Icons.visibility_off,
-            color: Colors.green, // Modify theme later
+            color: const Color(0xFF9098B1),
           ),
           onPressed: () {
             setState(() {
@@ -169,13 +205,12 @@ class _SignInPageState extends State<SignInPage> {
         ),
         errorMaxLines: 3,
       ),
-      // TODO: Add password validation
-      // validator: (value) {
-      //   if (value == null || (!isValidPassword(value, isRequired: true))) {
-      //     return "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character (!@#\$&*~).";
-      //   }
-      //   return null;
-      // },
+      validator: (value) {
+        if (value == null || (!isValidPassword(value, isRequired: true))) {
+          return "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character (!@#\$&*~).";
+        }
+        return null;
+      },
       obscureText: passwordVisible,
     );
   }
@@ -187,10 +222,22 @@ class _SignInPageState extends State<SignInPage> {
         BlocProvider.of<AuthBloc>(context).add(
             AuthLoginRequest(emailController.text, passwordController.text));
       },
-      // style: CustomButtonStyle.fillPrimary,
+      style: ElevatedButton.styleFrom(
+        elevation: 3,
+        backgroundColor: const Color(0xFF7DD334),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5.h),
+        ),
+        padding: EdgeInsets.all(20.h),
+        fixedSize: Size(double.maxFinite, 50.h),
+      ),
       child: Text(
         "Sign In",
-        // style: CustomTextStyles.elevatedButtonOnPrimary, // Modify theme later
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 16.sp,
+          color: Colors.white,
+        ),
       ),
     );
   }
@@ -204,13 +251,19 @@ class _SignInPageState extends State<SignInPage> {
             TextSpan(
               text: 'Don\'t have an account? ',
               style: TextStyle(
-                  fontSize: 12, color: Colors.black), // Modify theme later
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w400,
+                color: const Color.fromARGB(255, 144, 152, 177),
+              ),
             ),
             const TextSpan(text: " "),
             TextSpan(
               text: 'Sign Up',
               style: TextStyle(
-                  fontSize: 12, color: Colors.black), // Modify theme later
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w400,
+                color: const Color(0xFF7DD334),
+              ), // Modify theme later
             ),
           ],
         ),

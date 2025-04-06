@@ -3,6 +3,7 @@ import 'package:ch4nge/features/layers/presentation/screens/home/view/home_page.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class SignUpPage extends StatefulWidget {
   final VoidCallback show;
@@ -96,11 +97,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         ScaffoldMessenger.of(context).showSnackBar(snackbar);
                       },
                       (right) {
-                        Navigator.of(context).pushReplacement(
-                          MaterialPageRoute(
-                            builder: (context) => HomePage(),
-                          ),
-                        );
+                        context.go('/');
                       },
                     );
                   }

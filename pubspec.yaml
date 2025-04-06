@@ -48,6 +48,7 @@ dependencies:
   latlong2: ^0.9.1
   flutter_map_heatmap: ^0.0.7
   image_picker: ^1.1.2
+  email_validator: ^3.0.0
 
 
 
@@ -88,6 +89,7 @@ flutter:
     - assets/icons/trophy-material-7-svgrepo-com.svg
     - assets/icons/settings_icon.png
     - assets/icons/notifications_icon.png
+    - assets/images/logo.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
