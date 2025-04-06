@@ -14,7 +14,7 @@ class LeaderboardPage extends StatefulWidget {
 class _LeaderboardPageState extends State<LeaderboardPage> {
   final List<LeaderboardEntry> leaderboardData = [
     LeaderboardEntry(rank: 1, name: 'Lynn Mcclain', points: 40),
-    LeaderboardEntry(rank: 2, name: 'Marsha Fisher', points: 39),
+    LeaderboardEntry(rank: 2, name: 'Marsha Fisheeeeeeeeer', points: 39),
     LeaderboardEntry(rank: 3, name: 'Juanita Cormier', points: 38),
     LeaderboardEntry(rank: 4, name: 'Marsha Fisher', points: 36),
     LeaderboardEntry(rank: 5, name: 'Juanita Cormier', points: 35),
@@ -352,7 +352,7 @@ class TopUserContainer extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    height: 14.h,
+                    height: 12.h,
                   ),
                 ],
               ),
