@@ -12,10 +12,10 @@ class CustomBottomNavBar extends StatefulWidget {
   });
 
   @override
-  _CustomBottomNavBarState createState() => _CustomBottomNavBarState();
+  CustomBottomNavBarState createState() => CustomBottomNavBarState();
 }
 
-class _CustomBottomNavBarState extends State<CustomBottomNavBar> {
+class CustomBottomNavBarState extends State<CustomBottomNavBar> {
   late int _currentIndex;
 
   @override

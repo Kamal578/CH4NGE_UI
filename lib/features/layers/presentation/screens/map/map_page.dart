@@ -102,6 +102,8 @@ class _MapPageState extends State<MapPage> {
 }
 
 class FriendsActivitySheet extends StatelessWidget {
+  const FriendsActivitySheet({super.key});
+  
   @override
   Widget build(BuildContext context) {
     return DraggableBottomSheet(

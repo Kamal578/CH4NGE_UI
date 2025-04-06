@@ -21,19 +21,17 @@ class _FeedPageState extends State<FeedPage> {
       likeCount: 100,
       shareCount: 50,
       authorComment: "This is a sample comment.",
-      fitWidth: true,
     ),
     PostCardData(
       profilePicUrl:
           "https://media.licdn.com/dms/image/v2/C4E03AQGrdlO8sT78ug/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1663355766652?e=1749081600&v=beta&t=wKnfP2SW9E27yg6owE7tjLAPKOx5GlAhzqMN5BOWC-w",
       username: "Freaky Pavel",
       postImageUrl:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRl0C0pHDJx6DmOlaUmH5Igsk72aM2n7dDRBA&s",
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW-ux6VpEBhUHhFTFjB_CcZ-BY3vE6PliafQ&s",
       likeCount: 200,
       shareCount: 80,
       authorComment:
           "Long long long long long long long long long long sample comment.",
-      fitWidth: false,
     ),
   ];
 
@@ -47,67 +45,58 @@ class _FeedPageState extends State<FeedPage> {
         floatingActionButton: _buildNewPostWidget(),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         resizeToAvoidBottomInset: false,
-        body: Stack(
-          children: [
-            _buildTitleWidget(),
-            SingleChildScrollView(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Column(
-                children: [
-                  SizedBox(height: 40.h),
-                  _buildFeedPostCard(
-                    profilePicUrl: postCardData[0].profilePicUrl,
-                    username: postCardData[0].username,
-                    postImageUrl: postCardData[0].postImageUrl,
-                    likeCount: postCardData[0].likeCount,
-                    shareCount: postCardData[0].shareCount,
-                    authorComment: postCardData[0].authorComment,
-                    fitWidth: postCardData[0].fitWidth,
-                  ),
-                  SizedBox(height: 16.h),
-                  _buildTopCommentWidget(),
-                  SizedBox(height: 16.h),
-                  ...List.generate(
-                    postCardData.length - 1,
-                    (index) => Column(
-                      children: [
-                        _buildFeedPostCard(
-                          profilePicUrl: postCardData[index + 1].profilePicUrl,
-                          username: postCardData[index + 1].username,
-                          postImageUrl: postCardData[index + 1].postImageUrl,
-                          likeCount: postCardData[index + 1].likeCount,
-                          shareCount: postCardData[index + 1].shareCount,
-                          authorComment: postCardData[index + 1].authorComment,
-                          fitWidth: postCardData[index + 1].fitWidth,
-                        ),
-                        SizedBox(height: 16.h),
-                      ],
-                    ),
-                  ),
-                ],
+        body: SingleChildScrollView(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Column(
+            children: [
+              _buildTitleWidget(),
+              SizedBox(height: 8.h),
+              _buildFeedPostCard(
+                profilePicUrl: postCardData[0].profilePicUrl,
+                username: postCardData[0].username,
+                postImageUrl: postCardData[0].postImageUrl,
+                likeCount: postCardData[0].likeCount,
+                shareCount: postCardData[0].shareCount,
+                authorComment: postCardData[0].authorComment,
               ),
-            ),
-          ],
+              SizedBox(height: 16.h),
+              _buildTopCommentWidget(),
+              SizedBox(height: 16.h),
+              ...List.generate(
+                postCardData.length - 1,
+                (index) => Column(
+                  children: [
+                    _buildFeedPostCard(
+                      profilePicUrl: postCardData[index + 1].profilePicUrl,
+                      username: postCardData[index + 1].username,
+                      postImageUrl: postCardData[index + 1].postImageUrl,
+                      likeCount: postCardData[index + 1].likeCount,
+                      shareCount: postCardData[index + 1].shareCount,
+                      authorComment: postCardData[index + 1].authorComment,
+                    ),
+                    SizedBox(height: 16.h),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
 
   _buildTitleWidget() {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w),
-      child: Container(
-        width: double.maxFinite,
-        height: 32.h,
-        color: Colors.white,
-        alignment: Alignment.centerLeft,
-        child: Text(
-          "My Feed",
-          style: TextStyle(
-            fontSize: 20.sp,
-            fontWeight: FontWeight.w600,
-            color: Colors.black,
-          ),
+    return Container(
+      width: double.maxFinite,
+      height: 32.h,
+      color: Colors.white,
+      alignment: Alignment.centerLeft,
+      child: Text(
+        "My Feed",
+        style: TextStyle(
+          fontSize: 20.sp,
+          fontWeight: FontWeight.w600,
+          color: Colors.black,
         ),
       ),
     );
@@ -120,7 +109,6 @@ class _FeedPageState extends State<FeedPage> {
     required int likeCount,
     required int shareCount,
     required String authorComment,
-    required bool fitWidth,
   }) {
     return FeedPostCard(
       profilePicUrl: profilePicUrl,
@@ -129,7 +117,6 @@ class _FeedPageState extends State<FeedPage> {
       likeCount: likeCount,
       shareCount: shareCount,
       authorComment: authorComment,
-      fitWidth: fitWidth,
       onShare: () {
         // Handle share action
       },
@@ -148,9 +135,9 @@ class _FeedPageState extends State<FeedPage> {
 
   _buildNewPostWidget() {
     return UploadPostButton(
-      onUpload: (comment, fitWidth, imageData) {
+      onUpload: (comment, imageData) {
         // Handle the upload logic, e.g., send data to your provider or backend.
-        print("Comment: $comment, FitWidth: $fitWidth, Image: $imageData");
+        print("Comment: $comment, Image: $imageData");
       },
     );
   }
@@ -192,7 +179,6 @@ class FeedPostCard extends StatefulWidget {
   final int likeCount;
   final int shareCount;
   final String authorComment;
-  final bool fitWidth;
   final VoidCallback onShare;
 
   const FeedPostCard({
@@ -203,15 +189,14 @@ class FeedPostCard extends StatefulWidget {
     required this.likeCount,
     required this.shareCount,
     required this.authorComment,
-    required this.fitWidth,
     required this.onShare,
   });
 
   @override
-  _FeedPostCardState createState() => _FeedPostCardState();
+  FeedPostCardState createState() => FeedPostCardState();
 }
 
-class _FeedPostCardState extends State<FeedPostCard> {
+class FeedPostCardState extends State<FeedPostCard> {
   late bool _isLiked;
   late int _currentLikeCount;
 
@@ -272,20 +257,11 @@ class _FeedPostCardState extends State<FeedPostCard> {
             /// Post image with adaptive fitting
             const SizedBox(height: 8),
             ClipRRect(
-              child: widget.fitWidth
-                  ? Container(
-                      color: Colors.black,
-                      child: Image.network(
-                        widget.postImageUrl,
-                        width: double.infinity,
-                        fit: BoxFit.fitWidth,
-                      ),
-                    )
-                  : Image.network(
-                      widget.postImageUrl,
-                      width: double.infinity,
-                      fit: BoxFit.cover,
-                    ),
+              child: Image.network(
+                widget.postImageUrl,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             ),
 
             /// Like/Share row with stateful like button
@@ -421,7 +397,7 @@ class TopCommentWidget extends StatelessWidget {
 }
 
 class UploadPostButton extends StatelessWidget {
-  final Function(String comment, bool fitWidth, dynamic imageData) onUpload;
+  final Function(String comment, dynamic imageData) onUpload;
 
   const UploadPostButton({
     super.key,
@@ -460,6 +436,7 @@ class UploadPostButton extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
+      backgroundColor: Colors.white,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
       ),
@@ -474,23 +451,20 @@ class UploadPostButton extends StatelessWidget {
 }
 
 class UploadPostSheet extends StatefulWidget {
-  final Function(String comment, bool fitWidth, dynamic imageData) onUpload;
-  const UploadPostSheet({Key? key, required this.onUpload}) : super(key: key);
+  final Function(String comment, dynamic imageData) onUpload;
+  const UploadPostSheet({super.key, required this.onUpload});
 
   @override
-  _UploadPostSheetState createState() => _UploadPostSheetState();
+  UploadPostSheetState createState() => UploadPostSheetState();
 }
 
-class _UploadPostSheetState extends State<UploadPostSheet> {
+class UploadPostSheetState extends State<UploadPostSheet> {
   final TextEditingController _commentController = TextEditingController();
-  bool _fitWidth = false;
   dynamic _imageData; // Placeholder for image data
 
   @override
   Widget build(BuildContext context) {
-    final sheetHeight = MediaQuery.of(context).size.height * 0.8;
-    return Container(
-      height: sheetHeight,
+    return SingleChildScrollView(
       padding: EdgeInsets.all(16.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -500,63 +474,106 @@ class _UploadPostSheetState extends State<UploadPostSheet> {
             style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.bold),
           ),
           SizedBox(height: 16.h),
+          // Photo upload container: shows prompt or the selected image
+          GestureDetector(
+            onTap: _pickImage,
+            child: Container(
+              width: double.infinity,
+              height: _imageData == null ? 200.h : null, // Adjustable height
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xFF7DD334), width: 1.5),
+                borderRadius: BorderRadius.circular(8),
+                color: Colors.white,
+              ),
+              child: _imageData == null
+                  ? Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.add_a_photo,
+                            size: 20.sp,
+                            color: const Color(0xFF7DD334),
+                          ),
+                          SizedBox(width: 8.w),
+                          Text(
+                            "Upload Photo",
+                            style: TextStyle(
+                                fontSize: 16.sp, color: const Color(0xFF7DD334)),
+                          ),
+                        ],
+                      ),
+                    )
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(8),
+                      child: Image.network(
+                        _imageData,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+            ),
+          ),
+          SizedBox(height: 16.h),
+          // Post comment text field
           TextField(
             controller: _commentController,
             maxLines: 3,
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               labelText: "Post Comment",
-              border: OutlineInputBorder(),
+              labelStyle: TextStyle(fontSize: 16.sp, color: Colors.black54),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide:
+                    BorderSide(color: const Color(0xFF7DD334), width: 1.5),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide:
+                    BorderSide(color: const Color(0xFF7DD334), width: 1.5),
+              ),
             ),
           ),
           SizedBox(height: 16.h),
+          // Fit Width switch row
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              ElevatedButton.icon(
-                onPressed: _pickImage,
-                icon: const Icon(Icons.photo_camera),
-                label: const Text("Upload Photo"),
-              ),
-              Row(
-                children: [
-                  const Text("Fit Width"),
-                  Switch(
-                    value: _fitWidth,
-                    onChanged: (value) {
-                      setState(() {
-                        _fitWidth = value;
-                      });
-                    },
+              Expanded(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF7DD334),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 32.w, vertical: 12.h),
                   ),
-                ],
+                  onPressed: () {
+                    widget.onUpload(
+                      _commentController.text,
+                      _imageData,
+                    );
+                    Navigator.pop(context);
+                  },
+                  child: Text(
+                    "Post",
+                    style: TextStyle(fontSize: 16.sp, color: Colors.white),
+                  ),
+                ),
               ),
             ],
           ),
-          const Spacer(),
-          Center(
-            child: ElevatedButton(
-              onPressed: () {
-                widget.onUpload(
-                  _commentController.text,
-                  _fitWidth,
-                  _imageData,
-                );
-                Navigator.pop(context);
-              },
-              child: const Text("Post"),
-            ),
-          ),
-          SizedBox(height: 16.h),
         ],
       ),
     );
   }
 
   void _pickImage() async {
-    // Placeholder for image picking.
-    // Replace this with an image picker call (e.g., using the image_picker package).
+    // Placeholder for image picking logic.
+    // Replace with actual image picker code (e.g., using image_picker package).
     setState(() {
-      _imageData = "dummy_image_data"; // Simulated image data
+      // For demonstration, we use a dummy image URL.
+      _imageData =
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW-ux6VpEBhUHhFTFjB_CcZ-BY3vE6PliafQ&s";
     });
   }
 }
@@ -568,7 +585,6 @@ class PostCardData {
   int likeCount;
   int shareCount;
   String authorComment;
-  bool fitWidth;
 
   PostCardData({
     required this.profilePicUrl,
@@ -577,6 +593,5 @@ class PostCardData {
     required this.likeCount,
     required this.shareCount,
     required this.authorComment,
-    required this.fitWidth,
   });
 }
