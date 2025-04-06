@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({super.key});
@@ -460,7 +463,8 @@ class UploadPostSheet extends StatefulWidget {
 
 class UploadPostSheetState extends State<UploadPostSheet> {
   final TextEditingController _commentController = TextEditingController();
-  dynamic _imageData; // Placeholder for image data
+  final ImagePicker _picker = ImagePicker();
+  File? _image;
 
   @override
   Widget build(BuildContext context) {
@@ -479,13 +483,13 @@ class UploadPostSheetState extends State<UploadPostSheet> {
             onTap: _pickImage,
             child: Container(
               width: double.infinity,
-              height: _imageData == null ? 200.h : null, // Adjustable height
+              height: _image == null ? 200.h : null,
               decoration: BoxDecoration(
                 border: Border.all(color: const Color(0xFF7DD334), width: 1.5),
                 borderRadius: BorderRadius.circular(8),
                 color: Colors.white,
               ),
-              child: _imageData == null
+              child: _image == null
                   ? Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -499,15 +503,16 @@ class UploadPostSheetState extends State<UploadPostSheet> {
                           Text(
                             "Upload Photo",
                             style: TextStyle(
-                                fontSize: 16.sp, color: const Color(0xFF7DD334)),
+                                fontSize: 16.sp,
+                                color: const Color(0xFF7DD334)),
                           ),
                         ],
                       ),
                     )
                   : ClipRRect(
                       borderRadius: BorderRadius.circular(8),
-                      child: Image.network(
-                        _imageData,
+                      child: Image.file(
+                        _image!,
                         fit: BoxFit.contain,
                       ),
                     ),
@@ -550,7 +555,7 @@ class UploadPostSheetState extends State<UploadPostSheet> {
                   onPressed: () {
                     widget.onUpload(
                       _commentController.text,
-                      _imageData,
+                      _image,
                     );
                     Navigator.pop(context);
                   },
@@ -568,13 +573,14 @@ class UploadPostSheetState extends State<UploadPostSheet> {
   }
 
   void _pickImage() async {
-    // Placeholder for image picking logic.
-    // Replace with actual image picker code (e.g., using image_picker package).
-    setState(() {
-      // For demonstration, we use a dummy image URL.
-      _imageData =
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW-ux6VpEBhUHhFTFjB_CcZ-BY3vE6PliafQ&s";
-    });
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      _image = File(pickedFile.path);
+      setState(() {
+        _image = File(pickedFile.path);
+      });
+    }
   }
 }
 
