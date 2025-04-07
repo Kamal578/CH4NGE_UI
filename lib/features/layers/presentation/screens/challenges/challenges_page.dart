@@ -2,6 +2,7 @@ import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class ChallengesPage extends StatefulWidget {
   const ChallengesPage({super.key});
@@ -57,151 +58,153 @@ class _ChallengesPageState extends State<ChallengesPage> {
   }
 
   Widget _buildWeeklyChallengeWidget() {
-  return Container(
-    width: double.maxFinite,
-    constraints: BoxConstraints(minHeight: 90.h), // Use constraints instead of fixed height
-    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(24.r),
-      border: Border.all(
-        color: const Color.fromARGB(255, 144, 152, 177),
-        width: 0.5.w, // Make border width responsive
+    return Container(
+      width: double.maxFinite,
+      constraints: BoxConstraints(
+          minHeight: 90.h), // Use constraints instead of fixed height
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24.r),
+        border: Border.all(
+          color: const Color.fromARGB(255, 144, 152, 177),
+          width: 0.5.w, // Make border width responsive
+        ),
       ),
-    ),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Pedal Power Challenge",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    "75 KM on a bicycle in 7 Days!",
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      color: const Color.fromARGB(255, 144, 152, 177),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: 8.w),
-            Container(
-              constraints: BoxConstraints(
-                minWidth: 90.w,
-                maxWidth: 120.w, // Allow container to grow slightly
-              ),
-              padding: EdgeInsets.symmetric(
-                horizontal: 4.w,
-                vertical: 4.h,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.r),
-                border: Border.all(
-                  color: const Color.fromARGB(255, 144, 152, 177),
-                  width: 0.5.w,
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FittedBox( // Ensure time text scales down
-                    child: Text(
-                      "05 : 13 : 24",
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Pedal Power Challenge",
                       style: TextStyle(
-                        fontSize: 14.sp, // Reduced base size
-                        fontWeight: FontWeight.w400,
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
                       ),
                       maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    "days hrs min",
-                    style: TextStyle(
-                      fontSize: 10.sp,
-                      color: const Color.fromARGB(255, 217, 217, 217),
+                    SizedBox(height: 4.h),
+                    Text(
+                      "75 KM on a bicycle in 7 Days!",
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color.fromARGB(255, 144, 152, 177),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.visible,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 8.h),
-        _buildCompletedWeeklyAchievementBar(context),
-      ],
-    ),
-  );
-}
-
-Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
-  double percentageCompleted = 45.75 / 75;
-
-  return SizedBox(
-    height: 18.h,
-    child: Stack(
-      children: [
-        // Background bar
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24.r),
-            color: const Color.fromARGB(128, 144, 152, 177),
-          ),
-        ),
-        // Progress bar
-        LayoutBuilder(
-          builder: (context, constraints) {
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              width: constraints.maxWidth * percentageCompleted,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24.r),
-                color: const Color.fromARGB(255, 5, 149, 186),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "45.75 / 75",
-                    style: TextStyle(
-                      fontSize: 10.sp, // Reduced font size
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.fade,
-                  ),
+                  ],
                 ),
               ),
-            );
-          },
-        ),
-      ],
-    ),
-  );
-}
+              SizedBox(width: 8.w),
+              Container(
+                constraints: BoxConstraints(
+                  minWidth: 90.w,
+                  maxWidth: 120.w, // Allow container to grow slightly
+                ),
+                padding: EdgeInsets.symmetric(
+                  horizontal: 4.w,
+                  vertical: 4.h,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.r),
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 144, 152, 177),
+                    width: 0.5.w,
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FittedBox(
+                      // Ensure time text scales down
+                      child: Text(
+                        "05 : 13 : 24",
+                        style: TextStyle(
+                          fontSize: 14.sp, // Reduced base size
+                          fontWeight: FontWeight.w400,
+                        ),
+                        maxLines: 1,
+                      ),
+                    ),
+                    SizedBox(height: 2.h),
+                    Text(
+                      "days hrs min",
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: const Color.fromARGB(255, 217, 217, 217),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.visible,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 8.h),
+          _buildCompletedWeeklyAchievementBar(context),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
+    double percentageCompleted = 45.75 / 75;
+
+    return SizedBox(
+      height: 18.h,
+      child: Stack(
+        children: [
+          // Background bar
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24.r),
+              color: const Color.fromARGB(128, 144, 152, 177),
+            ),
+          ),
+          // Progress bar
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                width: constraints.maxWidth * percentageCompleted,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24.r),
+                  color: const Color.fromARGB(255, 5, 149, 186),
+                ),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "45.75 / 75",
+                      style: TextStyle(
+                        fontSize: 10.sp, // Reduced font size
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildAchievementsWidget() {
     return Container(
@@ -234,7 +237,9 @@ Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
                 ),
               ),
               IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  context.go('/achievements');
+                },
                 icon: Icon(
                   Icons.chevron_right_rounded,
                   size: 24.sp,
@@ -394,24 +399,7 @@ Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
 
   _buildCustomAppbarWidget() {
     return CustomAppBar(
-      actions: [
-        GestureDetector(
-          onTap: () {},
-          child: Image.asset(
-            "assets/icons/notifications_icon.png",
-            width: 28.w,
-            height: 28.h,
-          ),
-        ),
-        GestureDetector(
-          onTap: () {},
-          child: Image.asset(
-            "assets/icons/settings_icon.png",
-            width: 28.w,
-            height: 28.h,
-          ),
-        ),
-      ],
+      backgroundColor: Colors.white,
     );
   }
 }

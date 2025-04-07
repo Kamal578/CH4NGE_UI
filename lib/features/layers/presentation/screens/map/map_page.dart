@@ -79,31 +79,13 @@ class _MapPageState extends State<MapPage> {
   _buildCustomAppbarWidget() {
     return CustomAppBar(
       backgroundColor: Colors.white,
-      actions: [
-        GestureDetector(
-          onTap: () {},
-          child: Image.asset(
-            "assets/icons/notifications_icon.png",
-            width: 28.w,
-            height: 28.h,
-          ),
-        ),
-        GestureDetector(
-          onTap: () {},
-          child: Image.asset(
-            "assets/icons/settings_icon.png",
-            width: 28.w,
-            height: 28.h,
-          ),
-        ),
-      ],
     );
   }
 }
 
 class FriendsActivitySheet extends StatelessWidget {
   const FriendsActivitySheet({super.key});
-  
+
   @override
   Widget build(BuildContext context) {
     return DraggableBottomSheet(

@@ -458,24 +458,7 @@ Widget _buildNextAchievementWidget() {
 
   _buildCustomAppbarWidget() {
     return CustomAppBar(
-      actions: [
-        GestureDetector(
-          onTap: () {},
-          child: Image.asset(
-            "assets/icons/notifications_icon.png",
-            width: 28.w,
-            height: 28.h,
-          ),
-        ),
-        GestureDetector(
-          onTap: () {},
-          child: Image.asset(
-            "assets/icons/settings_icon.png",
-            width: 28.w,
-            height: 28.h,
-          ),
-        ),
-      ],
+      backgroundColor: Colors.white,
     );
   }
 }

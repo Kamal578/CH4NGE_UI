@@ -23,27 +23,37 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final List<Widget>? actions;
   final Color? backgroundColor;
 
-@override
-Widget build(BuildContext context) {
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16.w),
-    child: AppBar(
-      elevation: 0, 
-      surfaceTintColor: Colors.transparent,  // Disable scroll tint effect
-      shape: shape,
-      toolbarHeight: height ?? 56.h,
-      automaticallyImplyLeading: false,
-      backgroundColor: backgroundColor,
-      leadingWidth: leadingWidth ?? 0,
-      leading: leading,
-      title: title,
-      titleSpacing: 0,
-      centerTitle: centerTitle ?? false,
-      actions: actions,
-      forceMaterialTransparency: true,  // Disable any scroll-based transparency
-    ),
-  );
-}
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      child: AppBar(
+        elevation: 0,
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: backgroundColor,
+        leading: leading,
+        actions: actions ??
+            [
+              GestureDetector(
+                onTap: () {},
+                child: Image.asset(
+                  "assets/icons/notifications_icon.png",
+                  width: 28.w,
+                  height: 28.h,
+                ),
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Image.asset(
+                  "assets/icons/settings_icon.png",
+                  width: 28.w,
+                  height: 28.h,
+                ),
+              ),
+            ],
+      ),
+    );
+  }
 
   @override
   Size get preferredSize => Size.fromHeight(height ?? 56.h);

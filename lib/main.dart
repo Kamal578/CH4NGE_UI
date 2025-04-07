@@ -1,4 +1,5 @@
 import 'package:ch4nge/features/layers/presentation/screens/authentication/auth.dart';
+import 'package:ch4nge/features/layers/presentation/screens/challenges/achievements_page.dart';
 import 'package:ch4nge/features/layers/presentation/screens/challenges/challenges_page.dart';
 import 'package:ch4nge/features/layers/presentation/screens/feed/feed_page.dart';
 import 'package:ch4nge/features/layers/presentation/screens/home/view/home_page.dart';
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GoRouter router = GoRouter(
-      initialLocation: '/auth',
+      initialLocation: '/achievements',
       routes: [
         GoRoute(
           path: '/',
@@ -54,6 +55,10 @@ class MyApp extends StatelessWidget {
         GoRoute(
           path: '/map',
           builder: (context, state) => const MapPage(),
+        ),
+        GoRoute(
+          path: '/achievements',
+          builder: (context, state) => const AchievementsPage(),
         ),
       ],
     );
