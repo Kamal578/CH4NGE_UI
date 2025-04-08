@@ -2,6 +2,7 @@ import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,7 +12,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -136,319 +136,323 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-Widget _buildWeeklyChallengeWidget() {
-  return Container(
-    width: double.maxFinite,
-    constraints: BoxConstraints(minHeight: 90.h), // Use constraints instead of fixed height
-    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(24.r),
-      border: Border.all(
-        color: const Color.fromARGB(255, 144, 152, 177),
-        width: 0.5.w, // Make border width responsive
+  Widget _buildWeeklyChallengeWidget() {
+    return Container(
+      width: double.maxFinite,
+      constraints: BoxConstraints(
+          minHeight: 90.h), // Use constraints instead of fixed height
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24.r),
+        border: Border.all(
+          color: const Color.fromARGB(255, 144, 152, 177),
+          width: 0.5.w, // Make border width responsive
+        ),
       ),
-    ),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Expanded(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Pedal Power Challenge",
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    "75 KM on a bicycle in 7 Days!",
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      color: const Color.fromARGB(255, 144, 152, 177),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-            SizedBox(width: 8.w),
-            Container(
-              constraints: BoxConstraints(
-                minWidth: 90.w,
-                maxWidth: 120.w, // Allow container to grow slightly
-              ),
-              padding: EdgeInsets.symmetric(
-                horizontal: 4.w,
-                vertical: 4.h,
-              ),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.r),
-                border: Border.all(
-                  color: const Color.fromARGB(255, 144, 152, 177),
-                  width: 0.5.w,
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  FittedBox( // Ensure time text scales down
-                    child: Text(
-                      "05 : 13 : 24",
-                      style: TextStyle(
-                        fontSize: 14.sp, // Reduced base size
-                        fontWeight: FontWeight.w400,
-                      ),
-                      maxLines: 1,
-                    ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Text(
-                    "days hrs min",
-                    style: TextStyle(
-                      fontSize: 10.sp,
-                      color: const Color.fromARGB(255, 217, 217, 217),
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.visible,
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 8.h),
-        _buildCompletedWeeklyAchievementBar(context),
-      ],
-    ),
-  );
-}
-
-Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
-  double percentageCompleted = 45.75 / 75;
-
-  return SizedBox(
-    height: 18.h,
-    child: Stack(
-      children: [
-        // Background bar
-        Container(
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(24.r),
-            color: const Color.fromARGB(128, 144, 152, 177),
-          ),
-        ),
-        // Progress bar
-        LayoutBuilder(
-          builder: (context, constraints) {
-            return AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              width: constraints.maxWidth * percentageCompleted,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24.r),
-                color: const Color.fromARGB(255, 5, 149, 186),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.w),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "45.75 / 75",
-                    style: TextStyle(
-                      fontSize: 10.sp, // Reduced font size
-                      fontWeight: FontWeight.w500,
-                      color: Colors.white,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.fade,
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _buildActionListButtonWidget() {
-  return Container(
-    width: double.maxFinite,
-    constraints: BoxConstraints(minHeight: 80.h),
-    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-    decoration: BoxDecoration(
-      color: const Color(0xFF7DD334),
-      borderRadius: BorderRadius.circular(24.r),
-      border: Border.all(
-        color: const Color(0xFF9098B1),
-        width: 0.5.w,
-      ),
-    ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Expanded(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Make a step to Greener Future!",
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.white,
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Pedal Power Challenge",
+                      style: TextStyle(
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      "75 KM on a bicycle in 7 Days!",
+                      style: TextStyle(
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color.fromARGB(255, 144, 152, 177),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
-              SizedBox(height: 4.h),
-              Text(
-                "Record a sustainable action to gain points and reach weekly goals. See the list of actions.",
-                style: TextStyle(
-                  fontSize: 12.sp, // Increased from 10.sp
-                  fontWeight: FontWeight.w400,
-                  color: Colors.white,
-                  height: 1.2,
+              SizedBox(width: 8.w),
+              Container(
+                constraints: BoxConstraints(
+                  minWidth: 90.w,
+                  maxWidth: 120.w, // Allow container to grow slightly
                 ),
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
+                padding: EdgeInsets.symmetric(
+                  horizontal: 4.w,
+                  vertical: 4.h,
+                ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(8.r),
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 144, 152, 177),
+                    width: 0.5.w,
+                  ),
+                ),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    FittedBox(
+                      // Ensure time text scales down
+                      child: Text(
+                        "05 : 13 : 24",
+                        style: TextStyle(
+                          fontSize: 14.sp, // Reduced base size
+                          fontWeight: FontWeight.w400,
+                        ),
+                        maxLines: 1,
+                      ),
+                    ),
+                    SizedBox(height: 2.h),
+                    Text(
+                      "days hrs min",
+                      style: TextStyle(
+                        fontSize: 10.sp,
+                        color: const Color.fromARGB(255, 217, 217, 217),
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.visible,
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
-        ),
-        SizedBox(width: 8.w),
-        Container(
-          width: 40.w,
-          height: 40.w, // Keep square aspect ratio
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: const Color(0xFF7DD334),
-            border: Border.all(
-              color: Colors.white,
-              width: 1.5.w, // Made responsive
-            ),
-          ),
-          child: IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.chevron_right_rounded,
-              color: Colors.white,
-              size: 24.sp,
-            ),
-            padding: EdgeInsets.zero,
-          ),
-        ),
-      ],
-    ),
-  );
-}
-
-Widget _buildNextAchievementWidget() {
-  return Container(
-    width: double.maxFinite,
-    constraints: BoxConstraints(minHeight: 110.h),
-    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(24.r),
-      border: Border.all(
-        color: const Color(0xFF9098B1),
-        width: 0.5.w,
+          SizedBox(height: 8.h),
+          _buildCompletedWeeklyAchievementBar(context),
+        ],
       ),
-    ),
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Keep going! Next Goal:",
-          style: TextStyle(
-            fontSize: 18.sp, // Reduced from 20.sp
-            fontWeight: FontWeight.w600,
+    );
+  }
+
+  Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
+    double percentageCompleted = 45.75 / 75;
+
+    return SizedBox(
+      height: 18.h,
+      child: Stack(
+        children: [
+          // Background bar
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24.r),
+              color: const Color.fromARGB(128, 144, 152, 177),
+            ),
           ),
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-        Divider(
-          color: const Color(0x809098B1),
-          height: 16.h,
-          thickness: 0.5.h,
-        ),
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 2.w,
-                  height: 8.h,
-                  color: const Color(0x809098B1),
+          // Progress bar
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                width: constraints.maxWidth * percentageCompleted,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24.r),
+                  color: const Color.fromARGB(255, 5, 149, 186),
                 ),
-                Container(
-                  width: 50.r, // Responsive radius-based size
-                  height: 50.r,
-                  decoration: BoxDecoration(
-                    color: const Color(0x809098B1),
-                    shape: BoxShape.circle,
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "45.75 / 75",
+                      style: TextStyle(
+                        fontSize: 10.sp, // Reduced font size
+                        fontWeight: FontWeight.w500,
+                        color: Colors.white,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.fade,
+                    ),
                   ),
                 ),
-                Container(
-                  width: 2.w,
-                  height: 8.h,
-                  color: const Color(0x809098B1),
+              );
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildActionListButtonWidget() {
+    return Container(
+      width: double.maxFinite,
+      constraints: BoxConstraints(minHeight: 80.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+      decoration: BoxDecoration(
+        color: const Color(0xFF7DD334),
+        borderRadius: BorderRadius.circular(24.r),
+        border: Border.all(
+          color: const Color(0xFF9098B1),
+          width: 0.5.w,
+        ),
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Expanded(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Make a step to Greener Future!",
+                  style: TextStyle(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  "Record a sustainable action to gain points and reach weekly goals. See the list of actions.",
+                  style: TextStyle(
+                    fontSize: 12.sp, // Increased from 10.sp
+                    fontWeight: FontWeight.w400,
+                    color: Colors.white,
+                    height: 1.2,
+                  ),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
               ],
             ),
-            SizedBox(width: 12.w),
-            Expanded(
-              child: Column(
+          ),
+          SizedBox(width: 8.w),
+          Container(
+            width: 40.w,
+            height: 40.w, // Keep square aspect ratio
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: const Color(0xFF7DD334),
+              border: Border.all(
+                color: Colors.white,
+                width: 1.5.w, // Made responsive
+              ),
+            ),
+            child: IconButton(
+              onPressed: () {
+                context.go('/actions');
+              },
+              icon: Icon(
+                Icons.chevron_right_rounded,
+                color: Colors.white,
+                size: 24.sp,
+              ),
+              padding: EdgeInsets.zero,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildNextAchievementWidget() {
+    return Container(
+      width: double.maxFinite,
+      constraints: BoxConstraints(minHeight: 110.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24.r),
+        border: Border.all(
+          color: const Color(0xFF9098B1),
+          width: 0.5.w,
+        ),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Keep going! Next Goal:",
+            style: TextStyle(
+              fontSize: 18.sp, // Reduced from 20.sp
+              fontWeight: FontWeight.w600,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Divider(
+            color: const Color(0x809098B1),
+            height: 16.h,
+            thickness: 0.5.h,
+          ),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "Stealthy Water Warrior",
-                    style: TextStyle(
-                      fontSize: 14.sp, // Reduced from 16.sp
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
+                  Container(
+                    width: 2.w,
+                    height: 8.h,
+                    color: const Color(0x809098B1),
                   ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    "Saving 1,000+ liters of water in a month through mindful habits",
-                    style: TextStyle(
-                      fontSize: 12.sp, // Increased from 10.sp
+                  Container(
+                    width: 50.r, // Responsive radius-based size
+                    height: 50.r,
+                    decoration: BoxDecoration(
                       color: const Color(0x809098B1),
-                      height: 1.3,
+                      shape: BoxShape.circle,
                     ),
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Container(
+                    width: 2.w,
+                    height: 8.h,
+                    color: const Color(0x809098B1),
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
+              SizedBox(width: 12.w),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "Stealthy Water Warrior",
+                      style: TextStyle(
+                        fontSize: 14.sp, // Reduced from 16.sp
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    SizedBox(height: 4.h),
+                    Text(
+                      "Saving 1,000+ liters of water in a month through mindful habits",
+                      style: TextStyle(
+                        fontSize: 12.sp, // Increased from 10.sp
+                        color: const Color(0x809098B1),
+                        height: 1.3,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
 
   _buildCustomNavbarWidget() {
     return CustomBottomNavBar(
