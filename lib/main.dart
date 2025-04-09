@@ -6,6 +6,7 @@ import 'package:ch4nge/features/layers/presentation/screens/home/view/actions_pa
 import 'package:ch4nge/features/layers/presentation/screens/home/view/home_page.dart';
 import 'package:ch4nge/features/layers/presentation/screens/leaderboard/leaderboard_page.dart';
 import 'package:ch4nge/features/layers/presentation/screens/map/map_page.dart';
+import 'package:ch4nge/features/layers/presentation/screens/settings/settings_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -65,6 +66,10 @@ class MyApp extends StatelessWidget {
           path: '/actions',
           builder: (context, state) => ActionsPage(),
         ),
+        GoRoute(
+          path: '/settings',
+          builder: (context, state) => SettingsPage(), 
+          ),
       ],
     );
 
