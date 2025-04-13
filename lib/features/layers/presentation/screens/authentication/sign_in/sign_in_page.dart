@@ -1,4 +1,3 @@
-import 'package:ch4nge/core/utils/validation_functions.dart';
 import 'package:ch4nge/features/layers/presentation/screens/authentication/bloc/auth_bloc.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
