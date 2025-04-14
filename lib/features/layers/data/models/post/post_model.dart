@@ -1,0 +1,33 @@
+import 'package:ch4nge/features/layers/domain/entities/post_entity.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'post_model.freezed.dart';
+part 'post_model.g.dart';
+
+@freezed
+abstract class PostModel with _$PostModel {
+  const factory PostModel({
+    required String postId,
+    required String userId,
+    required List<String> commentIds,
+    required String title,
+    required String imageUrl,
+    required int likeNumber,
+    required int sharesNumber,
+  }) = _PostModel;
+
+  PostEntity toEntity() {
+    return PostEntity(
+      postId: postId,
+      userId: userId,
+      commentIds: commentIds,
+      title: title,
+      imageUrl: imageUrl,
+      likeNumber: likeNumber,
+      sharesNumber: sharesNumber,
+    );
+  }
+
+  factory PostModel.fromJson(Map<String, dynamic> json) =>
+      _$PostModelFromJson(json);
+}
