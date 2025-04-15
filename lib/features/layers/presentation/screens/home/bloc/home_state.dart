@@ -13,15 +13,16 @@ final class HomeInitialState extends HomeState {}
 final class HomeLoadingState extends HomeState {}
 
 final class HomaSuccessState extends HomeState {
+  final String userId;
   final String username;
   final int streak;
   final WeeklyChallengeEntity weeklyChallenge;
   final AchievementEntity achievement;
 
-  const HomaSuccessState(this.username, this.streak, this.weeklyChallenge, this.achievement);
+  const HomaSuccessState(this.userId, this.username, this.streak, this.weeklyChallenge, this.achievement);
 
   @override
-  List<Object> get props => [username, streak, weeklyChallenge, achievement];
+  List<Object> get props => [userId, username, streak, weeklyChallenge, achievement];
 }
 
 final class HomeErrorState extends HomeState {
