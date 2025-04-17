@@ -36,9 +36,9 @@ setupServiceLocator() async {
   serviceLocator.registerLazySingleton<IAuthenticationRepository>(
       () => AuthenticationRepositoryImpl());
   serviceLocator.registerLazySingleton<UserRepository>(
-      () => serviceLocator<UserRepositoryImpl>());
+      () => UserRepositoryImpl());
   serviceLocator.registerLazySingleton<WeeklyChallengeRepository>(
-      () => serviceLocator<WeeklyChallengeRepositoryImpl>());
+      () => WeeklyChallengeRepositoryImpl());
   serviceLocator.registerLazySingleton<AchievementRepository>(
       () => AchievementRepositoryImpl());
 

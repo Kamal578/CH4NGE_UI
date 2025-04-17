@@ -1,3 +1,10 @@
+import 'package:ch4nge/core/auth/auth_manager.dart';
+import 'package:ch4nge/features/layers/domain/entities/achievement_entity.dart';
+import 'package:ch4nge/features/layers/domain/entities/weekly_challenge_entity.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_next_achievement.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_user.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_weekly_challenge.dart';
+import 'package:ch4nge/features/layers/presentation/widgets/countdown_timer.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
 import 'package:flutter/material.dart';
@@ -5,15 +12,62 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({
+    required this.getUserUseCase,
+    required this.getWeeklyChallengeUseCase,
+    required this.getNextAchievementUseCase,
+    super.key,
+  });
+
+  final GetUserUseCase getUserUseCase;
+  final GetWeeklyChallengeUseCase getWeeklyChallengeUseCase;
+  final GetNextAchievementUseCase getNextAchievementUseCase;
 
   @override
   State<HomePage> createState() => _HomePageState();
 }
 
 class _HomePageState extends State<HomePage> {
+  final String username = AuthManager.getUsername();
+  final String userId = AuthManager.getId();
+  int? streak;
+  WeeklyChallengeEntity? weeklyChallenge;
+  AchievementEntity? achievement;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final user = await widget.getUserUseCase(userId);
+      final challenge = await widget.getWeeklyChallengeUseCase(userId);
+      final achievement = await widget.getNextAchievementUseCase(userId);
+
+      setState(() {
+        streak = user.streak;
+        weeklyChallenge = challenge;
+        this.achievement = achievement;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+      debugPrint('Error loading data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load data. Please try again.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -54,7 +108,7 @@ class _HomePageState extends State<HomePage> {
       height: 32.h,
       alignment: Alignment.centerLeft,
       child: Text(
-        "Hello Dima!",
+        "Hello $username!",
         style: TextStyle(
           fontSize: 20.sp,
           fontWeight: FontWeight.w600,
@@ -79,7 +133,7 @@ class _HomePageState extends State<HomePage> {
         children: [
           Center(
             child: Text(
-              "23",
+              streak.toString(),
               style: TextStyle(
                 fontSize: 64.sp,
                 fontWeight: FontWeight.w600,
@@ -161,7 +215,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Pedal Power Challenge",
+                      weeklyChallenge!.title,
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
@@ -171,7 +225,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      "75 KM on a bicycle in 7 Days!",
+                      weeklyChallenge!.subtitle,
                       style: TextStyle(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
@@ -204,15 +258,11 @@ class _HomePageState extends State<HomePage> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    FittedBox(
-                      // Ensure time text scales down
-                      child: Text(
-                        "05 : 13 : 24",
-                        style: TextStyle(
-                          fontSize: 14.sp, // Reduced base size
-                          fontWeight: FontWeight.w400,
-                        ),
-                        maxLines: 1,
+                    const WeeklyCountdownTimer(
+                      showLabels: false,
+                      textStyle: TextStyle(
+                        fontSize: 16,
+                        color: Colors.blue,
                       ),
                     ),
                     SizedBox(height: 2.h),
@@ -238,7 +288,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
-    double percentageCompleted = 45.75 / 75;
+    double percentageCompleted =
+        weeklyChallenge!.currentValue / weeklyChallenge!.totalValue;
 
     return SizedBox(
       height: 18.h,
@@ -266,7 +317,7 @@ class _HomePageState extends State<HomePage> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "45.75 / 75",
+                      "${weeklyChallenge!.currentValue} / ${weeklyChallenge!.totalValue}",
                       style: TextStyle(
                         fontSize: 10.sp, // Reduced font size
                         fontWeight: FontWeight.w500,
@@ -424,7 +475,7 @@ class _HomePageState extends State<HomePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Stealthy Water Warrior",
+                      achievement!.title,
                       style: TextStyle(
                         fontSize: 14.sp, // Reduced from 16.sp
                         fontWeight: FontWeight.bold,
@@ -435,7 +486,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      "Saving 1,000+ liters of water in a month through mindful habits",
+                      achievement!.subtitle,
                       style: TextStyle(
                         fontSize: 12.sp, // Increased from 10.sp
                         color: const Color(0x809098B1),

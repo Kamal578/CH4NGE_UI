@@ -7,11 +7,11 @@ class UserRepositoryImpl implements UserRepository {
   Future<UserEntity> getUser(String userId) async {
     return UserEntity(
       userId: userId,
-      username: 'John Doe',
-      password: 'password123',
+      username: 'Dima',
+      password: 'Qwerty123@',
       profilePicUrl:
           'https://media.licdn.com/dms/image/v2/D4E03AQE6_00Lbd-Itw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1697047665155?e=1750291200&v=beta&t=_BBvq5lAMPw3-cY4lHbN1M2_Y2aBYAsVfnJriLT1auA',
-      email: 'j.doe@ufaz.az',
+      email: 'd.kuramshin@ufaz.az',
       streak: 5,
       points: 100,
       ghgIndex: 4.73,

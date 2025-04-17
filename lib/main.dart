@@ -32,11 +32,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GoRouter router = GoRouter(
-      initialLocation: '/actions',
+      initialLocation: '/',
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => HomePage(),
+          builder: (context, state) => HomePage(
+            key: UniqueKey(),
+            getUserUseCase: serviceLocator(),
+            getWeeklyChallengeUseCase: serviceLocator(),
+            getNextAchievementUseCase: serviceLocator(),
+          ),
         ),
         GoRoute(
           path: '/auth',
@@ -68,8 +73,8 @@ class MyApp extends StatelessWidget {
         ),
         GoRoute(
           path: '/settings',
-          builder: (context, state) => SettingsPage(), 
-          ),
+          builder: (context, state) => SettingsPage(),
+        ),
       ],
     );
 

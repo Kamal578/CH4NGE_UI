@@ -7,8 +7,8 @@ class WeeklyChallengeRepositoryImpl implements WeeklyChallengeRepository {
     return WeeklyChallengeEntity(
       weekklyChallengeId: '1',
       userId: userId,
-      title: 'Weekly Challenge',
-      subtitle: 'Complete the weekly challenge to earn rewards.',
+      title: 'Pedal Power Challenge',
+      subtitle: '75 KM on a bicycle in 7 Days!',
       currentValue: 3,
       totalValue: 5,
       points: 20,
