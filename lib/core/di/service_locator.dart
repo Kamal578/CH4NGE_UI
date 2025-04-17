@@ -1,10 +1,13 @@
 import 'package:ch4nge/features/layers/data/datasources/datasource_auth.dart';
+import 'package:ch4nge/features/layers/data/repositories/achievement_repository.dart';
 import 'package:ch4nge/features/layers/data/repositories/auth_repository_impl.dart';
 import 'package:ch4nge/features/layers/data/repositories/user_repository.dart';
 import 'package:ch4nge/features/layers/data/repositories/weekly_challenge_repository.dart';
+import 'package:ch4nge/features/layers/domain/repositories/achievement_repository.dart';
 import 'package:ch4nge/features/layers/domain/repositories/auth_repository.dart';
 import 'package:ch4nge/features/layers/domain/repositories/user_repository.dart';
 import 'package:ch4nge/features/layers/domain/repositories/weekly_challenge_repository.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_next_achievement.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_user.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_weekly_challenge.dart';
 import 'package:ch4nge/features/layers/presentation/screens/authentication/bloc/auth_bloc.dart';
@@ -36,15 +39,20 @@ setupServiceLocator() async {
       () => serviceLocator<UserRepositoryImpl>());
   serviceLocator.registerLazySingleton<WeeklyChallengeRepository>(
       () => serviceLocator<WeeklyChallengeRepositoryImpl>());
+  serviceLocator.registerLazySingleton<AchievementRepository>(
+      () => AchievementRepositoryImpl());
 
   // Use cases
   serviceLocator.registerFactory(() => GetUserUseCase(serviceLocator()));
   serviceLocator
       .registerFactory(() => GetWeeklyChallengeUseCase(serviceLocator()));
+  serviceLocator
+      .registerFactory(() => GetNextAchievementUseCase(serviceLocator()));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => AuthBloc());
   serviceLocator.registerLazySingleton(() => HomePageBloc(
+        serviceLocator(),
         serviceLocator(),
         serviceLocator(),
       ));
