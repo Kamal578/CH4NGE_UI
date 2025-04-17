@@ -2,6 +2,7 @@ import 'package:ch4nge/features/layers/domain/entities/achievement_entity.dart';
 import 'package:ch4nge/features/layers/domain/entities/user_entity.dart';
 import 'package:ch4nge/features/layers/domain/entities/weekly_challenge_entity.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_user.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_weekly_challenge.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,10 +13,12 @@ part 'home_state.dart';
 class HomePageBloc extends Bloc<HomeEvent, HomeState> {
   HomePageBloc(
     this.getUserUseCase,
+    this.getWeeklyChallengeUseCase
   ) : super(HomeInitialState()) {
     on<HomeStarted>(_onHomeStarted);
   }
   GetUserUseCase getUserUseCase;
+  GetWeeklyChallengeUseCase getWeeklyChallengeUseCase;
 
   void _onHomeStarted(HomeStarted event, Emitter<HomeState> emit) async {
     emit(HomeLoadingState());
@@ -25,7 +28,7 @@ class HomePageBloc extends Bloc<HomeEvent, HomeState> {
       final String username = user.username;
       final int streak = user.streak;
       final WeeklyChallengeEntity weeklyChallenge =
-          getWeeklyChallengeUseCase(userId: userId);
+          await getWeeklyChallengeUseCase(event.userId);
       final AchievementEntity achievement =
           getNextAchievementUseCase(userId: userId);
 

@@ -5,9 +5,6 @@ import 'package:latlong2/latlong.dart';
 class UserRepositoryImpl implements UserRepository {
   @override
   Future<UserEntity> getUser(String userId) async {
-    // Simulate a network call
-    await Future.delayed(const Duration(seconds: 2));
-    // Replace with actual data fetching logic
     return UserEntity(
       userId: userId,
       username: 'John Doe',
