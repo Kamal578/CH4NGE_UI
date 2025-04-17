@@ -219,7 +219,7 @@ class _UserModel implements UserModel {
       points: points,
       ghgIndex: ghgIndex,
       location: LatLng(location[0], location[1]),
-      friendsIds: friendsIds.map((e) => int.parse(e)).toList(),
+      friendsIds: friendsIds,
     );
   }
 

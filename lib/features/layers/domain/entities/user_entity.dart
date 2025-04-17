@@ -10,7 +10,7 @@ class UserEntity {
   final int points;
   final double ghgIndex;
   final LatLng location;
-  final List<int> friendsIds;
+  final List<String> friendsIds;
 
   UserEntity({
     required this.userId,
