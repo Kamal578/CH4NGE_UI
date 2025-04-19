@@ -1,12 +1,20 @@
 import 'package:ch4nge/core/auth/auth_manager.dart';
+import 'package:ch4nge/features/layers/domain/entities/achievement_entity.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_all_achievements.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class AchievementsPage extends StatefulWidget {
-  const AchievementsPage({super.key});
+  const AchievementsPage({
+    super.key,
+    required this.getAllAchievementsUseCase,
+  });
+
+  final GetAllAchievementsUseCase getAllAchievementsUseCase;
 
   @override
   State<AchievementsPage> createState() => _AchievementsPageState();
@@ -14,6 +22,30 @@ class AchievementsPage extends StatefulWidget {
 
 class _AchievementsPageState extends State<AchievementsPage> {
   final String userId = AuthManager.getId();
+  List<AchievementEntity>? achievements;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final achievements = await widget.getAllAchievementsUseCase(userId);
+      setState(() {
+        this.achievements = achievements;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+      debugPrint('Error loading data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load data. Please try again.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +89,6 @@ class _AchievementsPageState extends State<AchievementsPage> {
   }
 
   Widget _buildAchievementsWidget() {
-    int length = 20;
-
     return SizedBox(
       width: double.maxFinite,
       child: Column(
@@ -72,38 +102,40 @@ class _AchievementsPageState extends State<AchievementsPage> {
           Column(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(
-              length,
-              (index) {
-                Color topLineColor = index == 0
-                    ? Colors.transparent
-                    : (index < 3
-                        ? Color.fromARGB(128, 125, 211, 52)
-                        : Color.fromARGB(128, 144, 152, 177));
-                Color circleColor = index < 2
-                    ? Color.fromARGB(255, 125, 211, 52)
-                    : Color.fromARGB(128, 144, 152, 177);
-                Color bottomLineColor = index < 2
-                    ? Color.fromARGB(128, 125, 211, 52)
-                    : Color.fromARGB(128, 144, 152, 177);
-                bottomLineColor =
-                    index == length - 1 ? Colors.transparent : bottomLineColor;
-                Color titleColor =
-                    index < 2 ? Colors.black : Colors.black.withAlpha(128);
+            children: achievements?.asMap().entries.map((entry) {
+              final index = entry.key;
+              final achievement = entry.value;
 
-                return Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildAchievementItem(
-                      topLineColor: topLineColor,
-                      circleColor: circleColor,
-                      bottomLineColor: bottomLineColor,
-                      titleColor: titleColor,
-                    ),
-                  ],
-                );
-              },
-            ),
+              Color topLineColor = index == 0
+                  ? Colors.transparent
+                  : (achievement.isAchieved == true
+                      ? Color.fromARGB(128, 125, 211, 52)
+                      : Color.fromARGB(128, 144, 152, 177));
+              Color circleColor = achievement.isAchieved == true
+                  ? Color.fromARGB(255, 125, 211, 52)
+                  : Color.fromARGB(128, 144, 152, 177);
+              Color bottomLineColor = achievement.isAchieved == true
+                  ? Color.fromARGB(128, 125, 211, 52)
+                  : Color.fromARGB(128, 144, 152, 177);
+              bottomLineColor =
+                  index == achievements!.length - 1 ? Colors.transparent : bottomLineColor;
+              Color titleColor =
+                  achievement.isAchieved == true ? Colors.black : Colors.black.withAlpha(128);
+
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildAchievementItem(
+                    topLineColor: topLineColor,
+                    circleColor: circleColor,
+                    bottomLineColor: bottomLineColor,
+                    titleColor: titleColor,
+                    title: achievement.title,
+                    subtitle: achievement.subtitle,
+                  ),
+                ],
+              );
+            }).toList() ?? [],
           ),
         ],
       ),
@@ -115,9 +147,11 @@ class _AchievementsPageState extends State<AchievementsPage> {
     required Color circleColor,
     required Color bottomLineColor,
     required Color titleColor,
+    required String title,
+    required String subtitle,
   }) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Vertical lines and circle
         Column(
@@ -153,7 +187,7 @@ class _AchievementsPageState extends State<AchievementsPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "Stealthy Water Warrior",
+                title,
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
@@ -161,9 +195,10 @@ class _AchievementsPageState extends State<AchievementsPage> {
                 ),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.start,
               ),
               Text(
-                "Saving 1,000+ liters of water in a month through mindful habits",
+                subtitle,
                 style: TextStyle(
                   fontSize: 12.sp,
                   color: Color.fromARGB(128, 144, 152, 177),
@@ -171,6 +206,7 @@ class _AchievementsPageState extends State<AchievementsPage> {
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.start,
               ),
             ],
           ),

@@ -70,7 +70,10 @@ class MyApp extends StatelessWidget {
         ),
         GoRoute(
           path: '/achievements',
-          builder: (context, state) => const AchievementsPage(),
+          builder: (context, state) => AchievementsPage(
+            key: UniqueKey(),
+            getAllAchievementsUseCase: serviceLocator(),
+          ),
         ),
         GoRoute(
           path: '/actions',
