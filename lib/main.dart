@@ -49,7 +49,10 @@ class MyApp extends StatelessWidget {
         ),
         GoRoute(
           path: '/leaderboard',
-          builder: (context, state) => const LeaderboardPage(),
+          builder: (context, state) => LeaderboardPage(
+            key: UniqueKey(),
+            getAllUsersUseCase: serviceLocator(),
+          ),
         ),
         GoRoute(
           path: '/feed',
