@@ -1,11 +1,19 @@
+import 'package:ch4nge/core/auth/auth_manager.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-class AchievementsPage extends StatelessWidget {
+class AchievementsPage extends StatefulWidget {
   const AchievementsPage({super.key});
+
+  @override
+  State<AchievementsPage> createState() => _AchievementsPageState();
+}
+
+class _AchievementsPageState extends State<AchievementsPage> {
+  final String userId = AuthManager.getId();
 
   @override
   Widget build(BuildContext context) {
@@ -78,9 +86,8 @@ class AchievementsPage extends StatelessWidget {
                 Color bottomLineColor = index < 2
                     ? Color.fromARGB(128, 125, 211, 52)
                     : Color.fromARGB(128, 144, 152, 177);
-                bottomLineColor = index == length - 1
-                    ? Colors.transparent
-                    : bottomLineColor;
+                bottomLineColor =
+                    index == length - 1 ? Colors.transparent : bottomLineColor;
                 Color titleColor =
                     index < 2 ? Colors.black : Colors.black.withAlpha(128);
 

@@ -13,10 +13,10 @@ import 'package:go_router/go_router.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
+    super.key,
     required this.getUserUseCase,
     required this.getWeeklyChallengeUseCase,
     required this.getNextAchievementUseCase,
-    super.key,
   });
 
   final GetUserUseCase getUserUseCase;

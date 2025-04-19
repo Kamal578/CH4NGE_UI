@@ -57,7 +57,12 @@ class MyApp extends StatelessWidget {
         ),
         GoRoute(
           path: '/challenges',
-          builder: (context, state) => const ChallengesPage(),
+          builder: (context, state) => ChallengesPage(
+            key: UniqueKey(),
+            getWeeklyChallengeUseCase: serviceLocator(),
+            getAchievementProgressUseCase: serviceLocator(),
+            getMiniChallengesUseCase: serviceLocator(),
+          ),
         ),
         GoRoute(
           path: '/map',

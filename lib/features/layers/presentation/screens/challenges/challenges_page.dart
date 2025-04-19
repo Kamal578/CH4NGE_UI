@@ -1,3 +1,11 @@
+import 'package:ch4nge/core/auth/auth_manager.dart';
+import 'package:ch4nge/features/layers/domain/entities/achievement_entity.dart';
+import 'package:ch4nge/features/layers/domain/entities/mini_challenge_entity.dart';
+import 'package:ch4nge/features/layers/domain/entities/weekly_challenge_entity.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_achievement_progress.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_mini_challenges.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_weekly_challenge.dart';
+import 'package:ch4nge/features/layers/presentation/widgets/countdown_timer.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
 import 'package:flutter/material.dart';
@@ -5,15 +13,60 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class ChallengesPage extends StatefulWidget {
-  const ChallengesPage({super.key});
+  const ChallengesPage({
+    super.key,
+    required this.getWeeklyChallengeUseCase,
+    required this.getAchievementProgressUseCase,
+    required this.getMiniChallengesUseCase,
+  });
+
+  final GetWeeklyChallengeUseCase getWeeklyChallengeUseCase;
+  final GetAchievementProgressUseCase getAchievementProgressUseCase;
+  final GetMiniChallengesUseCase getMiniChallengesUseCase;
 
   @override
   State<ChallengesPage> createState() => _ChallengesPageState();
 }
 
 class _ChallengesPageState extends State<ChallengesPage> {
+  final String userId = AuthManager.getId();
+  WeeklyChallengeEntity? weeklyChallenge;
+  List<AchievementEntity>? achievementProgress;
+  List<MiniChallengeEntity>? miniChallenges;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final challenge = await widget.getWeeklyChallengeUseCase(userId);
+      final achievements = await widget.getAchievementProgressUseCase(userId);
+      final miniChallenges = await widget.getMiniChallengesUseCase(userId);
+      setState(() {
+        weeklyChallenge = challenge;
+        achievementProgress = achievements;
+        this.miniChallenges = miniChallenges;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+      debugPrint('Error loading data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load data. Please try again.')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -47,7 +100,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
       height: 32.h,
       alignment: Alignment.centerLeft,
       child: Text(
-        "Weekly Challenges ",
+        "Weekly Challenges",
         style: TextStyle(
           fontSize: 20.sp,
           fontWeight: FontWeight.w600,
@@ -82,7 +135,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Pedal Power Challenge",
+                      weeklyChallenge!.title,
                       style: TextStyle(
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
@@ -92,7 +145,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      "75 KM on a bicycle in 7 Days!",
+                      weeklyChallenge!.subtitle,
                       style: TextStyle(
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
@@ -125,15 +178,11 @@ class _ChallengesPageState extends State<ChallengesPage> {
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    FittedBox(
-                      // Ensure time text scales down
-                      child: Text(
-                        "05 : 13 : 24",
-                        style: TextStyle(
-                          fontSize: 14.sp, // Reduced base size
-                          fontWeight: FontWeight.w400,
-                        ),
-                        maxLines: 1,
+                    const WeeklyCountdownTimer(
+                      showLabels: false,
+                      textStyle: TextStyle(
+                        fontSize: 16,
+                        color: Colors.blue,
                       ),
                     ),
                     SizedBox(height: 2.h),
@@ -159,7 +208,8 @@ class _ChallengesPageState extends State<ChallengesPage> {
   }
 
   Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
-    double percentageCompleted = 45.75 / 75;
+    double percentageCompleted =
+        weeklyChallenge!.currentValue / weeklyChallenge!.totalValue;
 
     return SizedBox(
       height: 18.h,
@@ -187,7 +237,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
                   child: Align(
                     alignment: Alignment.centerLeft,
                     child: Text(
-                      "45.75 / 75",
+                      "${weeklyChallenge!.currentValue} / ${weeklyChallenge!.totalValue}",
                       style: TextStyle(
                         fontSize: 10.sp, // Reduced font size
                         fontWeight: FontWeight.w500,
@@ -264,6 +314,8 @@ class _ChallengesPageState extends State<ChallengesPage> {
             circleColor: Color.fromARGB(128, 125, 211, 52),
             bottomLineColor: Color.fromARGB(128, 125, 211, 52),
             titleColor: Colors.black.withAlpha(128),
+            title: achievementProgress![0].title,
+            subtitle: achievementProgress![0].subtitle,
           ),
 
           // Second Achievement Item
@@ -272,6 +324,8 @@ class _ChallengesPageState extends State<ChallengesPage> {
             circleColor: Color.fromARGB(255, 125, 211, 52),
             bottomLineColor: Color.fromARGB(128, 144, 152, 177),
             titleColor: Colors.black,
+            title: achievementProgress![1].title,
+            subtitle: achievementProgress![1].subtitle,
           ),
 
           // Third Achievement Item
@@ -280,6 +334,8 @@ class _ChallengesPageState extends State<ChallengesPage> {
             circleColor: Color.fromARGB(128, 144, 152, 177),
             bottomLineColor: Color.fromARGB(128, 144, 152, 177),
             titleColor: Colors.black,
+            title: achievementProgress![1].title,
+            subtitle: achievementProgress![1].subtitle,
           ),
         ],
       ),
@@ -291,6 +347,8 @@ class _ChallengesPageState extends State<ChallengesPage> {
     required Color circleColor,
     required Color bottomLineColor,
     required Color titleColor,
+    required String title,
+    required String subtitle,
   }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -329,7 +387,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Text(
-                "Stealthy Water Warrior",
+                title,
                 style: TextStyle(
                   fontSize: 14.sp,
                   fontWeight: FontWeight.bold,
@@ -339,7 +397,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
                 overflow: TextOverflow.ellipsis,
               ),
               Text(
-                "Saving 1,000+ liters of water in a month through mindful habits",
+                subtitle,
                 style: TextStyle(
                   fontSize: 12.sp,
                   color: Color.fromARGB(128, 144, 152, 177),
@@ -375,15 +433,37 @@ class _ChallengesPageState extends State<ChallengesPage> {
           SizedBox(
             height: 200.h,
             child: CarouselView(
+              enableSplash: false,
               itemExtent: 200,
-              children: List.generate(
-                10,
-                (index) {
-                  return Container(
-                    color: Color.fromARGB(255, 125, 211, 52),
-                  );
-                },
-              ),
+              children: miniChallenges?.map((challenge) {
+                    return Container(
+                      color: const Color.fromARGB(255, 125, 211, 52),
+                      padding: EdgeInsets.all(16.h),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            challenge.title,
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.white,
+                            ),
+                          ),
+                          SizedBox(height: 8.h),
+                          Text(
+                            challenge.subtitle,
+                            style: TextStyle(
+                              fontSize: 10.sp,
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  }).toList() ??
+                  [],
             ),
           ),
         ],

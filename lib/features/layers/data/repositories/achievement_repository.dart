@@ -7,9 +7,29 @@ class AchievementRepositoryImpl implements AchievementRepository {
     return AchievementEntity(
       achievementId: '1',
       userId: userId,
-      title: 'First Achievement',
-      subtitle: 'This is your first achievement!',
+      title: 'Stealthy Water Warrior',
+      subtitle: 'Saving 1,000+ l of water in a month through mindful habits',
       isAchieved: false,
     );
+  }
+
+  @override
+  Future<List<AchievementEntity>> getAchievementProgress(String userId) async {
+    return [
+      AchievementEntity(
+        achievementId: '1',
+        userId: userId,
+        title: 'Stealthy Water Warrior',
+        subtitle: 'Saving 1,000+ l of water in a month through mindful habits',
+        isAchieved: false,
+      ),
+      AchievementEntity(
+        achievementId: '1',
+        userId: userId,
+        title: 'Stealthy Water Warrior',
+        subtitle: 'Saving 1,000+ l of water in a month through mindful habits',
+        isAchieved: false,
+      ),
+    ];
   }
 }
