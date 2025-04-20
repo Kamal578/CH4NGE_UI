@@ -35,14 +35,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         leading: leading,
         actions: actions ??
             [
-              GestureDetector(
-                onTap: () {},
-                child: Image.asset(
-                  "assets/icons/notifications_icon.png",
-                  width: 28.w,
-                  height: 28.h,
-                ),
-              ),
+              // GestureDetector(
+              //   onTap: () {},
+              //   child: Image.asset(
+              //     "assets/icons/notifications_icon.png",
+              //     width: 28.w,
+              //     height: 28.h,
+              //   ),
+              // ),
               GestureDetector(
                 onTap: () {
                   context.go('/settings');

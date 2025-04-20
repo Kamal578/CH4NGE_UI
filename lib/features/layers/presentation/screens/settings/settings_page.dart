@@ -34,7 +34,7 @@ class SettingsPage extends StatelessWidget {
                   onTap: () {},
                 ),
               ),
-              _applicationSettings(context),
+              // _applicationSettings(context),
               _accountSettings(context),
               _otherSettings(context),
               SizedBox(height: 12.h),

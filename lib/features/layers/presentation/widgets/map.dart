@@ -89,11 +89,11 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  _loadData() async {
-    var str = await rootBundle.loadString('assets/points.json');
+  Future<void> _loadData() async {
+    var str = await rootBundle.loadString('assets/json_data/points.json');
     List<dynamic> result = jsonDecode(str);
 
-    var str2 = await rootBundle.loadString('assets/sensors.json');
+    var str2 = await rootBundle.loadString('assets/json_data/sensors.json');
     List<dynamic> result2 = jsonDecode(str2);
 
     setState(() {

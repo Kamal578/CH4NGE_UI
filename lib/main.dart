@@ -69,7 +69,11 @@ class MyApp extends StatelessWidget {
         ),
         GoRoute(
           path: '/map',
-          builder: (context, state) => const MapPage(),
+          builder: (context, state) => MapPage(
+            key: UniqueKey(),
+            getFriendsActivitiesUseCase: serviceLocator(),
+            getFriendsUseCase: serviceLocator(),
+          ),
         ),
         GoRoute(
           path: '/achievements',

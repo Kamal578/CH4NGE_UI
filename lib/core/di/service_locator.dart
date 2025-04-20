@@ -12,6 +12,7 @@ import 'package:ch4nge/features/layers/domain/repositories/weekly_challenge_repo
 import 'package:ch4nge/features/layers/domain/use_cases/get_achievement_progress.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_all_achievements.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_all_users.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_friends.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_mini_challenges.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_next_achievement.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_user.dart';
@@ -61,8 +62,8 @@ setupServiceLocator() async {
       .registerFactory(() => GetMiniChallengesUseCase(serviceLocator()));
   serviceLocator
       .registerFactory(() => GetAllAchievementsUseCase(serviceLocator()));
-  serviceLocator
-      .registerFactory(() => GetAllUsersUseCase(serviceLocator()));
+  serviceLocator.registerFactory(() => GetAllUsersUseCase(serviceLocator()));
+  serviceLocator.registerFactory(() => GetFriendsUseCase(serviceLocator()));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => AuthBloc());

@@ -1,3 +1,8 @@
+import 'package:ch4nge/core/auth/auth_manager.dart';
+import 'package:ch4nge/features/layers/domain/entities/activity_entity.dart';
+import 'package:ch4nge/features/layers/domain/entities/user_entity.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_friends.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_friends_activities.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/draggable_bottomsheet.dart';
@@ -6,13 +11,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class MapPage extends StatefulWidget {
-  const MapPage({super.key});
+  const MapPage({
+    super.key,
+    required this.getFriendsActivitiesUseCase,
+    required this.getFriendsUseCase,
+  });
+
+  final GetFriendsUseCase getFriendsUseCase;
+  final GetFriendsActivitiesUseCase getFriendsActivitiesUseCase;
 
   @override
   State<MapPage> createState() => _MapPageState();
 }
 
 class _MapPageState extends State<MapPage> {
+  final String userId = AuthManager.getId();
+  final List<UserEntity>? users = [];
+  final Map<String, ActivityEntity>? activities = {};
+  bool isLoading = true;
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

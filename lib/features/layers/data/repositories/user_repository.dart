@@ -298,4 +298,75 @@ class UserRepositoryImpl implements UserRepository {
       ),
     ];
   }
+
+  @override
+  Future<List<UserEntity>> getFriends(String userId) async {
+    return [
+      UserEntity(
+        userId: userId,
+        username: 'Dima',
+        password: 'Qwerty123@',
+        profilePicUrl:
+            'https://media.licdn.com/dms/image/v2/D4E03AQE6_00Lbd-Itw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1697047665155?e=1750291200&v=beta&t=_BBvq5lAMPw3-cY4lHbN1M2_Y2aBYAsVfnJriLT1auA',
+        email: 'd.kuramshin@ufaz.az',
+        streak: 5,
+        points: 100,
+        ghgIndex: 4.73,
+        location: LatLng(413010, 49.945072),
+        friendsIds: ['12346', '12347', '12348'],
+      ),
+      UserEntity(
+        userId: '12346',
+        username: 'Kamal',
+        password: 'Qwerty123@@',
+        profilePicUrl:
+            'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
+        email: 'kamal.ahmadov@ufaz.az',
+        streak: 5,
+        points: 110,
+        ghgIndex: 4.70,
+        location: LatLng(413000, 49.915072),
+        friendsIds: ['12345', '12347', '12348', '12349'],
+      ),
+      UserEntity(
+        userId: '12347',
+        username: 'Pavel',
+        password: 'Password123!',
+        profilePicUrl:
+            'https://media.licdn.com/dms/image/v2/C4E03AQGrdlO8sT78ug/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1663355766652?e=1749081600&v=beta&t=wKnfP2SW9E27yg6owE7tjLAPKOx5GlAhzqMN5BOWC-w',
+        email: 'p.kuznetsov@ufaz.az',
+        streak: 3,
+        points: 119,
+        ghgIndex: 4.65,
+        location: LatLng(40.458456, 49.857582),
+        friendsIds: ['12345', '12346', '12348', '12349'],
+      ),
+      UserEntity(
+        userId: '12348',
+        username: 'Rena',
+        password: 'RenaPassword',
+        profilePicUrl:
+            'https://media.licdn.com/dms/image/v2/D4E03AQFBIu9J-kB1vg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1719592835289?e=1749081600&v=beta&t=q0rtR0XkdszZIbllG59gYCvi9HYV65NlYVH0p0yZ990',
+        email: 'rena@ufaz.az',
+        streak: 7,
+        points: 118,
+        ghgIndex: 2.80,
+        location: LatLng(40.409264, 49.867092),
+        friendsIds: ['12345', '12346', '12347', '12349'],
+      ),
+      UserEntity(
+        userId: '12349',
+        username: 'Suad',
+        password: 'SuadPassword',
+        profilePicUrl:
+            'https://media.licdn.com/dms/image/v2/D4E03AQHIxVV2KRBqWw/profile-displayphoto-shrink_200_200/B4EZSVG6waHgAg-/0/1737668408302?e=1749081600&v=beta&t=f9lC_Wl9YLTU8Wbi0H2X_nCuFJq54csVo6vDxZZ5vW8',
+        email: 'suad@ufaz.az',
+        streak: 4,
+        points: 119,
+        ghgIndex: 4.95,
+        location: LatLng(40.388456, 49.821582),
+        friendsIds: ['12345', '12346', '12347', '12348'],
+      ),
+    ];
+  }
 }
