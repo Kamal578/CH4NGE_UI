@@ -1,10 +1,12 @@
 import 'package:ch4nge/features/layers/data/datasources/datasource_auth.dart';
 import 'package:ch4nge/features/layers/data/repositories/achievement_repository.dart';
+import 'package:ch4nge/features/layers/data/repositories/activity_repository.dart';
 import 'package:ch4nge/features/layers/data/repositories/auth_repository_impl.dart';
 import 'package:ch4nge/features/layers/data/repositories/mini_challenge.dart';
 import 'package:ch4nge/features/layers/data/repositories/user_repository.dart';
 import 'package:ch4nge/features/layers/data/repositories/weekly_challenge_repository.dart';
 import 'package:ch4nge/features/layers/domain/repositories/achievement_repository.dart';
+import 'package:ch4nge/features/layers/domain/repositories/activity_repository.dart';
 import 'package:ch4nge/features/layers/domain/repositories/auth_repository.dart';
 import 'package:ch4nge/features/layers/domain/repositories/mini_challenge_repository.dart';
 import 'package:ch4nge/features/layers/domain/repositories/user_repository.dart';
@@ -13,6 +15,7 @@ import 'package:ch4nge/features/layers/domain/use_cases/get_achievement_progress
 import 'package:ch4nge/features/layers/domain/use_cases/get_all_achievements.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_all_users.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_friends.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_friends_activities.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_mini_challenges.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_next_achievement.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_user.dart';
@@ -49,6 +52,8 @@ setupServiceLocator() async {
       () => AchievementRepositoryImpl());
   serviceLocator.registerLazySingleton<MiniChallengeRepository>(
       () => MiniChallengeRepositoryImpl());
+  serviceLocator.registerLazySingleton<ActivityRepository>(
+      () => ActivityRepositoryImpl());
 
   // Use cases
   serviceLocator.registerFactory(() => GetUserUseCase(serviceLocator()));
@@ -64,6 +69,7 @@ setupServiceLocator() async {
       .registerFactory(() => GetAllAchievementsUseCase(serviceLocator()));
   serviceLocator.registerFactory(() => GetAllUsersUseCase(serviceLocator()));
   serviceLocator.registerFactory(() => GetFriendsUseCase(serviceLocator()));
+  serviceLocator.registerFactory(() => GetFriendsActivitiesUseCase(serviceLocator()));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => AuthBloc());

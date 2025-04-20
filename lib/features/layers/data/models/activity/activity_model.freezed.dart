@@ -15,6 +15,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$ActivityModel {
+  String get activityId;
   String get userId;
   List<double> get location;
   String get title;
@@ -36,6 +37,8 @@ mixin _$ActivityModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is ActivityModel &&
+            (identical(other.activityId, activityId) ||
+                other.activityId == activityId) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             const DeepCollectionEquality().equals(other.location, location) &&
             (identical(other.title, title) || other.title == title) &&
@@ -44,12 +47,12 @@ mixin _$ActivityModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, userId,
+  int get hashCode => Object.hash(runtimeType, activityId, userId,
       const DeepCollectionEquality().hash(location), title, value);
 
   @override
   String toString() {
-    return 'ActivityModel(userId: $userId, location: $location, title: $title, value: $value)';
+    return 'ActivityModel(activityId: $activityId, userId: $userId, location: $location, title: $title, value: $value)';
   }
 }
 
@@ -59,7 +62,12 @@ abstract mixin class $ActivityModelCopyWith<$Res> {
           ActivityModel value, $Res Function(ActivityModel) _then) =
       _$ActivityModelCopyWithImpl;
   @useResult
-  $Res call({String userId, List<double> location, String title, int value});
+  $Res call(
+      {String activityId,
+      String userId,
+      List<double> location,
+      String title,
+      int value});
 }
 
 /// @nodoc
@@ -75,12 +83,17 @@ class _$ActivityModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? activityId = null,
     Object? userId = null,
     Object? location = null,
     Object? title = null,
     Object? value = null,
   }) {
     return _then(_self.copyWith(
+      activityId: null == activityId
+          ? _self.activityId
+          : activityId // ignore: cast_nullable_to_non_nullable
+              as String,
       userId: null == userId
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
@@ -105,7 +118,8 @@ class _$ActivityModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _ActivityModel implements ActivityModel {
   const _ActivityModel(
-      {required this.userId,
+      {required this.activityId,
+      required this.userId,
       required final List<double> location,
       required this.title,
       required this.value})
@@ -113,6 +127,8 @@ class _ActivityModel implements ActivityModel {
   factory _ActivityModel.fromJson(Map<String, dynamic> json) =>
       _$ActivityModelFromJson(json);
 
+  @override
+  final String activityId;
   @override
   final String userId;
   final List<double> _location;
@@ -130,6 +146,7 @@ class _ActivityModel implements ActivityModel {
 
   ActivityEntity toEntity() {
     return ActivityEntity(
+      activityId: activityId,
       userId: userId,
       location: LatLng(location[0], location[1]),
       title: title,
@@ -157,6 +174,8 @@ class _ActivityModel implements ActivityModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _ActivityModel &&
+            (identical(other.activityId, activityId) ||
+                other.activityId == activityId) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             const DeepCollectionEquality().equals(other._location, _location) &&
             (identical(other.title, title) || other.title == title) &&
@@ -165,12 +184,12 @@ class _ActivityModel implements ActivityModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, userId,
+  int get hashCode => Object.hash(runtimeType, activityId, userId,
       const DeepCollectionEquality().hash(_location), title, value);
 
   @override
   String toString() {
-    return 'ActivityModel(userId: $userId, location: $location, title: $title, value: $value)';
+    return 'ActivityModel(activityId: $activityId, userId: $userId, location: $location, title: $title, value: $value)';
   }
 }
 
@@ -182,7 +201,12 @@ abstract mixin class _$ActivityModelCopyWith<$Res>
       __$ActivityModelCopyWithImpl;
   @override
   @useResult
-  $Res call({String userId, List<double> location, String title, int value});
+  $Res call(
+      {String activityId,
+      String userId,
+      List<double> location,
+      String title,
+      int value});
 }
 
 /// @nodoc
@@ -198,12 +222,17 @@ class __$ActivityModelCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
+    Object? activityId = null,
     Object? userId = null,
     Object? location = null,
     Object? title = null,
     Object? value = null,
   }) {
     return _then(_ActivityModel(
+      activityId: null == activityId
+          ? _self.activityId
+          : activityId // ignore: cast_nullable_to_non_nullable
+              as String,
       userId: null == userId
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable

@@ -8,6 +8,7 @@ part 'activity_model.g.dart';
 @freezed
 abstract class ActivityModel with _$ActivityModel {
   const factory ActivityModel({
+    required String activityId,
     required String userId,
     required List<double> location,
     required String title,
@@ -16,6 +17,7 @@ abstract class ActivityModel with _$ActivityModel {
 
   ActivityEntity toEntity() {
     return ActivityEntity(
+      activityId: activityId,
       userId: userId,
       location: LatLng(location[0], location[1]),
       title: title,

@@ -201,12 +201,6 @@ class _UserModel implements UserModel {
   @override
   final double ghgIndex;
   final List<double> _location;
-  @override
-  List<double> get location {
-    if (_location is EqualUnmodifiableListView) return _location;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_location);
-  }
 
   UserEntity toEntity() {
     return UserEntity(
@@ -221,6 +215,13 @@ class _UserModel implements UserModel {
       location: LatLng(location[0], location[1]),
       friendsIds: friendsIds,
     );
+  }
+
+  @override
+  List<double> get location {
+    if (_location is EqualUnmodifiableListView) return _location;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_location);
   }
 
   final List<String> _friendsIds;
