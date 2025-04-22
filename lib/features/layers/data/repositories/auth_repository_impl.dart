@@ -32,4 +32,14 @@ class AuthenticationRepositoryImpl implements IAuthenticationRepository {
       return Left("${ex.message}");
     }
   }
+
+  @override
+  Future<Either<String, String>> logout() async {
+    try {
+      await _datasource.logout();
+      return Right('Done');
+    } on ApiException catch (ex) {
+      return Left("${ex.message}");
+    }
+  }
 }

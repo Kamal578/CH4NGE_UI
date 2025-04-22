@@ -16,3 +16,5 @@ class AuthRegisterRequest extends AuthEvent {
   
   AuthRegisterRequest(this.email, this.username, this.password);
 }
+
+class AuthLogoutRequest extends AuthEvent {}

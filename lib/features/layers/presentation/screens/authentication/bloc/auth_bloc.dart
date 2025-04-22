@@ -12,6 +12,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc() : super(AuthInitState()) {
     on<AuthLoginRequest>(_onLoginRequest);
     on<AuthRegisterRequest>(_onRegisterRequest);
+    on<AuthLogoutRequest>(_onLogoutRequest);
   }
 
   void _onLoginRequest(AuthLoginRequest event, Emitter<AuthState> emit) async {
@@ -23,6 +24,12 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   void _onRegisterRequest(AuthRegisterRequest event, Emitter<AuthState> emit) async {
     emit(AuthLoadingState());
     final response = await _authenticationRepository.register(event.email, event.password, event.username);
+    emit(AuthRequestSuccessState(response));
+  }
+
+  void _onLogoutRequest(AuthLogoutRequest event, Emitter<AuthState> emit) async {
+    emit(AuthLoadingState());
+    final response = await _authenticationRepository.logout();
     emit(AuthRequestSuccessState(response));
   }
 }

@@ -6,6 +6,7 @@ import 'package:dio/dio.dart';
 abstract class IAuthenticationDatasource {
   Future<void> register(String email, String password, String name);
   Future<String> login(String email, String password);
+  Future<void> logout();
 }
 
 class AuthenticationRemote extends IAuthenticationDatasource {
@@ -99,6 +100,40 @@ class AuthenticationRemote extends IAuthenticationDatasource {
   //     }
   //   } on DioException catch (ex) {
   //     throw ApiException(ex.response?.data["message"], ex.response);
+  //   }
+  // }
+  @override
+  Future<void> logout() async {
+    await Future.delayed(const Duration(seconds: 1));
+    AuthManager.logout();
+  }
+
+  // TODO: Uncomment this section to use the actual API
+  // @override
+  // Future<void> logout() async {
+  //   try {
+  //     final response = await _dio.post(
+  //       '/api/users/logout',
+  //       options: Options(
+  //         headers: {
+  //           'Authorization': 'Bearer ${AuthManager.readAuth()}',
+  //         },
+  //         validateStatus: (status) => status! < 500,
+  //       ),
+  //     );
+
+  //     if (response.statusCode! >= 200 && response.statusCode! < 300) {
+  //       AuthManager.logout();
+  //       return;
+  //     }
+
+  //     final errorMessage = response.data?['message'] ?? 'Logout failed';
+  //     throw ApiException(errorMessage, response);
+  //   } on DioException catch (ex) {
+  //     final message = ex.response?.data?['message'] ??
+  //         ex.message ??
+  //         'Network error during logout';
+  //     throw ApiException(message, ex.response);
   //   }
   // }
 }
