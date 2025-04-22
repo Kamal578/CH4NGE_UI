@@ -28,7 +28,7 @@ class SettingsPage extends StatelessWidget {
                 child: MySmallUserCard(
                   cardColor: Color.fromARGB(255, 125, 211, 52),
                   backgroundMotifColor: Colors.white,
-                  userName: 'Kamal Skibidi',
+                  userName: 'Kamal Ahmadov',
                   userProfilePicUrl:
                       'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
                   onTap: () {},

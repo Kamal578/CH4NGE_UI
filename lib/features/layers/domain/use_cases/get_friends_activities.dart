@@ -5,7 +5,7 @@ class GetFriendsActivitiesUseCase {
   final ActivityRepository repository;
 
   GetFriendsActivitiesUseCase(this.repository);
-  Future<List<ActivityEntity>> call(String userId) async {
-    return await repository.getFriendsActivities(userId);
+  Future<List<ActivityEntity>> call(List<String> userIds) async {
+    return await repository.getFriendsActivities(userIds);
   }
 }

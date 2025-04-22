@@ -312,7 +312,7 @@ class UserRepositoryImpl implements UserRepository {
         streak: 5,
         points: 100,
         ghgIndex: 4.73,
-        location: LatLng(413010, 49.945072),
+        location: LatLng(40.418456, 49.907582),
         friendsIds: ['12346', '12347', '12348'],
       ),
       UserEntity(
@@ -325,7 +325,7 @@ class UserRepositoryImpl implements UserRepository {
         streak: 5,
         points: 110,
         ghgIndex: 4.70,
-        location: LatLng(413000, 49.915072),
+        location: LatLng(40.398456, 49.927582),
         friendsIds: ['12345', '12347', '12348', '12349'],
       ),
       UserEntity(

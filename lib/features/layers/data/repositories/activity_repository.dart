@@ -4,26 +4,27 @@ import 'package:latlong2/latlong.dart';
 
 class ActivityRepositoryImpl implements ActivityRepository {
   @override
-  Future<List<ActivityEntity>> getFriendsActivities(String userId) async {
+  Future<List<ActivityEntity>> getFriendsActivities(
+      List<String> userIds) async {
     return [
       // Activities for Dima
       ActivityEntity(
         activityId: '1',
-        userId: userId,
+        userId: '12345',
         title: 'Walked to work.',
         location: LatLng(40.41766581333585, 49.96498330825312),
         value: 12,
       ),
       ActivityEntity(
         activityId: '2',
-        userId: userId,
+        userId: '12345',
         title: 'Recycled plastic.',
         location: LatLng(40.41866581333585, 49.96598330825312),
         value: 8,
       ),
       ActivityEntity(
         activityId: '3',
-        userId: userId,
+        userId: '12345',
         title: 'Used public transport.',
         location: LatLng(40.41966581333585, 49.96698330825312),
         value: 10,

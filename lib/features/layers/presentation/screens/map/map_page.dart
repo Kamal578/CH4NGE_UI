@@ -3,10 +3,10 @@ import 'package:ch4nge/features/layers/domain/entities/activity_entity.dart';
 import 'package:ch4nge/features/layers/domain/entities/user_entity.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_friends.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_friends_activities.dart';
+import 'package:ch4nge/features/layers/presentation/screens/map/widgets/friends_activity_sheet.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
-import 'package:ch4nge/features/layers/presentation/widgets/draggable_bottomsheet.dart';
-import 'package:ch4nge/features/layers/presentation/widgets/map.dart';
+import 'package:ch4nge/features/layers/presentation/screens/map/widgets/map.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -26,12 +26,55 @@ class MapPage extends StatefulWidget {
 
 class _MapPageState extends State<MapPage> {
   final String userId = AuthManager.getId();
-  final List<UserEntity>? users = [];
-  final Map<String, ActivityEntity>? activities = {};
+  List<UserEntity>? users = [];
+  Map<String, List<ActivityEntity>>? activities = {};
   bool isLoading = true;
 
   @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final users = await widget.getFriendsUseCase(userId);
+
+      final userIdToUsername = {
+        for (final user in users) user.userId: user.username,
+      };
+
+      final userIds = userIdToUsername.keys.toList();
+      final activities = await widget.getFriendsActivitiesUseCase(userIds);
+
+      final Map<String, List<ActivityEntity>> result = {};
+
+      for (final activity in activities) {
+        final username = userIdToUsername[activity.userId] ?? 'Unknown';
+
+        result.putIfAbsent(username, () => []).add(activity);
+      }
+
+      setState(() {
+        this.users = users;
+        this.activities = result;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+      debugPrint('Error loading data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to load data. Please try again.')),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -40,9 +83,9 @@ class _MapPageState extends State<MapPage> {
         resizeToAvoidBottomInset: false,
         body: Stack(
           children: [
-            GHGMap(),
+            GHGMap(users: users!, activities: activities!),
             _buildTitleWidget(),
-            FriendsActivitySheet(),
+            FriendsActivitySheet(users: users!, activities: activities!),
           ],
         ),
       ),
@@ -96,121 +139,6 @@ class _MapPageState extends State<MapPage> {
   _buildCustomAppbarWidget() {
     return CustomAppBar(
       backgroundColor: Colors.white,
-    );
-  }
-}
-
-class FriendsActivitySheet extends StatelessWidget {
-  const FriendsActivitySheet({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return DraggableBottomSheet(
-      minHeightRatio: 0.25,
-      backgroundColor: Colors.white,
-      headerText: "See Friends' Activities",
-      builder: (context, sheetPosition) {
-        return SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 8.h),
-              _buildActivityItem(
-                username: "Kamush Skibidi",
-                time: "9:41",
-                action: "Planted a tree",
-                points: 10,
-              ),
-              _buildActivityItem(
-                username: "Kamush Skibidi",
-                time: "9:41",
-                action:
-                    "Planted a tree, and saved a cat from a tree, and bla bla bla ble ble ble blu blu blu",
-                points: 52,
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildActivityItem(
-      {required String username,
-      required String action,
-      required String time,
-      required int points}) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 4.h),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12.r),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4.r,
-            spreadRadius: 1.r,
-          ),
-        ],
-      ),
-      child: ListTile(
-        contentPadding: EdgeInsets.all(12.r),
-        leading: CircleAvatar(
-          radius: 24.r,
-          backgroundColor: Color(0xFF7DD334).withValues(alpha: .1),
-          child: Icon(Icons.person, color: Color(0xFF7DD334), size: 28.r),
-        ),
-        title: RichText(
-          text: TextSpan(
-            style: TextStyle(
-              fontSize: 14.sp,
-              color: Colors.black87,
-              height: 1.4,
-            ),
-            children: [
-              TextSpan(
-                text: username,
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              TextSpan(text: ' '),
-              TextSpan(text: action),
-            ],
-          ),
-        ),
-        subtitle: Padding(
-          padding: EdgeInsets.only(top: 4.h),
-          child: Text(
-            time,
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: Colors.grey[600],
-            ),
-          ),
-        ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.eco,
-              color: Color(0xFF7DD334),
-              size: 20.sp,
-            ),
-            SizedBox(width: 4.w),
-            Text(
-              '+$points',
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.bold,
-                color: Color(0xFF7DD334),
-              ),
-            ),
-          ],
-        ),
-      ),
     );
   }
 }
