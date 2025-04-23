@@ -3,8 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
-class ActionsPage extends StatelessWidget {
+class ActionsPage extends StatefulWidget {
   const ActionsPage({super.key});
+
+  @override
+  State<ActionsPage> createState() => _ActionsPageState();
+}
+
+class _ActionsPageState extends State<ActionsPage> {
+  String? _selectedTransportMode;
+  String? _selectedGreenAction;
+  String _selectedDistanceUnit = 'km';
+  String _selectedDurationUnit = 'minutes';
+  final TextEditingController _distanceController = TextEditingController();
+  final TextEditingController _durationController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -18,63 +30,274 @@ class ActionsPage extends StatelessWidget {
             left: 16.h,
             right: 16.h,
           ),
-          child: Column(
-            children: [
-              _buildTitleWidget(),
-              SizedBox(height: 8.h),
-              ExpandableActionCard(
-                title: "Transportation",
-                onRecordAction: () {
-                  // Add validation or submission logic here
-                },
-                sections: [
-                  ExpansionSectionData(
-                    title: "Active Commute",
-                    content: Column(
-                      children: [
-                        TextField(
-                            decoration: InputDecoration(labelText: "Distance")),
-                        TextField(
-                            decoration: InputDecoration(labelText: "Duration")),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: const Text("On Foot"),
-                                value: "On Foot",
-                                groupValue: "On Foot",
-                                onChanged: (value) {},
-                              ),
-                            ),
-                            Expanded(
-                              child: RadioListTile<String>(
-                                title: const Text("Bicycle"),
-                                value: "Bicycle",
-                                groupValue: "On Foot",
-                                onChanged: (value) {},
-                              ),
-                            ),
-                          ],
+          child: Column(children: [
+            _buildTitleWidget(),
+            SizedBox(height: 8.h),
+            ExpandableActionCard(
+              title: "Transportation",
+              onRecordAction: () {
+                if (_selectedTransportMode == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Please select a transport mode")),
+                  );
+                } else {
+                  print("""
+                    Recorded transport: $_selectedTransportMode
+                    Distance: ${_distanceController.text} $_selectedDistanceUnit}
+                    Duration: ${_durationController.text} $_selectedDurationUnit}
+                  """);
+                }
+              },
+              sections: [
+                ExpansionSectionData(
+                  title: "Active Commute",
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 4.h),
+                      _buildUnitInputField(
+                        controller: _distanceController,
+                        label: "Distance",
+                        selectedUnit: _selectedDistanceUnit,
+                        units: const ['km', 'm'],
+                        onUnitChanged: (unit) =>
+                            setState(() => _selectedDistanceUnit = unit!),
+                      ),
+                      SizedBox(height: 16.h),
+                      _buildUnitInputField(
+                        controller: _durationController,
+                        label: "Duration",
+                        selectedUnit: _selectedDurationUnit,
+                        units: const ['minutes', 'hours'],
+                        onUnitChanged: (unit) =>
+                            setState(() => _selectedDurationUnit = unit!),
+                      ),
+                      SizedBox(height: 16.h),
+                      Padding(
+                        padding: EdgeInsets.only(left: 8.w),
+                        child: Text(
+                          "Select Transport Mode",
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87,
+                          ),
                         ),
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 8.h),
+                      _buildTransportRadioTiles(),
+                    ],
                   ),
-                  ExpansionSectionData(
-                    title: "Shared Ride",
-                    content: const Text("Shared Ride content"),
+                ),
+                ExpansionSectionData(
+                  title: "Private Vehicle",
+                  content: Text("Private Vehicle content"),
+                ),
+                ExpansionSectionData(
+                  title: "Public Transport",
+                  content: Text("Public Trasport content"),
+                ),
+              ],
+            ),
+            SizedBox(height: 12.h),
+            ExpandableActionCard(
+              title: "Green Action",
+              onRecordAction: () {
+                if (_selectedGreenAction == null) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text("Please select an action")),
+                  );
+                } else {
+                  debugPrint("Recorded green action: $_selectedGreenAction");
+                }
+              },
+              sections: [
+                ExpansionSectionData(
+                  title: "Choose an Action",
+                  content: Column(
+                    children: [
+                      RadioListTile<String>(
+                        activeColor: Color.fromARGB(255, 125, 211, 52),
+                        title: const Text("Planted a tree"),
+                        value: "Planted a tree",
+                        groupValue: _selectedGreenAction,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGreenAction = value;
+                          });
+                        },
+                      ),
+                      RadioListTile<String>(
+                        activeColor: Color.fromARGB(255, 125, 211, 52),
+                        title: const Text("Turned off lights"),
+                        value: "Turned off lights",
+                        groupValue: _selectedGreenAction,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGreenAction = value;
+                          });
+                        },
+                      ),
+                      RadioListTile<String>(
+                        activeColor: Color.fromARGB(255, 125, 211, 52),
+                        title: const Text("Recycling"),
+                        value: "Recycling",
+                        groupValue: _selectedGreenAction,
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedGreenAction = value;
+                          });
+                        },
+                      ),
+                    ],
                   ),
-                  ExpansionSectionData(
-                    title: "Public Transport",
-                    content: const Text("Public Transport content"),
-                  ),
-                ],
-              ),
-              SizedBox(height: 12.h),
-            ],
-          ),
+                ),
+              ],
+            ),
+            SizedBox(height: 12.h),
+          ]),
         ),
       ),
+    );
+  }
+
+  Widget _buildUnitInputField({
+    required TextEditingController controller,
+    required String label,
+    required String selectedUnit,
+    required List<String> units,
+    required ValueChanged<String?> onUnitChanged,
+  }) {
+    return Row(
+      children: [
+        Expanded(
+          flex: 3,
+          child: TextField(
+            controller: controller,
+            decoration: InputDecoration(
+              labelText: label,
+              labelStyle: TextStyle(
+                fontSize: 14.sp,
+                color: Colors.grey[600],
+              ),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.r),
+                borderSide: BorderSide(color: Colors.grey[300]!),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: const Color(0xFF9098B1),
+                  width: 1.5,
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 16.w,
+                vertical: 14.h,
+              ),
+              floatingLabelBehavior: FloatingLabelBehavior.never,
+            ),
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+            ),
+            keyboardType: TextInputType.number,
+          ),
+        ),
+        SizedBox(width: 8.w),
+        Expanded(
+          flex: 2,
+          child: DropdownButtonFormField<String>(
+            dropdownColor: Colors.white,
+            value: selectedUnit,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8.r),
+                borderSide: BorderSide(color: Colors.grey[300]!),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(8),
+                borderSide: BorderSide(
+                  color: const Color(0xFF9098B1),
+                  width: 1.5,
+                ),
+              ),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 12.w,
+                vertical: 2.h,
+              ),
+            ),
+            items: units
+                .map((unit) => DropdownMenuItem(
+                      value: unit,
+                      child: Text(
+                        unit,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          color: Colors.grey[800],
+                        ),
+                      ),
+                    ))
+                .toList(),
+            onChanged: onUnitChanged,
+            elevation: 1,
+            icon: Icon(Icons.arrow_drop_down, size: 20.sp),
+            isDense: true,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTransportRadioTiles() {
+    return Column(
+      children: [
+        _buildTransportRadio("On Foot", Icons.directions_walk_rounded),
+        Divider(
+          height: 1.h,
+          indent: 40.w,
+          endIndent: 8.w,
+        ),
+        _buildTransportRadio("Bicycle", Icons.pedal_bike_rounded),
+        Divider(
+          height: 1.h,
+          indent: 40.w,
+          endIndent: 8.w,
+        ),
+        _buildTransportRadio("E-Scooter", Icons.electric_scooter_rounded),
+      ],
+    );
+  }
+
+  Widget _buildTransportRadio(String value, IconData icon) {
+    return RadioListTile<String>(
+      activeColor: Color(0xFF7DD334),
+      contentPadding: EdgeInsets.symmetric(
+        horizontal: 8.w,
+        vertical: 4.h,
+      ),
+      title: Row(
+        children: [
+          Icon(
+            icon,
+            size: 18.sp,
+            color: Colors.grey[700],
+          ),
+          SizedBox(width: 12.w),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: Colors.grey[800],
+            ),
+          ),
+        ],
+      ),
+      value: value,
+      groupValue: _selectedTransportMode,
+      onChanged: (newValue) =>
+          setState(() => _selectedTransportMode = newValue),
     );
   }
 
@@ -98,7 +321,7 @@ class ActionsPage extends StatelessWidget {
           ),
           SizedBox(height: 4.h),
           Text(
-            "Record a sustainable action to gain points and reach weekly goals. See the list of actions",
+            "Record an action to gain points and reach weekly goals. See the list of actions",
             style: TextStyle(
               fontSize: 10.sp,
               color: Color.fromARGB(128, 144, 152, 177),
