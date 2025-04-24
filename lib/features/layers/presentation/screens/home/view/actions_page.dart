@@ -1,4 +1,4 @@
-import 'package:ch4nge/features/layers/domain/use_cases/upload_activity.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/upload_action.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -10,7 +10,7 @@ class ActionsPage extends StatefulWidget {
     required this.uploadActivityUseCase,
   });
 
-  final UploadActivityUseCase uploadActivityUseCase;
+  final UploadActionUseCase uploadActivityUseCase;
 
   @override
   State<ActionsPage> createState() => _ActionsPageState();

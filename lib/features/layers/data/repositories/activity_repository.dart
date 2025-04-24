@@ -1,7 +1,5 @@
 import 'package:ch4nge/features/layers/domain/entities/activity_entity.dart';
 import 'package:ch4nge/features/layers/domain/repositories/activity_repository.dart';
-import 'package:either_dart/either.dart';
-import 'package:latlong2/latlong.dart';
 
 List<ActivityEntity> activities = [
   ActivityEntity(
@@ -109,14 +107,5 @@ class ActivityRepositoryImpl implements ActivityRepository {
   Future<List<ActivityEntity>> getFriendsActivities(
       List<String> userIds) async {
     return Future.value(activities);
-  }
-
-  @override
-  Future<Either<String, String>> uploadActivity(ActivityEntity activity) async {
-    await Future.delayed(const Duration(seconds: 2));
-
-    activities.add(activity);
-
-    return const Right('Activity uploaded successfully');
   }
 }
