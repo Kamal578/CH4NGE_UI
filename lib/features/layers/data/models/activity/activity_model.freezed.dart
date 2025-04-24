@@ -17,9 +17,8 @@ T _$identity<T>(T value) => value;
 mixin _$ActivityModel {
   String get activityId;
   String get userId;
-  List<double> get location;
   String get title;
-  int get value;
+  int get points;
 
   /// Create a copy of ActivityModel
   /// with the given fields replaced by the non-null parameter values.
@@ -40,19 +39,18 @@ mixin _$ActivityModel {
             (identical(other.activityId, activityId) ||
                 other.activityId == activityId) &&
             (identical(other.userId, userId) || other.userId == userId) &&
-            const DeepCollectionEquality().equals(other.location, location) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.value, value) || other.value == value));
+            (identical(other.points, points) || other.points == points));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, activityId, userId,
-      const DeepCollectionEquality().hash(location), title, value);
+  int get hashCode =>
+      Object.hash(runtimeType, activityId, userId, title, points);
 
   @override
   String toString() {
-    return 'ActivityModel(activityId: $activityId, userId: $userId, location: $location, title: $title, value: $value)';
+    return 'ActivityModel(activityId: $activityId, userId: $userId, title: $title, points: $points)';
   }
 }
 
@@ -62,12 +60,7 @@ abstract mixin class $ActivityModelCopyWith<$Res> {
           ActivityModel value, $Res Function(ActivityModel) _then) =
       _$ActivityModelCopyWithImpl;
   @useResult
-  $Res call(
-      {String activityId,
-      String userId,
-      List<double> location,
-      String title,
-      int value});
+  $Res call({String activityId, String userId, String title, int points});
 }
 
 /// @nodoc
@@ -85,9 +78,8 @@ class _$ActivityModelCopyWithImpl<$Res>
   $Res call({
     Object? activityId = null,
     Object? userId = null,
-    Object? location = null,
     Object? title = null,
-    Object? value = null,
+    Object? points = null,
   }) {
     return _then(_self.copyWith(
       activityId: null == activityId
@@ -98,17 +90,13 @@ class _$ActivityModelCopyWithImpl<$Res>
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      location: null == location
-          ? _self.location
-          : location // ignore: cast_nullable_to_non_nullable
-              as List<double>,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      value: null == value
-          ? _self.value
-          : value // ignore: cast_nullable_to_non_nullable
+      points: null == points
+          ? _self.points
+          : points // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -120,10 +108,8 @@ class _ActivityModel implements ActivityModel {
   const _ActivityModel(
       {required this.activityId,
       required this.userId,
-      required final List<double> location,
       required this.title,
-      required this.value})
-      : _location = location;
+      required this.points});
   factory _ActivityModel.fromJson(Map<String, dynamic> json) =>
       _$ActivityModelFromJson(json);
 
@@ -131,26 +117,17 @@ class _ActivityModel implements ActivityModel {
   final String activityId;
   @override
   final String userId;
-  final List<double> _location;
-  @override
-  List<double> get location {
-    if (_location is EqualUnmodifiableListView) return _location;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_location);
-  }
-
   @override
   final String title;
   @override
-  final int value;
+  final int points;
 
   ActivityEntity toEntity() {
     return ActivityEntity(
       activityId: activityId,
       userId: userId,
-      location: LatLng(location[0], location[1]),
       title: title,
-      value: value,
+      value: points,
     );
   }
 
@@ -177,19 +154,18 @@ class _ActivityModel implements ActivityModel {
             (identical(other.activityId, activityId) ||
                 other.activityId == activityId) &&
             (identical(other.userId, userId) || other.userId == userId) &&
-            const DeepCollectionEquality().equals(other._location, _location) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.value, value) || other.value == value));
+            (identical(other.points, points) || other.points == points));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, activityId, userId,
-      const DeepCollectionEquality().hash(_location), title, value);
+  int get hashCode =>
+      Object.hash(runtimeType, activityId, userId, title, points);
 
   @override
   String toString() {
-    return 'ActivityModel(activityId: $activityId, userId: $userId, location: $location, title: $title, value: $value)';
+    return 'ActivityModel(activityId: $activityId, userId: $userId, title: $title, points: $points)';
   }
 }
 
@@ -201,12 +177,7 @@ abstract mixin class _$ActivityModelCopyWith<$Res>
       __$ActivityModelCopyWithImpl;
   @override
   @useResult
-  $Res call(
-      {String activityId,
-      String userId,
-      List<double> location,
-      String title,
-      int value});
+  $Res call({String activityId, String userId, String title, int points});
 }
 
 /// @nodoc
@@ -224,9 +195,8 @@ class __$ActivityModelCopyWithImpl<$Res>
   $Res call({
     Object? activityId = null,
     Object? userId = null,
-    Object? location = null,
     Object? title = null,
-    Object? value = null,
+    Object? points = null,
   }) {
     return _then(_ActivityModel(
       activityId: null == activityId
@@ -237,17 +207,13 @@ class __$ActivityModelCopyWithImpl<$Res>
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      location: null == location
-          ? _self._location
-          : location // ignore: cast_nullable_to_non_nullable
-              as List<double>,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      value: null == value
-          ? _self.value
-          : value // ignore: cast_nullable_to_non_nullable
+      points: null == points
+          ? _self.points
+          : points // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }

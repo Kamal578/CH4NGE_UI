@@ -1,10 +1,16 @@
+import 'package:ch4nge/features/layers/domain/use_cases/upload_activity.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 
 class ActionsPage extends StatefulWidget {
-  const ActionsPage({super.key});
+  const ActionsPage({
+    super.key,
+    required this.uploadActivityUseCase,
+  });
+
+  final UploadActivityUseCase uploadActivityUseCase;
 
   @override
   State<ActionsPage> createState() => _ActionsPageState();

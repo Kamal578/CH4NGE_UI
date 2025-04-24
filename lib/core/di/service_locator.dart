@@ -20,6 +20,7 @@ import 'package:ch4nge/features/layers/domain/use_cases/get_mini_challenges.dart
 import 'package:ch4nge/features/layers/domain/use_cases/get_next_achievement.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_user.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_weekly_challenge.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/upload_activity.dart';
 import 'package:ch4nge/features/layers/presentation/screens/authentication/bloc/auth_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ch4nge/core/network/network_client.dart';
@@ -69,7 +70,9 @@ setupServiceLocator() async {
       .registerFactory(() => GetAllAchievementsUseCase(serviceLocator()));
   serviceLocator.registerFactory(() => GetAllUsersUseCase(serviceLocator()));
   serviceLocator.registerFactory(() => GetFriendsUseCase(serviceLocator()));
-  serviceLocator.registerFactory(() => GetFriendsActivitiesUseCase(serviceLocator()));
+  serviceLocator
+      .registerFactory(() => GetFriendsActivitiesUseCase(serviceLocator()));
+  serviceLocator.registerFactory(() => UploadActivityUseCase(serviceLocator()));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => AuthBloc());

@@ -49,6 +49,7 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
   }
 
   Future<void> _loadData() async {
+
     var str = await rootBundle.loadString('assets/json_data/points.json');
     List<dynamic> result = jsonDecode(str);
 
@@ -70,6 +71,7 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
         }
     };
 
+    print(personDetails);
     setState(() {
       data = result
           .map((e) => e as List<dynamic>)
