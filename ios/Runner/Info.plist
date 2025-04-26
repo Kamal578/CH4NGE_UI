@@ -50,5 +50,8 @@
 	<string>Pick an image from gallery</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Pick image from Camera</string>
+	<!--Geolocation-->
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>We need your location to provide better services.</string>
 </dict>
 </plist>

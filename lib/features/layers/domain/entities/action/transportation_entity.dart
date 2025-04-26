@@ -17,7 +17,7 @@ class TransportationEntity implements ActionEntity {
   @override
   final List<double> location;
   final double distance;
-  final String duration;
+  final double duration;
   final String distanceUnit;
   final String durationUnit;
 }

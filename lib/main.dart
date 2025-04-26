@@ -85,7 +85,8 @@ class MyApp extends StatelessWidget {
         GoRoute(
           path: '/actions',
           builder: (context, state) => ActionsPage(
-            uploadActivityUseCase: serviceLocator(),
+            uploadActionUseCase: serviceLocator(),
+            getCurrentLocationUseCase: serviceLocator(),
           ),
         ),
         GoRoute(

@@ -1,3 +1,6 @@
+import 'package:ch4nge/features/layers/domain/entities/action/green_entity.dart';
+import 'package:ch4nge/features/layers/domain/entities/action/transportation_entity.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_current_location.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/upload_action.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +10,12 @@ import 'package:go_router/go_router.dart';
 class ActionsPage extends StatefulWidget {
   const ActionsPage({
     super.key,
-    required this.uploadActivityUseCase,
+    required this.uploadActionUseCase,
+    required this.getCurrentLocationUseCase,
   });
 
-  final UploadActionUseCase uploadActivityUseCase;
+  final UploadActionUseCase uploadActionUseCase;
+  final GetCurrentLocationUseCase getCurrentLocationUseCase;
 
   @override
   State<ActionsPage> createState() => _ActionsPageState();
@@ -18,6 +23,7 @@ class ActionsPage extends StatefulWidget {
 
 class _ActionsPageState extends State<ActionsPage> {
   String? _selectedTransportMode;
+  String? _selectedVehicle;
   String? _selectedGreenAction;
   String _selectedDistanceUnit = 'km';
   String _selectedDurationUnit = 'minutes';
@@ -41,12 +47,30 @@ class _ActionsPageState extends State<ActionsPage> {
             SizedBox(height: 8.h),
             ExpandableActionCard(
               title: "Transportation",
-              onRecordAction: () {
+              onSectionTap: (section) {
+                setState(() {
+                  // if section.title is empty -> it was closed, so clear
+                  _selectedTransportMode =
+                      section.title.isNotEmpty ? section.title : null;
+                });
+              },
+              onRecordAction: () async {
                 if (_selectedTransportMode == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Please select a transport mode")),
                   );
                 } else {
+                  final location = await widget.getCurrentLocationUseCase();
+                  final action = TransportationEntity(
+                    option: _selectedTransportMode!,
+                    vehicle: _selectedVehicle!,
+                    location: location ?? [0.0, 0.0],
+                    distance: double.parse(_distanceController.text),
+                    duration: double.parse(_durationController.text),
+                    distanceUnit: _selectedDistanceUnit,
+                    durationUnit: _selectedDurationUnit,
+                  );
+                  widget.uploadActionUseCase(action);
                   print("""
                     Recorded transport: $_selectedTransportMode
                     Distance: ${_distanceController.text} $_selectedDistanceUnit}
@@ -108,12 +132,18 @@ class _ActionsPageState extends State<ActionsPage> {
             SizedBox(height: 12.h),
             ExpandableActionCard(
               title: "Green Action",
+              onSectionTap: (section) {},
               onRecordAction: () {
                 if (_selectedGreenAction == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Please select an action")),
                   );
                 } else {
+                  final action = GreenEntity(
+                    option: _selectedGreenAction!,
+                    location: [0.0, 0.0], // Replace with actual location
+                  );
+                  widget.uploadActionUseCase(action);
                   debugPrint("Recorded green action: $_selectedGreenAction");
                 }
               },
@@ -301,9 +331,8 @@ class _ActionsPageState extends State<ActionsPage> {
         ],
       ),
       value: value,
-      groupValue: _selectedTransportMode,
-      onChanged: (newValue) =>
-          setState(() => _selectedTransportMode = newValue),
+      groupValue: _selectedVehicle,
+      onChanged: (newValue) => setState(() => _selectedVehicle = newValue),
     );
   }
 
@@ -369,6 +398,7 @@ class ExpandableActionCard extends StatefulWidget {
   final String title;
   final List<ExpansionSectionData> sections;
   final VoidCallback onRecordAction;
+  final ValueChanged<ExpansionSectionData>? onSectionTap;
   final int toggleThreshold;
   final String? successMessage;
   final String? errorMessage;
@@ -378,6 +408,7 @@ class ExpandableActionCard extends StatefulWidget {
     required this.title,
     required this.sections,
     required this.onRecordAction,
+    required this.onSectionTap,
     this.toggleThreshold = 5,
     this.successMessage = "Action Recorded Successfully",
     this.errorMessage = "Please complete the required fields.",
@@ -392,19 +423,30 @@ class _ExpandableActionCardState extends State<ExpandableActionCard> {
   bool _showSuccess = false;
   bool _showError = false;
 
-  void _handleExpansion(int index) {
-    setState(() {
-      // Close all sections first
-      if (_expandedIndex == index) {
-        _expandedIndex = -1; // Close if clicking the same tile
-      } else {
-        _expandedIndex = index; // Open new tile and close others
-      }
+  void _handleExpansion(int index, bool expanded) {
+    setState(
+      () {
+        // Close all sections first
+        if (_expandedIndex == index) {
+          _expandedIndex = -1; // Close if clicking the same tile
+        } else {
+          _expandedIndex = index; // Open new tile and close others
+        }
 
-      // Clear any existing messages when opening/closing
-      _showSuccess = false;
-      _showError = false;
-    });
+        // Clear any existing messages when opening/closing
+        _showSuccess = false;
+        _showError = false;
+      },
+    );
+
+    if (widget.onSectionTap != null) {
+      final section = widget.sections[index];
+      widget.onSectionTap!(
+        _expandedIndex == index
+            ? section
+            : ExpansionSectionData(title: '', content: const SizedBox()),
+      );
+    }
   }
 
   void _recordAction() {
@@ -452,7 +494,7 @@ class _ExpandableActionCardState extends State<ExpandableActionCard> {
         tilePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
         title: Text(section.title,
             style: const TextStyle(fontWeight: FontWeight.w500)),
-        onExpansionChanged: (expanded) => _handleExpansion(index),
+        onExpansionChanged: (expanded) => _handleExpansion(index, expanded),
         initiallyExpanded: isExpanded,
         children: [
           Padding(
