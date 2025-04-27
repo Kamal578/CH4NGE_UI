@@ -4,6 +4,7 @@ import 'package:ch4nge/features/layers/data/repositories/action_repository.dart'
 import 'package:ch4nge/features/layers/data/repositories/activity_repository.dart';
 import 'package:ch4nge/features/layers/data/repositories/auth_repository_impl.dart';
 import 'package:ch4nge/features/layers/data/repositories/mini_challenge.dart';
+import 'package:ch4nge/features/layers/data/repositories/post_repository.dart';
 import 'package:ch4nge/features/layers/data/repositories/user_repository.dart';
 import 'package:ch4nge/features/layers/data/repositories/weekly_challenge_repository.dart';
 import 'package:ch4nge/features/layers/domain/repositories/achievement_repository.dart';
@@ -11,6 +12,7 @@ import 'package:ch4nge/features/layers/domain/repositories/action_repository.dar
 import 'package:ch4nge/features/layers/domain/repositories/activity_repository.dart';
 import 'package:ch4nge/features/layers/domain/repositories/auth_repository.dart';
 import 'package:ch4nge/features/layers/domain/repositories/mini_challenge_repository.dart';
+import 'package:ch4nge/features/layers/domain/repositories/post_repository.dart';
 import 'package:ch4nge/features/layers/domain/repositories/user_repository.dart';
 import 'package:ch4nge/features/layers/domain/repositories/weekly_challenge_repository.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_achievement_progress.dart';
@@ -21,9 +23,11 @@ import 'package:ch4nge/features/layers/domain/use_cases/get_friends.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_friends_activities.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_mini_challenges.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_next_achievement.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_posts.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_user.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_weekly_challenge.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/upload_action.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/upload_post_form.dart';
 import 'package:ch4nge/features/layers/presentation/screens/authentication/bloc/auth_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ch4nge/core/network/network_client.dart';
@@ -60,6 +64,8 @@ setupServiceLocator() async {
       () => ActivityRepositoryImpl());
   serviceLocator
       .registerLazySingleton<ActionRepository>(() => ActionRepositoryImpl());
+  serviceLocator
+      .registerLazySingleton<PostRepository>(() => PostRepositoryImpl());
 
   // Use cases
   serviceLocator.registerFactory(() => GetUserUseCase(serviceLocator()));
@@ -79,6 +85,11 @@ setupServiceLocator() async {
       .registerFactory(() => GetFriendsActivitiesUseCase(serviceLocator()));
   serviceLocator.registerFactory(() => UploadActionUseCase(serviceLocator()));
   serviceLocator.registerFactory(() => GetCurrentLocationUseCase());
+  serviceLocator.registerFactory(() => GetPostsUseCase(
+        serviceLocator(),
+        serviceLocator(),
+      ));
+  serviceLocator.registerFactory(() => UploadPostFormUseCase(serviceLocator()));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => AuthBloc());

@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:ch4nge/features/layers/domain/entities/post_entity.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/get_posts.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
 import 'package:flutter/material.dart';
@@ -7,39 +9,50 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 class FeedPage extends StatefulWidget {
-  const FeedPage({super.key});
+  const FeedPage({
+    super.key,
+    required this.getPostsUseCase,
+  });
+
+  final GetPostsUseCase getPostsUseCase;
 
   @override
   State<FeedPage> createState() => _FeedPageState();
 }
 
 class _FeedPageState extends State<FeedPage> {
-  List<PostCardData> postCardData = [
-    PostCardData(
-      profilePicUrl:
-          "https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE",
-      username: "Kamush Skibidi",
-      postImageUrl:
-          "https://www.vintagetreecare.com/wp-content/uploads/2023/06/planting-tree.jpg",
-      likeCount: 100,
-      shareCount: 50,
-      authorComment: "This is a sample comment.",
-    ),
-    PostCardData(
-      profilePicUrl:
-          "https://media.licdn.com/dms/image/v2/C4E03AQGrdlO8sT78ug/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1663355766652?e=1749081600&v=beta&t=wKnfP2SW9E27yg6owE7tjLAPKOx5GlAhzqMN5BOWC-w",
-      username: "Freaky Pavel",
-      postImageUrl:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW-ux6VpEBhUHhFTFjB_CcZ-BY3vE6PliafQ&s",
-      likeCount: 200,
-      shareCount: 80,
-      authorComment:
-          "Long long long long long long long long long long sample comment.",
-    ),
-  ];
+  late List<PostEntity> postCardData;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadData();
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final postCardData = await widget.getPostsUseCase();
+
+      setState(() {
+        this.postCardData = postCardData;
+        isLoading = false;
+      });
+    } catch (e) {
+      setState(() => isLoading = false);
+      debugPrint('Error loading data: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to load data. Please try again.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -55,27 +68,27 @@ class _FeedPageState extends State<FeedPage> {
               _buildTitleWidget(),
               SizedBox(height: 8.h),
               _buildFeedPostCard(
-                profilePicUrl: postCardData[0].profilePicUrl,
-                username: postCardData[0].username,
-                postImageUrl: postCardData[0].postImageUrl,
-                likeCount: postCardData[0].likeCount,
-                shareCount: postCardData[0].shareCount,
-                authorComment: postCardData[0].authorComment,
+                profilePicUrl: postCardData[0].profileImageUrl!,
+                username: postCardData[0].username!,
+                postImageUrl: postCardData[0].imageUrl,
+                likeCount: postCardData[0].likeNumber,
+                shareCount: postCardData[0].sharesNumber,
+                authorComment: postCardData[0].title,
               ),
-              SizedBox(height: 16.h),
-              _buildTopCommentWidget(),
+              // SizedBox(height: 16.h),
+              // _buildTopCommentWidget(),
               SizedBox(height: 16.h),
               ...List.generate(
                 postCardData.length - 1,
                 (index) => Column(
                   children: [
                     _buildFeedPostCard(
-                      profilePicUrl: postCardData[index + 1].profilePicUrl,
-                      username: postCardData[index + 1].username,
-                      postImageUrl: postCardData[index + 1].postImageUrl,
-                      likeCount: postCardData[index + 1].likeCount,
-                      shareCount: postCardData[index + 1].shareCount,
-                      authorComment: postCardData[index + 1].authorComment,
+                      profilePicUrl: postCardData[index + 1].profileImageUrl!,
+                      username: postCardData[index + 1].username!,
+                      postImageUrl: postCardData[index + 1].imageUrl,
+                      likeCount: postCardData[index + 1].likeNumber,
+                      shareCount: postCardData[index + 1].sharesNumber,
+                      authorComment: postCardData[index + 1].title,
                     ),
                     SizedBox(height: 16.h),
                   ],
@@ -126,15 +139,15 @@ class _FeedPageState extends State<FeedPage> {
     );
   }
 
-  _buildTopCommentWidget() {
-    return TopCommentWidget(
-      title: "Your Top Comment",
-      commentText:
-          "This is a sample comment text that can be long and should be wrapped properly.",
-      likes: 10,
-      shares: 5,
-    );
-  }
+  // _buildTopCommentWidget() {
+  //   return TopCommentWidget(
+  //     title: "Your Top Comment",
+  //     commentText:
+  //         "This is a sample comment text that can be long and should be wrapped properly.",
+  //     likes: 10,
+  //     shares: 5,
+  //   );
+  // }
 
   _buildNewPostWidget() {
     return UploadPostButton(

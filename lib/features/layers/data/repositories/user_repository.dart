@@ -3,10 +3,9 @@ import 'package:ch4nge/features/layers/domain/repositories/user_repository.dart'
 import 'package:latlong2/latlong.dart';
 
 class UserRepositoryImpl implements UserRepository {
-  @override
-  Future<UserEntity> getUser(String userId) async {
-    return UserEntity(
-      userId: userId,
+  final List<UserEntity> _users = [
+    UserEntity(
+      userId: '12345',
       username: 'Dima',
       password: 'Qwerty123@',
       profilePicUrl:
@@ -15,9 +14,40 @@ class UserRepositoryImpl implements UserRepository {
       streak: 5,
       points: 100,
       ghgIndex: 4.73,
-      location: LatLng(413010, 49.945072),
-      friendsIds: ['2', '3'],
-    );
+      location: LatLng(40.418456, 49.907582),
+      friendsIds: ['12346', '12347', '12348'],
+    ),
+    UserEntity(
+      userId: '12346',
+      username: 'Kamal',
+      password: 'Qwerty123@@',
+      profilePicUrl:
+          'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
+      email: 'kamal.ahmadov@ufaz.az',
+      streak: 5,
+      points: 110,
+      ghgIndex: 4.70,
+      location: LatLng(40.398456, 49.927582),
+      friendsIds: ['12345', '12347', '12348', '12349'],
+    ),
+    UserEntity(
+      userId: '12347',
+      username: 'Pavel',
+      password: 'Password123!',
+      profilePicUrl:
+          'https://media.licdn.com/dms/image/v2/C4E03AQGrdlO8sT78ug/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1663355766652?e=1749081600&v=beta&t=wKnfP2SW9E27yg6owE7tjLAPKOx5GlAhzqMN5BOWC-w',
+      email: 'p.kuznetsov@ufaz.az',
+      streak: 3,
+      points: 119,
+      ghgIndex: 4.65,
+      location: LatLng(40.458456, 49.857582),
+      friendsIds: ['12345', '12346', '12348', '12349'],
+    ),
+  ];
+
+  @override
+  Future<UserEntity> getUser(String userId) async {
+    return _users.firstWhere((user) => user.userId == userId);
   }
 
   @override

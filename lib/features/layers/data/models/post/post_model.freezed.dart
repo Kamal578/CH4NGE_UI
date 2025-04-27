@@ -173,7 +173,7 @@ class _PostModel implements PostModel {
   @override
   final int sharesNumber;
 
-    PostEntity toEntity() {
+  PostEntity toEntity() {
     return PostEntity(
       postId: postId,
       userId: userId,

@@ -7,13 +7,17 @@ class PostEntity {
     required this.imageUrl,
     required this.likeNumber,
     required this.sharesNumber,
-    });
+    this.profileImageUrl,
+    this.username,
+  });
 
-    final String postId;
-    final String userId;
-    final List<String> commentIds;
-    final String title;
-    final String imageUrl;
-    final int likeNumber;
-    final int sharesNumber;
-  }
+  final String postId;
+  final String userId;
+  final List<String> commentIds;
+  final String title;
+  final String imageUrl;
+  final int likeNumber;
+  final int sharesNumber;
+  String? profileImageUrl;
+  String? username;
+}

@@ -56,7 +56,10 @@ class MyApp extends StatelessWidget {
         ),
         GoRoute(
           path: '/feed',
-          builder: (context, state) => const FeedPage(),
+          builder: (context, state) => FeedPage(
+            key: UniqueKey(),
+            getPostsUseCase: serviceLocator(),
+          ),
         ),
         GoRoute(
           path: '/challenges',
