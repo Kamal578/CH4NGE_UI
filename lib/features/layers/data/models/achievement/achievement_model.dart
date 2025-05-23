@@ -1,3 +1,4 @@
+import 'package:ch4nge/features/layers/domain/entities/achievement_entity.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'achievement_model.freezed.dart';
@@ -12,6 +13,16 @@ abstract class AchievementModel with _$AchievementModel {
     required String subtitle,
     required bool isAchieved,
   }) = _AchievementModel;
+
+  AchievementEntity toEntity() {
+    return AchievementEntity(
+      achievementId: achievementId,
+      userId: userId,
+      title: title,
+      subtitle: subtitle,
+      isAchieved: isAchieved,
+    );
+  }
 
   factory AchievementModel.fromJson(Map<String, dynamic> json) =>
       _$AchievementModelFromJson(json);

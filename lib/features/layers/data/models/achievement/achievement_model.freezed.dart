@@ -139,6 +139,16 @@ class _AchievementModel implements AchievementModel {
   @override
   final bool isAchieved;
 
+  AchievementEntity toEntity() {
+    return AchievementEntity(
+      achievementId: achievementId,
+      userId: userId,
+      title: title,
+      subtitle: subtitle,
+      isAchieved: isAchieved,
+    );
+  }
+
   /// Create a copy of AchievementModel
   /// with the given fields replaced by the non-null parameter values.
   @override
