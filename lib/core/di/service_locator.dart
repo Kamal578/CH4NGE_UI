@@ -1,5 +1,6 @@
 import 'package:ch4nge/features/layers/data/datasources/datasource_achievements.dart';
 import 'package:ch4nge/features/layers/data/datasources/datasource_auth.dart';
+import 'package:ch4nge/features/layers/data/datasources/mini_challenge_datasource.dart';
 import 'package:ch4nge/features/layers/data/repositories/achievement_repository.dart';
 import 'package:ch4nge/features/layers/data/repositories/action_repository.dart';
 import 'package:ch4nge/features/layers/data/repositories/activity_repository.dart';
@@ -49,6 +50,8 @@ setupServiceLocator() async {
   serviceLocator
       .registerFactory<IAuthenticationDatasource>(() => AuthenticationRemote());
   serviceLocator.registerFactory<IAchievementsDatasource>(() => AchievementsRemote());
+  serviceLocator.registerFactory<IMiniChallengeDatasource>(
+      () => MiniChallengeRemote());
 
 
   // Repositories
@@ -61,7 +64,7 @@ setupServiceLocator() async {
   serviceLocator.registerLazySingleton<AchievementRepository>(
       () => AchievementRepositoryImpl(datasource: serviceLocator()));
   serviceLocator.registerLazySingleton<MiniChallengeRepository>(
-      () => MiniChallengeRepositoryImpl());
+      () => MiniChallengeRepositoryImpl(datasource: serviceLocator()));
   serviceLocator.registerLazySingleton<ActivityRepository>(
       () => ActivityRepositoryImpl());
   serviceLocator
