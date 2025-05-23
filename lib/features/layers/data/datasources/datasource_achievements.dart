@@ -1,7 +1,9 @@
 import 'dart:convert';
 import 'package:ch4nge/core/api/api_service.dart';
+import 'package:ch4nge/core/auth/auth_manager.dart';
 import 'package:ch4nge/features/layers/data/models/achievement/achievement_model.dart';
 import 'package:ch4nge/features/layers/domain/entities/achievement_entity.dart';
+import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IAchievementsDatasource {
@@ -33,7 +35,15 @@ class AchievementsRemote implements IAchievementsDatasource {
 
     try {
       // Fetch from API
-      final response = await _apiService.get('/users/$userId/achievements');
+      final response = await _apiService.get(
+        '/users/$userId/achievements',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${AuthManager.readAuth()}',
+          },
+          validateStatus: (status) => status! < 500,
+        ),
+      );
       
       if (response.statusCode == 200 && response.data != null) {
         final List<dynamic> achievementsData = response.data as List<dynamic>;
@@ -77,7 +87,15 @@ class AchievementsRemote implements IAchievementsDatasource {
 
     try {
       // Fetch from API
-      final response = await _apiService.get('/users/$userId/achievements/next');
+      final response = await _apiService.get(
+        '/users/$userId/achievements/next',
+         options: Options(
+          headers: {
+            'Authorization': 'Bearer ${AuthManager.readAuth()}',
+          },
+          validateStatus: (status) => status! < 500,
+        ),
+      );
       
       if (response.statusCode == 200 && response.data != null) {
         final achievementData = response.data as Map<String, dynamic>;
@@ -114,7 +132,15 @@ class AchievementsRemote implements IAchievementsDatasource {
 
     try {
       // Fetch from API
-      final response = await _apiService.get('/users/$userId/achievements/progress');
+      final response = await _apiService.get(
+        '/users/$userId/achievements/progress',
+        options: Options(
+          headers: {
+            'Authorization': 'Bearer ${AuthManager.readAuth()}',
+          },
+        validateStatus: (status) => status! < 500,
+        ),
+      );
       
       if (response.statusCode == 200 && response.data != null) {
         final List<dynamic> progressData = response.data as List<dynamic>;
