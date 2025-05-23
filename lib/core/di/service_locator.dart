@@ -1,6 +1,7 @@
 import 'package:ch4nge/features/layers/data/datasources/datasource_achievements.dart';
 import 'package:ch4nge/features/layers/data/datasources/datasource_auth.dart';
 import 'package:ch4nge/features/layers/data/datasources/mini_challenge_datasource.dart';
+import 'package:ch4nge/features/layers/data/datasources/weekly_challenge_datasource.dart';
 import 'package:ch4nge/features/layers/data/repositories/achievement_repository.dart';
 import 'package:ch4nge/features/layers/data/repositories/action_repository.dart';
 import 'package:ch4nge/features/layers/data/repositories/activity_repository.dart';
@@ -52,6 +53,7 @@ setupServiceLocator() async {
   serviceLocator.registerFactory<IAchievementsDatasource>(() => AchievementsRemote());
   serviceLocator.registerFactory<IMiniChallengeDatasource>(
       () => MiniChallengeRemote());
+  serviceLocator.registerFactory<IWeeklyChallengeDatasource>(() => WeeklyChallengeRemote());
 
 
   // Repositories
@@ -60,7 +62,7 @@ setupServiceLocator() async {
   serviceLocator
       .registerLazySingleton<UserRepository>(() => UserRepositoryImpl());
   serviceLocator.registerLazySingleton<WeeklyChallengeRepository>(
-      () => WeeklyChallengeRepositoryImpl());
+      () => WeeklyChallengeRepositoryImpl(datasource: serviceLocator()));
   serviceLocator.registerLazySingleton<AchievementRepository>(
       () => AchievementRepositoryImpl(datasource: serviceLocator()));
   serviceLocator.registerLazySingleton<MiniChallengeRepository>(
