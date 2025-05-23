@@ -1,3 +1,4 @@
+import 'package:ch4nge/features/layers/data/datasources/activity_datasource.dart';
 import 'package:ch4nge/features/layers/domain/entities/activity_entity.dart';
 import 'package:ch4nge/features/layers/domain/repositories/activity_repository.dart';
 
@@ -103,6 +104,22 @@ List<ActivityEntity> activities = [
 ];
 
 class ActivityRepositoryImpl implements ActivityRepository {
+  final IActivityDatasource datasource;
+
+  ActivityRepositoryImpl({required this.datasource});
+
+  // TODO: Uncomment when API is ready
+  // @override
+  // Future<List<ActivityEntity>> getFriendsActivities(
+  //     List<String> userIds) async {
+  //   try {
+  //     // Try to get data from datasource (which will check cache first, then API)
+  //     return await datasource.getFriendsActivities(userIds);
+  //   } catch (e) {
+  //     throw Exception('Failed to fetch friends activities');
+  //   }
+  // }
+
   @override
   Future<List<ActivityEntity>> getFriendsActivities(
       List<String> userIds) async {

@@ -7,6 +7,7 @@ class WeeklyChallengeRepositoryImpl implements WeeklyChallengeRepository {
 
   WeeklyChallengeRepositoryImpl({required this.datasource});
 
+  // TODO: Uncomment when API is ready
   // @override
   // Future<WeeklyChallengeEntity> getWeeklyChallenge(String userId) async {
   //   try {
