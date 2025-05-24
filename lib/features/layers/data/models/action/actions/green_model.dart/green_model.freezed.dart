@@ -106,7 +106,14 @@ class _GreenModel implements GreenModel {
     return EqualUnmodifiableListView(_location);
   }
 
-    ActionDTO toActionDTO() {
+  GreenEntity toEntity() {
+    return GreenEntity(
+      option: option,
+      location: location,
+    );
+  }
+
+  ActionDTO toActionDTO() {
     return ActionDTO(
       actionType: 'green',
       payload: {
