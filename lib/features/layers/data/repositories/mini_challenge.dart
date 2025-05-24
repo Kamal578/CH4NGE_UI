@@ -7,6 +7,7 @@ class MiniChallengeRepositoryImpl implements MiniChallengeRepository {
 
   MiniChallengeRepositoryImpl({required this.datasource});
 
+  // TODO: Uncomment when API is ready
   // @override
   // Future<List<MiniChallengeEntity>> getMiniChallenges(String userId) async {
   //   try {

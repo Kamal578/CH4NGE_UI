@@ -9,7 +9,6 @@ abstract class PostModel with _$PostModel {
   const factory PostModel({
     required String postId,
     required String userId,
-    required List<String> commentIds,
     required String title,
     required String imageUrl,
     required int likeNumber,
@@ -20,7 +19,6 @@ abstract class PostModel with _$PostModel {
     return PostEntity(
       postId: postId,
       userId: userId,
-      commentIds: commentIds,
       title: title,
       imageUrl: imageUrl,
       likeNumber: likeNumber,

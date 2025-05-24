@@ -139,6 +139,7 @@ class _AchievementModel implements AchievementModel {
   @override
   final bool isAchieved;
 
+
   AchievementEntity toEntity() {
     return AchievementEntity(
       achievementId: achievementId,

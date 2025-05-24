@@ -17,8 +17,7 @@ T _$identity<T>(T value) => value;
 mixin _$PostFormModel {
   String get userId;
   String get title;
-  @Uint8ListConverter()
-  Uint8List get imageBytes;
+  String get imageUrl;
   String get imageName;
 
   /// Create a copy of PostFormModel
@@ -39,20 +38,20 @@ mixin _$PostFormModel {
             other is PostFormModel &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.title, title) || other.title == title) &&
-            const DeepCollectionEquality()
-                .equals(other.imageBytes, imageBytes) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             (identical(other.imageName, imageName) ||
                 other.imageName == imageName));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, userId, title,
-      const DeepCollectionEquality().hash(imageBytes), imageName);
+  int get hashCode =>
+      Object.hash(runtimeType, userId, title, imageUrl, imageName);
 
   @override
   String toString() {
-    return 'PostFormModel(userId: $userId, title: $title, imageBytes: $imageBytes, imageName: $imageName)';
+    return 'PostFormModel(userId: $userId, title: $title, imageUrl: $imageUrl, imageName: $imageName)';
   }
 }
 
@@ -62,11 +61,7 @@ abstract mixin class $PostFormModelCopyWith<$Res> {
           PostFormModel value, $Res Function(PostFormModel) _then) =
       _$PostFormModelCopyWithImpl;
   @useResult
-  $Res call(
-      {String userId,
-      String title,
-      @Uint8ListConverter() Uint8List imageBytes,
-      String imageName});
+  $Res call({String userId, String title, String imageUrl, String imageName});
 }
 
 /// @nodoc
@@ -84,7 +79,7 @@ class _$PostFormModelCopyWithImpl<$Res>
   $Res call({
     Object? userId = null,
     Object? title = null,
-    Object? imageBytes = null,
+    Object? imageUrl = null,
     Object? imageName = null,
   }) {
     return _then(_self.copyWith(
@@ -96,10 +91,10 @@ class _$PostFormModelCopyWithImpl<$Res>
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      imageBytes: null == imageBytes
-          ? _self.imageBytes
-          : imageBytes // ignore: cast_nullable_to_non_nullable
-              as Uint8List,
+      imageUrl: null == imageUrl
+          ? _self.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       imageName: null == imageName
           ? _self.imageName
           : imageName // ignore: cast_nullable_to_non_nullable
@@ -114,7 +109,7 @@ class _PostFormModel implements PostFormModel {
   const _PostFormModel(
       {required this.userId,
       required this.title,
-      @Uint8ListConverter() required this.imageBytes,
+      required this.imageUrl,
       required this.imageName});
   factory _PostFormModel.fromJson(Map<String, dynamic> json) =>
       _$PostFormModelFromJson(json);
@@ -124,8 +119,7 @@ class _PostFormModel implements PostFormModel {
   @override
   final String title;
   @override
-  @Uint8ListConverter()
-  final Uint8List imageBytes;
+  final String imageUrl;
   @override
   final String imageName;
 
@@ -151,20 +145,20 @@ class _PostFormModel implements PostFormModel {
             other is _PostFormModel &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.title, title) || other.title == title) &&
-            const DeepCollectionEquality()
-                .equals(other.imageBytes, imageBytes) &&
+            (identical(other.imageUrl, imageUrl) ||
+                other.imageUrl == imageUrl) &&
             (identical(other.imageName, imageName) ||
                 other.imageName == imageName));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, userId, title,
-      const DeepCollectionEquality().hash(imageBytes), imageName);
+  int get hashCode =>
+      Object.hash(runtimeType, userId, title, imageUrl, imageName);
 
   @override
   String toString() {
-    return 'PostFormModel(userId: $userId, title: $title, imageBytes: $imageBytes, imageName: $imageName)';
+    return 'PostFormModel(userId: $userId, title: $title, imageUrl: $imageUrl, imageName: $imageName)';
   }
 }
 
@@ -176,11 +170,7 @@ abstract mixin class _$PostFormModelCopyWith<$Res>
       __$PostFormModelCopyWithImpl;
   @override
   @useResult
-  $Res call(
-      {String userId,
-      String title,
-      @Uint8ListConverter() Uint8List imageBytes,
-      String imageName});
+  $Res call({String userId, String title, String imageUrl, String imageName});
 }
 
 /// @nodoc
@@ -198,7 +188,7 @@ class __$PostFormModelCopyWithImpl<$Res>
   $Res call({
     Object? userId = null,
     Object? title = null,
-    Object? imageBytes = null,
+    Object? imageUrl = null,
     Object? imageName = null,
   }) {
     return _then(_PostFormModel(
@@ -210,10 +200,10 @@ class __$PostFormModelCopyWithImpl<$Res>
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      imageBytes: null == imageBytes
-          ? _self.imageBytes
-          : imageBytes // ignore: cast_nullable_to_non_nullable
-              as Uint8List,
+      imageUrl: null == imageUrl
+          ? _self.imageUrl
+          : imageUrl // ignore: cast_nullable_to_non_nullable
+              as String,
       imageName: null == imageName
           ? _self.imageName
           : imageName // ignore: cast_nullable_to_non_nullable

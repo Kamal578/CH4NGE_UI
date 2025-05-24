@@ -17,7 +17,6 @@ T _$identity<T>(T value) => value;
 mixin _$PostModel {
   String get postId;
   String get userId;
-  List<String> get commentIds;
   String get title;
   String get imageUrl;
   int get likeNumber;
@@ -40,8 +39,6 @@ mixin _$PostModel {
             other is PostModel &&
             (identical(other.postId, postId) || other.postId == postId) &&
             (identical(other.userId, userId) || other.userId == userId) &&
-            const DeepCollectionEquality()
-                .equals(other.commentIds, commentIds) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
@@ -54,18 +51,11 @@ mixin _$PostModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      postId,
-      userId,
-      const DeepCollectionEquality().hash(commentIds),
-      title,
-      imageUrl,
-      likeNumber,
-      sharesNumber);
+      runtimeType, postId, userId, title, imageUrl, likeNumber, sharesNumber);
 
   @override
   String toString() {
-    return 'PostModel(postId: $postId, userId: $userId, commentIds: $commentIds, title: $title, imageUrl: $imageUrl, likeNumber: $likeNumber, sharesNumber: $sharesNumber)';
+    return 'PostModel(postId: $postId, userId: $userId, title: $title, imageUrl: $imageUrl, likeNumber: $likeNumber, sharesNumber: $sharesNumber)';
   }
 }
 
@@ -77,7 +67,6 @@ abstract mixin class $PostModelCopyWith<$Res> {
   $Res call(
       {String postId,
       String userId,
-      List<String> commentIds,
       String title,
       String imageUrl,
       int likeNumber,
@@ -98,7 +87,6 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
   $Res call({
     Object? postId = null,
     Object? userId = null,
-    Object? commentIds = null,
     Object? title = null,
     Object? imageUrl = null,
     Object? likeNumber = null,
@@ -113,10 +101,6 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      commentIds: null == commentIds
-          ? _self.commentIds
-          : commentIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -143,12 +127,10 @@ class _PostModel implements PostModel {
   const _PostModel(
       {required this.postId,
       required this.userId,
-      required final List<String> commentIds,
       required this.title,
       required this.imageUrl,
       required this.likeNumber,
-      required this.sharesNumber})
-      : _commentIds = commentIds;
+      required this.sharesNumber});
   factory _PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);
 
@@ -156,14 +138,6 @@ class _PostModel implements PostModel {
   final String postId;
   @override
   final String userId;
-  final List<String> _commentIds;
-  @override
-  List<String> get commentIds {
-    if (_commentIds is EqualUnmodifiableListView) return _commentIds;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_commentIds);
-  }
-
   @override
   final String title;
   @override
@@ -177,7 +151,6 @@ class _PostModel implements PostModel {
     return PostEntity(
       postId: postId,
       userId: userId,
-      commentIds: commentIds,
       title: title,
       imageUrl: imageUrl,
       likeNumber: likeNumber,
@@ -207,8 +180,6 @@ class _PostModel implements PostModel {
             other is _PostModel &&
             (identical(other.postId, postId) || other.postId == postId) &&
             (identical(other.userId, userId) || other.userId == userId) &&
-            const DeepCollectionEquality()
-                .equals(other._commentIds, _commentIds) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
@@ -221,18 +192,11 @@ class _PostModel implements PostModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType,
-      postId,
-      userId,
-      const DeepCollectionEquality().hash(_commentIds),
-      title,
-      imageUrl,
-      likeNumber,
-      sharesNumber);
+      runtimeType, postId, userId, title, imageUrl, likeNumber, sharesNumber);
 
   @override
   String toString() {
-    return 'PostModel(postId: $postId, userId: $userId, commentIds: $commentIds, title: $title, imageUrl: $imageUrl, likeNumber: $likeNumber, sharesNumber: $sharesNumber)';
+    return 'PostModel(postId: $postId, userId: $userId, title: $title, imageUrl: $imageUrl, likeNumber: $likeNumber, sharesNumber: $sharesNumber)';
   }
 }
 
@@ -247,7 +211,6 @@ abstract mixin class _$PostModelCopyWith<$Res>
   $Res call(
       {String postId,
       String userId,
-      List<String> commentIds,
       String title,
       String imageUrl,
       int likeNumber,
@@ -268,7 +231,6 @@ class __$PostModelCopyWithImpl<$Res> implements _$PostModelCopyWith<$Res> {
   $Res call({
     Object? postId = null,
     Object? userId = null,
-    Object? commentIds = null,
     Object? title = null,
     Object? imageUrl = null,
     Object? likeNumber = null,
@@ -283,10 +245,6 @@ class __$PostModelCopyWithImpl<$Res> implements _$PostModelCopyWith<$Res> {
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
               as String,
-      commentIds: null == commentIds
-          ? _self._commentIds
-          : commentIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
