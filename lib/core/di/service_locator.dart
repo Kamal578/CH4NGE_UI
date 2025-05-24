@@ -1,5 +1,5 @@
 import 'package:ch4nge/features/layers/data/datasources/activity_datasource.dart';
-import 'package:ch4nge/features/layers/data/datasources/datasource_achievements.dart';
+import 'package:ch4nge/features/layers/data/datasources/achievement_datasource.dart';
 import 'package:ch4nge/features/layers/data/datasources/datasource_auth.dart';
 import 'package:ch4nge/features/layers/data/datasources/mini_challenge_datasource.dart';
 import 'package:ch4nge/features/layers/data/datasources/weekly_challenge_datasource.dart';

@@ -27,8 +27,12 @@ class _ActionsPageState extends State<ActionsPage> {
   String? _selectedGreenAction;
   String _selectedDistanceUnit = 'km';
   String _selectedDurationUnit = 'minutes';
+  String _selectedFuelType = 'Gasoline';
+  String _selectedPublicTransport = 'Bus';
   final TextEditingController _distanceController = TextEditingController();
   final TextEditingController _durationController = TextEditingController();
+  final TextEditingController _fuelConsumptionController = TextEditingController();
+  final TextEditingController _passengersController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +53,6 @@ class _ActionsPageState extends State<ActionsPage> {
               title: "Transportation",
               onSectionTap: (section) {
                 setState(() {
-                  // if section.title is empty -> it was closed, so clear
                   _selectedTransportMode =
                       section.title.isNotEmpty ? section.title : null;
                 });
@@ -63,18 +66,18 @@ class _ActionsPageState extends State<ActionsPage> {
                   final location = await widget.getCurrentLocationUseCase();
                   final action = TransportationEntity(
                     option: _selectedTransportMode!,
-                    vehicle: _selectedVehicle!,
+                    vehicle: _selectedVehicle ?? _selectedPublicTransport,
                     location: location ?? [0.0, 0.0],
-                    distance: double.parse(_distanceController.text),
-                    duration: double.parse(_durationController.text),
+                    distance: double.tryParse(_distanceController.text) ?? 0.0,
+                    duration: double.tryParse(_durationController.text) ?? 0.0,
                     distanceUnit: _selectedDistanceUnit,
                     durationUnit: _selectedDurationUnit,
                   );
                   widget.uploadActionUseCase(action);
                   print("""
                     Recorded transport: $_selectedTransportMode
-                    Distance: ${_distanceController.text} $_selectedDistanceUnit}
-                    Duration: ${_durationController.text} $_selectedDurationUnit}
+                    Distance: ${_distanceController.text} $_selectedDistanceUnit
+                    Duration: ${_durationController.text} $_selectedDurationUnit
                   """);
                 }
               },
@@ -121,11 +124,119 @@ class _ActionsPageState extends State<ActionsPage> {
                 ),
                 ExpansionSectionData(
                   title: "Private Vehicle",
-                  content: Text("Private Vehicle content"),
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 4.h),
+                      _buildUnitInputField(
+                        controller: _distanceController,
+                        label: "Distance",
+                        selectedUnit: _selectedDistanceUnit,
+                        units: const ['km', 'm'],
+                        onUnitChanged: (unit) =>
+                            setState(() => _selectedDistanceUnit = unit!),
+                      ),
+                      SizedBox(height: 16.h),
+                      _buildUnitInputField(
+                        controller: _durationController,
+                        label: "Duration",
+                        selectedUnit: _selectedDurationUnit,
+                        units: const ['minutes', 'hours'],
+                        onUnitChanged: (unit) =>
+                            setState(() => _selectedDurationUnit = unit!),
+                      ),
+                      SizedBox(height: 16.h),
+                      _buildUnitInputField(
+                        controller: _fuelConsumptionController,
+                        label: "Fuel Consumption",
+                        selectedUnit: "L/100km",
+                        units: const ['L/100km', 'mpg'],
+                        onUnitChanged: (unit) => {},
+                      ),
+                      SizedBox(height: 16.h),
+                      TextField(
+                        controller: _passengersController,
+                        decoration: InputDecoration(
+                          labelText: "Number of Passengers",
+                          labelStyle: TextStyle(
+                            fontSize: 14.sp,
+                            color: Colors.grey[600],
+                          ),
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                            borderSide: BorderSide(color: Colors.grey[300]!),
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8),
+                            borderSide: BorderSide(
+                              color: const Color(0xFF9098B1),
+                              width: 1.5,
+                            ),
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 14.h,
+                          ),
+                          floatingLabelBehavior: FloatingLabelBehavior.never,
+                        ),
+                        keyboardType: TextInputType.number,
+                      ),
+                      SizedBox(height: 16.h),
+                      Padding(
+                        padding: EdgeInsets.only(left: 8.w),
+                        child: Text(
+                          "Select Fuel Type",
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      _buildFuelTypeRadioTiles(),
+                    ],
+                  ),
                 ),
                 ExpansionSectionData(
                   title: "Public Transport",
-                  content: Text("Public Trasport content"),
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 4.h),
+                      _buildUnitInputField(
+                        controller: _distanceController,
+                        label: "Distance",
+                        selectedUnit: _selectedDistanceUnit,
+                        units: const ['km', 'm'],
+                        onUnitChanged: (unit) =>
+                            setState(() => _selectedDistanceUnit = unit!),
+                      ),
+                      SizedBox(height: 16.h),
+                      _buildUnitInputField(
+                        controller: _durationController,
+                        label: "Duration",
+                        selectedUnit: _selectedDurationUnit,
+                        units: const ['minutes', 'hours'],
+                        onUnitChanged: (unit) =>
+                            setState(() => _selectedDurationUnit = unit!),
+                      ),
+                      SizedBox(height: 16.h),
+                      Padding(
+                        padding: EdgeInsets.only(left: 8.w),
+                        child: Text(
+                          "Select Transport Type",
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      _buildPublicTransportRadioTiles(),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -133,15 +244,16 @@ class _ActionsPageState extends State<ActionsPage> {
             ExpandableActionCard(
               title: "Green Action",
               onSectionTap: (section) {},
-              onRecordAction: () {
+              onRecordAction: () async {
                 if (_selectedGreenAction == null) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text("Please select an action")),
                   );
                 } else {
+                  final location = await widget.getCurrentLocationUseCase();
                   final action = GreenEntity(
                     option: _selectedGreenAction!,
-                    location: [0.0, 0.0], // Replace with actual location
+                    location: location ?? [0.0, 0.0],
                   );
                   widget.uploadActionUseCase(action);
                   debugPrint("Recorded green action: $_selectedGreenAction");
@@ -149,42 +261,62 @@ class _ActionsPageState extends State<ActionsPage> {
               },
               sections: [
                 ExpansionSectionData(
-                  title: "Choose an Action",
+                  title: "Energy Conservation",
                   content: Column(
                     children: [
-                      RadioListTile<String>(
-                        activeColor: Color.fromARGB(255, 125, 211, 52),
-                        title: const Text("Planted a tree"),
-                        value: "Planted a tree",
-                        groupValue: _selectedGreenAction,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedGreenAction = value;
-                          });
-                        },
-                      ),
-                      RadioListTile<String>(
-                        activeColor: Color.fromARGB(255, 125, 211, 52),
-                        title: const Text("Turned off lights"),
-                        value: "Turned off lights",
-                        groupValue: _selectedGreenAction,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedGreenAction = value;
-                          });
-                        },
-                      ),
-                      RadioListTile<String>(
-                        activeColor: Color.fromARGB(255, 125, 211, 52),
-                        title: const Text("Recycling"),
-                        value: "Recycling",
-                        groupValue: _selectedGreenAction,
-                        onChanged: (value) {
-                          setState(() {
-                            _selectedGreenAction = value;
-                          });
-                        },
-                      ),
+                      _buildGreenActionRadio("Turned off lights", Icons.lightbulb_outline),
+                      _buildGreenActionRadio("Unplugged electronics", Icons.power_off),
+                      _buildGreenActionRadio("Used LED bulbs", Icons.lightbulb),
+                      _buildGreenActionRadio("Adjusted thermostat", Icons.thermostat),
+                      _buildGreenActionRadio("Air-dried clothes", Icons.dry_cleaning),
+                    ],
+                  ),
+                ),
+                ExpansionSectionData(
+                  title: "Waste Reduction",
+                  content: Column(
+                    children: [
+                      _buildGreenActionRadio("Recycling", Icons.recycling),
+                      _buildGreenActionRadio("Composting", Icons.compost),
+                      _buildGreenActionRadio("Used reusable bags", Icons.shopping_bag),
+                      _buildGreenActionRadio("Reduced plastic use", Icons.no_drinks),
+                      _buildGreenActionRadio("Repaired instead of replacing", Icons.build),
+                    ],
+                  ),
+                ),
+                ExpansionSectionData(
+                  title: "Water Conservation",
+                  content: Column(
+                    children: [
+                      _buildGreenActionRadio("Shorter shower", Icons.shower),
+                      _buildGreenActionRadio("Fixed water leak", Icons.plumbing),
+                      _buildGreenActionRadio("Used rainwater", Icons.water_drop),
+                      _buildGreenActionRadio("Full dishwasher load", Icons.kitchen),
+                      _buildGreenActionRadio("Turned off tap while brushing", Icons.water),
+                    ],
+                  ),
+                ),
+                ExpansionSectionData(
+                  title: "Environmental Action",
+                  content: Column(
+                    children: [
+                      _buildGreenActionRadio("Planted a tree", Icons.park),
+                      _buildGreenActionRadio("Cleaned up litter", Icons.cleaning_services),
+                      _buildGreenActionRadio("Participated in beach cleanup", Icons.waves),
+                      _buildGreenActionRadio("Created pollinator garden", Icons.local_florist),
+                      _buildGreenActionRadio("Joined environmental group", Icons.groups),
+                    ],
+                  ),
+                ),
+                ExpansionSectionData(
+                  title: "Sustainable Consumption",
+                  content: Column(
+                    children: [
+                      _buildGreenActionRadio("Bought local produce", Icons.store),
+                      _buildGreenActionRadio("Chose organic food", Icons.eco),
+                      _buildGreenActionRadio("Reduced meat consumption", Icons.restaurant),
+                      _buildGreenActionRadio("Bought second-hand", Icons.handshake),
+                      _buildGreenActionRadio("Used public library", Icons.library_books),
                     ],
                   ),
                 ),
@@ -289,18 +421,38 @@ class _ActionsPageState extends State<ActionsPage> {
     return Column(
       children: [
         _buildTransportRadio("On Foot", Icons.directions_walk_rounded),
-        Divider(
-          height: 1.h,
-          indent: 40.w,
-          endIndent: 8.w,
-        ),
+        Divider(height: 1.h, indent: 40.w, endIndent: 8.w),
         _buildTransportRadio("Bicycle", Icons.pedal_bike_rounded),
-        Divider(
-          height: 1.h,
-          indent: 40.w,
-          endIndent: 8.w,
-        ),
+        Divider(height: 1.h, indent: 40.w, endIndent: 8.w),
         _buildTransportRadio("E-Scooter", Icons.electric_scooter_rounded),
+      ],
+    );
+  }
+
+  Widget _buildFuelTypeRadioTiles() {
+    return Column(
+      children: [
+        _buildFuelTypeRadio("Gasoline", Icons.local_gas_station),
+        Divider(height: 1.h, indent: 40.w, endIndent: 8.w),
+        _buildFuelTypeRadio("Diesel", Icons.local_gas_station_outlined),
+        Divider(height: 1.h, indent: 40.w, endIndent: 8.w),
+        _buildFuelTypeRadio("Electric", Icons.electric_car),
+        Divider(height: 1.h, indent: 40.w, endIndent: 8.w),
+        _buildFuelTypeRadio("Hybrid", Icons.eco),
+      ],
+    );
+  }
+
+  Widget _buildPublicTransportRadioTiles() {
+    return Column(
+      children: [
+        _buildPublicTransportRadio("Bus", Icons.directions_bus),
+        Divider(height: 1.h, indent: 40.w, endIndent: 8.w),
+        _buildPublicTransportRadio("Metro/Subway", Icons.subway),
+        Divider(height: 1.h, indent: 40.w, endIndent: 8.w),
+        _buildPublicTransportRadio("Train", Icons.train),
+        Divider(height: 1.h, indent: 40.w, endIndent: 8.w),
+        _buildPublicTransportRadio("Tram", Icons.tram),
       ],
     );
   }
@@ -308,17 +460,10 @@ class _ActionsPageState extends State<ActionsPage> {
   Widget _buildTransportRadio(String value, IconData icon) {
     return RadioListTile<String>(
       activeColor: Color(0xFF7DD334),
-      contentPadding: EdgeInsets.symmetric(
-        horizontal: 8.w,
-        vertical: 4.h,
-      ),
+      contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
       title: Row(
         children: [
-          Icon(
-            icon,
-            size: 18.sp,
-            color: Colors.grey[700],
-          ),
+          Icon(icon, size: 18.sp, color: Colors.grey[700]),
           SizedBox(width: 12.w),
           Text(
             value,
@@ -333,6 +478,80 @@ class _ActionsPageState extends State<ActionsPage> {
       value: value,
       groupValue: _selectedVehicle,
       onChanged: (newValue) => setState(() => _selectedVehicle = newValue),
+    );
+  }
+
+  Widget _buildFuelTypeRadio(String value, IconData icon) {
+    return RadioListTile<String>(
+      activeColor: Color(0xFF7DD334),
+      contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      title: Row(
+        children: [
+          Icon(icon, size: 18.sp, color: Colors.grey[700]),
+          SizedBox(width: 12.w),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: Colors.grey[800],
+            ),
+          ),
+        ],
+      ),
+      value: value,
+      groupValue: _selectedFuelType,
+      onChanged: (newValue) => setState(() => _selectedFuelType = newValue!),
+    );
+  }
+
+  Widget _buildPublicTransportRadio(String value, IconData icon) {
+    return RadioListTile<String>(
+      activeColor: Color(0xFF7DD334),
+      contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      title: Row(
+        children: [
+          Icon(icon, size: 18.sp, color: Colors.grey[700]),
+          SizedBox(width: 12.w),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w400,
+              color: Colors.grey[800],
+            ),
+          ),
+        ],
+      ),
+      value: value,
+      groupValue: _selectedPublicTransport,
+      onChanged: (newValue) => setState(() => _selectedPublicTransport = newValue!),
+    );
+  }
+
+  Widget _buildGreenActionRadio(String value, IconData icon) {
+    return RadioListTile<String>(
+      activeColor: Color.fromARGB(255, 125, 211, 52),
+      contentPadding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+      title: Row(
+        children: [
+          Icon(icon, size: 18.sp, color: Colors.grey[700]),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Text(
+              value,
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+                color: Colors.grey[800],
+              ),
+            ),
+          ),
+        ],
+      ),
+      value: value,
+      groupValue: _selectedGreenAction,
+      onChanged: (newValue) => setState(() => _selectedGreenAction = newValue),
     );
   }
 
@@ -426,14 +645,11 @@ class _ExpandableActionCardState extends State<ExpandableActionCard> {
   void _handleExpansion(int index, bool expanded) {
     setState(
       () {
-        // Close all sections first
         if (_expandedIndex == index) {
-          _expandedIndex = -1; // Close if clicking the same tile
+          _expandedIndex = -1;
         } else {
-          _expandedIndex = index; // Open new tile and close others
+          _expandedIndex = index;
         }
-
-        // Clear any existing messages when opening/closing
         _showSuccess = false;
         _showError = false;
       },
@@ -489,8 +705,7 @@ class _ExpandableActionCardState extends State<ExpandableActionCard> {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        key: ValueKey(
-            '${section.title}_$isExpanded'), // Force rebuild on state change
+        key: ValueKey('${section.title}_$isExpanded'),
         tilePadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
         title: Text(section.title,
             style: const TextStyle(fontWeight: FontWeight.w500)),
