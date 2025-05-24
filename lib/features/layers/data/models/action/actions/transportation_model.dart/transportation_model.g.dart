@@ -14,9 +14,14 @@ _TransportationModel _$TransportationModelFromJson(Map<String, dynamic> json) =>
           .map((e) => (e as num).toDouble())
           .toList(),
       distance: (json['distance'] as num).toDouble(),
-      duration: json['duration'] as String,
+      duration: (json['duration'] as num).toDouble(),
       distanceUnit: json['distanceUnit'] as String,
       durationUnit: json['durationUnit'] as String,
+      fuelType: json['fuelType'] as String?,
+      fuelConsumption: (json['fuelConsumption'] as num?)?.toDouble(),
+      fuelConsumptionUnit: json['fuelConsumptionUnit'] as String?,
+      numberOfPassengers: (json['numberOfPassengers'] as num?)?.toInt(),
+      publicTransportType: json['publicTransportType'] as String?,
     );
 
 Map<String, dynamic> _$TransportationModelToJson(
@@ -29,4 +34,9 @@ Map<String, dynamic> _$TransportationModelToJson(
       'duration': instance.duration,
       'distanceUnit': instance.distanceUnit,
       'durationUnit': instance.durationUnit,
+      'fuelType': instance.fuelType,
+      'fuelConsumption': instance.fuelConsumption,
+      'fuelConsumptionUnit': instance.fuelConsumptionUnit,
+      'numberOfPassengers': instance.numberOfPassengers,
+      'publicTransportType': instance.publicTransportType,
     };

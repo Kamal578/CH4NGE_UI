@@ -16,12 +16,17 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$TransportationModel {
   String get option;
-  String get vehicle; // "car", "bus", etc
+  String get vehicle;
   List<double> get location;
   double get distance;
-  String get duration;
+  double get duration;
   String get distanceUnit;
   String get durationUnit;
+  String? get fuelType;
+  double? get fuelConsumption;
+  String? get fuelConsumptionUnit;
+  int? get numberOfPassengers;
+  String? get publicTransportType;
 
   /// Create a copy of TransportationModel
   /// with the given fields replaced by the non-null parameter values.
@@ -49,7 +54,17 @@ mixin _$TransportationModel {
             (identical(other.distanceUnit, distanceUnit) ||
                 other.distanceUnit == distanceUnit) &&
             (identical(other.durationUnit, durationUnit) ||
-                other.durationUnit == durationUnit));
+                other.durationUnit == durationUnit) &&
+            (identical(other.fuelType, fuelType) ||
+                other.fuelType == fuelType) &&
+            (identical(other.fuelConsumption, fuelConsumption) ||
+                other.fuelConsumption == fuelConsumption) &&
+            (identical(other.fuelConsumptionUnit, fuelConsumptionUnit) ||
+                other.fuelConsumptionUnit == fuelConsumptionUnit) &&
+            (identical(other.numberOfPassengers, numberOfPassengers) ||
+                other.numberOfPassengers == numberOfPassengers) &&
+            (identical(other.publicTransportType, publicTransportType) ||
+                other.publicTransportType == publicTransportType));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -62,11 +77,16 @@ mixin _$TransportationModel {
       distance,
       duration,
       distanceUnit,
-      durationUnit);
+      durationUnit,
+      fuelType,
+      fuelConsumption,
+      fuelConsumptionUnit,
+      numberOfPassengers,
+      publicTransportType);
 
   @override
   String toString() {
-    return 'TransportationModel(option: $option, vehicle: $vehicle, location: $location, distance: $distance, duration: $duration, distanceUnit: $distanceUnit, durationUnit: $durationUnit)';
+    return 'TransportationModel(option: $option, vehicle: $vehicle, location: $location, distance: $distance, duration: $duration, distanceUnit: $distanceUnit, durationUnit: $durationUnit, fuelType: $fuelType, fuelConsumption: $fuelConsumption, fuelConsumptionUnit: $fuelConsumptionUnit, numberOfPassengers: $numberOfPassengers, publicTransportType: $publicTransportType)';
   }
 }
 
@@ -81,9 +101,14 @@ abstract mixin class $TransportationModelCopyWith<$Res> {
       String vehicle,
       List<double> location,
       double distance,
-      String duration,
+      double duration,
       String distanceUnit,
-      String durationUnit});
+      String durationUnit,
+      String? fuelType,
+      double? fuelConsumption,
+      String? fuelConsumptionUnit,
+      int? numberOfPassengers,
+      String? publicTransportType});
 }
 
 /// @nodoc
@@ -106,6 +131,11 @@ class _$TransportationModelCopyWithImpl<$Res>
     Object? duration = null,
     Object? distanceUnit = null,
     Object? durationUnit = null,
+    Object? fuelType = freezed,
+    Object? fuelConsumption = freezed,
+    Object? fuelConsumptionUnit = freezed,
+    Object? numberOfPassengers = freezed,
+    Object? publicTransportType = freezed,
   }) {
     return _then(_self.copyWith(
       option: null == option
@@ -127,7 +157,7 @@ class _$TransportationModelCopyWithImpl<$Res>
       duration: null == duration
           ? _self.duration
           : duration // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       distanceUnit: null == distanceUnit
           ? _self.distanceUnit
           : distanceUnit // ignore: cast_nullable_to_non_nullable
@@ -136,6 +166,26 @@ class _$TransportationModelCopyWithImpl<$Res>
           ? _self.durationUnit
           : durationUnit // ignore: cast_nullable_to_non_nullable
               as String,
+      fuelType: freezed == fuelType
+          ? _self.fuelType
+          : fuelType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fuelConsumption: freezed == fuelConsumption
+          ? _self.fuelConsumption
+          : fuelConsumption // ignore: cast_nullable_to_non_nullable
+              as double?,
+      fuelConsumptionUnit: freezed == fuelConsumptionUnit
+          ? _self.fuelConsumptionUnit
+          : fuelConsumptionUnit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      numberOfPassengers: freezed == numberOfPassengers
+          ? _self.numberOfPassengers
+          : numberOfPassengers // ignore: cast_nullable_to_non_nullable
+              as int?,
+      publicTransportType: freezed == publicTransportType
+          ? _self.publicTransportType
+          : publicTransportType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -150,7 +200,12 @@ class _TransportationModel implements TransportationModel {
       required this.distance,
       required this.duration,
       required this.distanceUnit,
-      required this.durationUnit})
+      required this.durationUnit,
+      this.fuelType,
+      this.fuelConsumption,
+      this.fuelConsumptionUnit,
+      this.numberOfPassengers,
+      this.publicTransportType})
       : _location = location;
   factory _TransportationModel.fromJson(Map<String, dynamic> json) =>
       _$TransportationModelFromJson(json);
@@ -159,9 +214,7 @@ class _TransportationModel implements TransportationModel {
   final String option;
   @override
   final String vehicle;
-// "car", "bus", etc
   final List<double> _location;
-// "car", "bus", etc
   @override
   List<double> get location {
     if (_location is EqualUnmodifiableListView) return _location;
@@ -172,25 +225,68 @@ class _TransportationModel implements TransportationModel {
   @override
   final double distance;
   @override
-  final String duration;
+  final double duration;
   @override
   final String distanceUnit;
   @override
   final String durationUnit;
+  @override
+  final String? fuelType;
+  @override
+  final double? fuelConsumption;
+  @override
+  final String? fuelConsumptionUnit;
+  @override
+  final int? numberOfPassengers;
+  @override
+  final String? publicTransportType;
 
+  // Convert to TransportationEntity
+  TransportationEntity toEntity() {
+    return TransportationEntity(
+      option: option,
+      vehicle: vehicle,
+      location: location,
+      distance: distance,
+      duration: duration,
+      distanceUnit: distanceUnit,
+      durationUnit: durationUnit,
+      fuelType: fuelType,
+      fuelConsumption: fuelConsumption,
+      fuelConsumptionUnit: fuelConsumptionUnit,
+      numberOfPassengers: numberOfPassengers,
+      publicTransportType: publicTransportType,
+    );
+  }
+
+  // Convert to ActionDTO with all transportation-specific fields
   ActionDTO toActionDTO() {
+    final Map<String, dynamic> payload = {
+      'option': option,
+      'vehicle': vehicle,
+      'location': location,
+      'distance': distance,
+      'duration': duration,
+      'distanceUnit': distanceUnit,
+      'durationUnit': durationUnit,
+    };
+
+    // Add optional fields only if they are not null
+    if (fuelType != null) payload['fuelType'] = fuelType;
+    if (fuelConsumption != null) payload['fuelConsumption'] = fuelConsumption;
+    if (fuelConsumptionUnit != null) payload['fuelConsumptionUnit'] = fuelConsumptionUnit;
+    if (numberOfPassengers != null) payload['numberOfPassengers'] = numberOfPassengers;
+    if (publicTransportType != null) payload['publicTransportType'] = publicTransportType;
+
     return ActionDTO(
       actionType: 'transportation',
-      payload: {
-        'option': option,
-        'vehicle': vehicle,
-        'location': location,
-        'distance': distance,
-        'duration': duration,
-        'distanceUnit': distanceUnit,
-        'durationUnit': durationUnit,
+      payload: payload,
+      metadata: {
+        'transportMode': option,
+        'isEcoFriendly': toEntity().isEcoFriendly,
+        'estimatedCO2Emissions': toEntity().estimatedCO2Emissions,
+        'transportModeDisplay': toEntity().transportModeDisplay,
       },
-      metadata: {},
     );
   }
 
@@ -225,7 +321,17 @@ class _TransportationModel implements TransportationModel {
             (identical(other.distanceUnit, distanceUnit) ||
                 other.distanceUnit == distanceUnit) &&
             (identical(other.durationUnit, durationUnit) ||
-                other.durationUnit == durationUnit));
+                other.durationUnit == durationUnit) &&
+            (identical(other.fuelType, fuelType) ||
+                other.fuelType == fuelType) &&
+            (identical(other.fuelConsumption, fuelConsumption) ||
+                other.fuelConsumption == fuelConsumption) &&
+            (identical(other.fuelConsumptionUnit, fuelConsumptionUnit) ||
+                other.fuelConsumptionUnit == fuelConsumptionUnit) &&
+            (identical(other.numberOfPassengers, numberOfPassengers) ||
+                other.numberOfPassengers == numberOfPassengers) &&
+            (identical(other.publicTransportType, publicTransportType) ||
+                other.publicTransportType == publicTransportType));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
@@ -238,11 +344,16 @@ class _TransportationModel implements TransportationModel {
       distance,
       duration,
       distanceUnit,
-      durationUnit);
+      durationUnit,
+      fuelType,
+      fuelConsumption,
+      fuelConsumptionUnit,
+      numberOfPassengers,
+      publicTransportType);
 
   @override
   String toString() {
-    return 'TransportationModel(option: $option, vehicle: $vehicle, location: $location, distance: $distance, duration: $duration, distanceUnit: $distanceUnit, durationUnit: $durationUnit)';
+    return 'TransportationModel(option: $option, vehicle: $vehicle, location: $location, distance: $distance, duration: $duration, distanceUnit: $distanceUnit, durationUnit: $durationUnit, fuelType: $fuelType, fuelConsumption: $fuelConsumption, fuelConsumptionUnit: $fuelConsumptionUnit, numberOfPassengers: $numberOfPassengers, publicTransportType: $publicTransportType)';
   }
 }
 
@@ -259,9 +370,14 @@ abstract mixin class _$TransportationModelCopyWith<$Res>
       String vehicle,
       List<double> location,
       double distance,
-      String duration,
+      double duration,
       String distanceUnit,
-      String durationUnit});
+      String durationUnit,
+      String? fuelType,
+      double? fuelConsumption,
+      String? fuelConsumptionUnit,
+      int? numberOfPassengers,
+      String? publicTransportType});
 }
 
 /// @nodoc
@@ -284,6 +400,11 @@ class __$TransportationModelCopyWithImpl<$Res>
     Object? duration = null,
     Object? distanceUnit = null,
     Object? durationUnit = null,
+    Object? fuelType = freezed,
+    Object? fuelConsumption = freezed,
+    Object? fuelConsumptionUnit = freezed,
+    Object? numberOfPassengers = freezed,
+    Object? publicTransportType = freezed,
   }) {
     return _then(_TransportationModel(
       option: null == option
@@ -305,7 +426,7 @@ class __$TransportationModelCopyWithImpl<$Res>
       duration: null == duration
           ? _self.duration
           : duration // ignore: cast_nullable_to_non_nullable
-              as String,
+              as double,
       distanceUnit: null == distanceUnit
           ? _self.distanceUnit
           : distanceUnit // ignore: cast_nullable_to_non_nullable
@@ -314,6 +435,26 @@ class __$TransportationModelCopyWithImpl<$Res>
           ? _self.durationUnit
           : durationUnit // ignore: cast_nullable_to_non_nullable
               as String,
+      fuelType: freezed == fuelType
+          ? _self.fuelType
+          : fuelType // ignore: cast_nullable_to_non_nullable
+              as String?,
+      fuelConsumption: freezed == fuelConsumption
+          ? _self.fuelConsumption
+          : fuelConsumption // ignore: cast_nullable_to_non_nullable
+              as double?,
+      fuelConsumptionUnit: freezed == fuelConsumptionUnit
+          ? _self.fuelConsumptionUnit
+          : fuelConsumptionUnit // ignore: cast_nullable_to_non_nullable
+              as String?,
+      numberOfPassengers: freezed == numberOfPassengers
+          ? _self.numberOfPassengers
+          : numberOfPassengers // ignore: cast_nullable_to_non_nullable
+              as int?,
+      publicTransportType: freezed == publicTransportType
+          ? _self.publicTransportType
+          : publicTransportType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }

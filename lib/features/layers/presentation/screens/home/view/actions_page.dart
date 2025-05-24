@@ -64,21 +64,67 @@ class _ActionsPageState extends State<ActionsPage> {
                   );
                 } else {
                   final location = await widget.getCurrentLocationUseCase();
-                  final action = TransportationEntity(
-                    option: _selectedTransportMode!,
-                    vehicle: _selectedVehicle ?? _selectedPublicTransport,
-                    location: location ?? [0.0, 0.0],
-                    distance: double.tryParse(_distanceController.text) ?? 0.0,
-                    duration: double.tryParse(_durationController.text) ?? 0.0,
-                    distanceUnit: _selectedDistanceUnit,
-                    durationUnit: _selectedDurationUnit,
-                  );
+                  final distance = double.tryParse(_distanceController.text) ?? 0.0;
+                  final duration = double.tryParse(_durationController.text) ?? 0.0;
+                  
+                  TransportationEntity action;
+                  
+                  switch (_selectedTransportMode) {
+                    case "Active Commute":
+                      if (_selectedVehicle == null) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text("Please select a transport mode")),
+                        );
+                        return;
+                      }
+                      action = TransportationEntity.activeCommute(
+                        vehicle: _selectedVehicle!,
+                        location: location ?? [0.0, 0.0],
+                        distance: distance,
+                        duration: duration,
+                        distanceUnit: _selectedDistanceUnit,
+                        durationUnit: _selectedDurationUnit,
+                      );
+                      break;
+                    case "Private Vehicle":
+                      action = TransportationEntity.privateVehicle(
+                        location: location ?? [0.0, 0.0],
+                        distance: distance,
+                        duration: duration,
+                        distanceUnit: _selectedDistanceUnit,
+                        durationUnit: _selectedDurationUnit,
+                        fuelType: _selectedFuelType,
+                        fuelConsumption: double.tryParse(_fuelConsumptionController.text),
+                        fuelConsumptionUnit: "L/100km",
+                        numberOfPassengers: int.tryParse(_passengersController.text),
+                      );
+                      break;
+                    case "Public Transport":
+                      action = TransportationEntity.publicTransport(
+                        publicTransportType: _selectedPublicTransport,
+                        location: location ?? [0.0, 0.0],
+                        distance: distance,
+                        duration: duration,
+                        distanceUnit: _selectedDistanceUnit,
+                        durationUnit: _selectedDurationUnit,
+                      );
+                      break;
+                    default:
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text("Invalid transport mode selected")),
+                      );
+                      return;
+                  }
+                  
                   widget.uploadActionUseCase(action);
-                  print("""
-                    Recorded transport: $_selectedTransportMode
-                    Distance: ${_distanceController.text} $_selectedDistanceUnit
-                    Duration: ${_durationController.text} $_selectedDurationUnit
-                  """);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text("Transport action recorded successfully!"),
+                      backgroundColor: Colors.green,
+                    ),
+                  );
+                  
+                  debugPrint("Recorded transport action: ${action.toString()}");
                 }
               },
               sections: [
