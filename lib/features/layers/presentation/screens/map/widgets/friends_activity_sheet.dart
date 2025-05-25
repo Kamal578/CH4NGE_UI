@@ -21,7 +21,6 @@ class FriendsActivitySheet extends StatelessWidget {
     filteredActivities = Map.fromEntries(
       activities.entries.where((entry) => entry.key != username),
     );
-
     return DraggableBottomSheet(
       minHeightRatio: 0.25,
       backgroundColor: Colors.white,

@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final GoRouter router = GoRouter(
-      initialLocation: '/',
+      initialLocation: '/auth',
       routes: [
         GoRoute(
           path: '/',
@@ -76,6 +76,8 @@ class MyApp extends StatelessWidget {
             key: UniqueKey(),
             getFriendsActivitiesUseCase: serviceLocator(),
             getFriendsUseCase: serviceLocator(),
+            getAllUsersUseCase: serviceLocator(),
+            updateFriendsUseCase: serviceLocator(),
           ),
         ),
         GoRoute(

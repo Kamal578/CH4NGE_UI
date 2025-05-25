@@ -3,6 +3,7 @@ import 'package:ch4nge/features/layers/data/datasources/activity_datasource.dart
 import 'package:ch4nge/features/layers/data/datasources/achievement_datasource.dart';
 import 'package:ch4nge/features/layers/data/datasources/datasource_auth.dart';
 import 'package:ch4nge/features/layers/data/datasources/mini_challenge_datasource.dart';
+import 'package:ch4nge/features/layers/data/datasources/user_datasource.dart';
 import 'package:ch4nge/features/layers/data/datasources/weekly_challenge_datasource.dart';
 import 'package:ch4nge/features/layers/data/repositories/achievement_repository.dart';
 import 'package:ch4nge/features/layers/data/repositories/action_repository.dart';
@@ -31,6 +32,8 @@ import 'package:ch4nge/features/layers/domain/use_cases/get_next_achievement.dar
 import 'package:ch4nge/features/layers/domain/use_cases/get_posts.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_user.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_weekly_challenge.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/update_friends.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/update_profile_pic.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/upload_action.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/upload_post_form.dart';
 import 'package:ch4nge/features/layers/presentation/screens/authentication/bloc/auth_bloc.dart';
@@ -43,8 +46,8 @@ final serviceLocator = GetIt.instance;
 
 setupServiceLocator() async {
   serviceLocator.registerSingleton(Config());
-  serviceLocator.registerSingleton(
-      NetworkClient(config: serviceLocator<Config>()));
+  serviceLocator
+      .registerSingleton(NetworkClient(config: serviceLocator<Config>()));
   serviceLocator.registerFactory(() => serviceLocator<NetworkClient>().dio);
   serviceLocator.registerSingleton<SharedPreferences>(
       await SharedPreferences.getInstance());
@@ -52,19 +55,22 @@ setupServiceLocator() async {
   // Datasources
   serviceLocator
       .registerFactory<IAuthenticationDatasource>(() => AuthenticationRemote());
-  serviceLocator.registerFactory<IAchievementsDatasource>(() => AchievementsRemote());
-  serviceLocator.registerFactory<IMiniChallengeDatasource>(
-      () => MiniChallengeRemote());
-  serviceLocator.registerFactory<IWeeklyChallengeDatasource>(() => WeeklyChallengeRemote());
+  serviceLocator
+      .registerFactory<IAchievementsDatasource>(() => AchievementsRemote());
+  serviceLocator
+      .registerFactory<IMiniChallengeDatasource>(() => MiniChallengeRemote());
+  serviceLocator.registerFactory<IWeeklyChallengeDatasource>(
+      () => WeeklyChallengeRemote());
   serviceLocator.registerFactory<IActivityDatasource>(() => ActivityRemote());
-  serviceLocator.registerFactory<IActionDatasource>(() => ActionRemoteDatasource());
-
+  serviceLocator
+      .registerFactory<IActionDatasource>(() => ActionRemoteDatasource());
+  serviceLocator.registerFactory<IUserDatasource>(() => UserRemoteDatasource());
 
   // Repositories
   serviceLocator.registerLazySingleton<IAuthenticationRepository>(
       () => AuthenticationRepositoryImpl());
   serviceLocator
-      .registerLazySingleton<UserRepository>(() => UserRepositoryImpl());
+      .registerLazySingleton<UserRepository>(() => UserRepositoryImpl(datasource: serviceLocator()));
   serviceLocator.registerLazySingleton<WeeklyChallengeRepository>(
       () => WeeklyChallengeRepositoryImpl(datasource: serviceLocator()));
   serviceLocator.registerLazySingleton<AchievementRepository>(
@@ -73,8 +79,8 @@ setupServiceLocator() async {
       () => MiniChallengeRepositoryImpl(datasource: serviceLocator()));
   serviceLocator.registerLazySingleton<ActivityRepository>(
       () => ActivityRepositoryImpl(datasource: serviceLocator()));
-  serviceLocator
-      .registerLazySingleton<ActionRepository>(() => ActionRepositoryImpl(datasource: serviceLocator()));
+  serviceLocator.registerLazySingleton<ActionRepository>(
+      () => ActionRepositoryImpl(datasource: serviceLocator()));
   serviceLocator
       .registerLazySingleton<PostRepository>(() => PostRepositoryImpl());
 
@@ -101,6 +107,9 @@ setupServiceLocator() async {
         serviceLocator(),
       ));
   serviceLocator.registerFactory(() => UploadPostFormUseCase(serviceLocator()));
+  serviceLocator.registerFactory(() => UpdateFriendsUseCase(serviceLocator()));
+  serviceLocator
+      .registerFactory(() => UpdateProfilePicUseCase(serviceLocator()));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => AuthBloc());

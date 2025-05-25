@@ -15,8 +15,12 @@ class GetPostsUseCase {
     final posts = await postRepository.getRecentPosts();
     for (var post in posts) {
       final user = await userRepository.getUser(post.userId);
-      post.profileImageUrl = user.profilePicUrl;
-      post.username = user.username;
+      if (user.isLeft) {
+        continue;
+      } else {
+          post.profileImageUrl = user.right.profilePicUrl;
+          post.username = user.right.username;
+      }
     }
 
     return posts;
