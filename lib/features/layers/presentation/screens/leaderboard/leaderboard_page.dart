@@ -36,7 +36,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     try {
       final users = await widget.getAllUsersUseCase();
       List<LeaderboardEntry> leaderboardData = convertToLeaderboard(
-        users,
+        users.right,
         userId,
       );
       setState(() {

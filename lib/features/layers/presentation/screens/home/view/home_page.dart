@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
       final achievement = await widget.getNextAchievementUseCase(userId);
 
       setState(() {
-        streak = user.streak;
+        streak = user.right.streak;
         weeklyChallenge = challenge;
         this.achievement = achievement;
         isLoading = false;

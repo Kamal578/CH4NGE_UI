@@ -156,7 +156,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
       final allUsers = await widget.getAllUsersUseCase();
 
       final friendIdToUsername = {
-        for (final user in friends) user.userId: user.username,
+        for (final user in friends.right) user.userId: user.username,
       };
 
       final friendIds = friendIdToUsername.keys.toList();
@@ -170,8 +170,8 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
       }
 
       setState(() {
-        users = allUsers;
-        this.friends = friends;
+        users = allUsers.right;
+        this.friends = friends.right;
         this.activities = result;
         isLoading = false;
       });
