@@ -3,6 +3,7 @@ import 'package:ch4nge/features/layers/data/datasources/activity_datasource.dart
 import 'package:ch4nge/features/layers/data/datasources/achievement_datasource.dart';
 import 'package:ch4nge/features/layers/data/datasources/datasource_auth.dart';
 import 'package:ch4nge/features/layers/data/datasources/mini_challenge_datasource.dart';
+import 'package:ch4nge/features/layers/data/datasources/post_datasource.dart';
 import 'package:ch4nge/features/layers/data/datasources/user_datasource.dart';
 import 'package:ch4nge/features/layers/data/datasources/weekly_challenge_datasource.dart';
 import 'package:ch4nge/features/layers/data/repositories/achievement_repository.dart';
@@ -32,6 +33,8 @@ import 'package:ch4nge/features/layers/domain/use_cases/get_next_achievement.dar
 import 'package:ch4nge/features/layers/domain/use_cases/get_posts.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_user.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_weekly_challenge.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/like_post.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/share_post.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/update_friends.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/update_profile_pic.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/upload_action.dart';
@@ -65,12 +68,13 @@ setupServiceLocator() async {
   serviceLocator
       .registerFactory<IActionDatasource>(() => ActionRemoteDatasource());
   serviceLocator.registerFactory<IUserDatasource>(() => UserRemoteDatasource());
+  serviceLocator.registerFactory<IPostDatasource>(() => PostRemoteDatasource());
 
   // Repositories
   serviceLocator.registerLazySingleton<IAuthenticationRepository>(
       () => AuthenticationRepositoryImpl());
-  serviceLocator
-      .registerLazySingleton<UserRepository>(() => UserRepositoryImpl(datasource: serviceLocator()));
+  serviceLocator.registerLazySingleton<UserRepository>(
+      () => UserRepositoryImpl(datasource: serviceLocator()));
   serviceLocator.registerLazySingleton<WeeklyChallengeRepository>(
       () => WeeklyChallengeRepositoryImpl(datasource: serviceLocator()));
   serviceLocator.registerLazySingleton<AchievementRepository>(
@@ -81,8 +85,8 @@ setupServiceLocator() async {
       () => ActivityRepositoryImpl(datasource: serviceLocator()));
   serviceLocator.registerLazySingleton<ActionRepository>(
       () => ActionRepositoryImpl(datasource: serviceLocator()));
-  serviceLocator
-      .registerLazySingleton<PostRepository>(() => PostRepositoryImpl());
+  serviceLocator.registerLazySingleton<PostRepository>(
+      () => PostRepositoryImpl(datasource: serviceLocator()));
 
   // Use cases
   serviceLocator.registerFactory(() => GetUserUseCase(serviceLocator()));
@@ -110,6 +114,8 @@ setupServiceLocator() async {
   serviceLocator.registerFactory(() => UpdateFriendsUseCase(serviceLocator()));
   serviceLocator
       .registerFactory(() => UpdateProfilePicUseCase(serviceLocator()));
+  serviceLocator.registerFactory(() => LikePostUseCase(serviceLocator()));
+  serviceLocator.registerFactory(() => SharePostUseCase(serviceLocator()));
 
   // Blocs
   serviceLocator.registerLazySingleton(() => AuthBloc());

@@ -4,5 +4,7 @@ import 'package:either_dart/either.dart';
 
 abstract class PostRepository {
   Future<List<PostEntity>> getRecentPosts();
-  Future<Either<String, Right>> uploadPostForm(PostFormEntity post);
+  Future<Either<String, String>> uploadPostForm(PostFormEntity post);
+  Future<Either<String, PostEntity>> likePost(String postId, String userId);
+  Future<Either<String, PostEntity>> sharePost(String postId, String userId);
 } 
