@@ -1,4 +1,5 @@
 import 'package:ch4nge/core/auth/auth_manager.dart';
+import 'package:ch4nge/core/utils/timestamp_mapper.dart';
 import 'package:ch4nge/features/layers/domain/entities/achievement_entity.dart';
 import 'package:ch4nge/features/layers/domain/entities/weekly_challenge_entity.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_next_achievement.dart';
@@ -43,6 +44,37 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _loadData() async {
     try {
+      final now = DateTime.now();
+
+      final userCacheTimestamp =
+          await CacheTimestampMapper.getUserCacheTimestamp(userId);
+      final weeklyChallengeCacheTimestamp =
+          await CacheTimestampMapper.getWeeklyChallengeCacheTimestamp(userId);
+      final nextAchievementCacheTimestamp =
+          await CacheTimestampMapper.getNextAchievementCacheTimestamp(userId);
+
+      final cacheStamps = {
+        "user": userCacheTimestamp,
+        "weekly_challenge": weeklyChallengeCacheTimestamp,
+        "next_achievement": nextAchievementCacheTimestamp,
+      };
+
+      for (final cacheStamp in cacheStamps.entries) {
+        if (cacheStamp.value != null) {
+          final isDifferentDate = cacheStamp.value!.year != now.year ||
+              cacheStamp.value!.month != now.month ||
+              cacheStamp.value!.day != now.day;
+
+          if (isDifferentDate) {
+            CacheTimestampMapper.setNewTimestamp(
+              cacheStamp.key,
+              userId: userId,
+              newTimestamp: now.subtract(const Duration(minutes: 6)),
+            );
+          }
+        }
+      }
+
       final user = await widget.getUserUseCase(userId);
       final challenge = await widget.getWeeklyChallengeUseCase(userId);
       final achievement = await widget.getNextAchievementUseCase(userId);
