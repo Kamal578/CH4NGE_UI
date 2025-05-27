@@ -56,6 +56,8 @@ dependencies:
   location: ^5.0.0
   http: ^1.4.0
   path: ^1.9.1
+  share_plus: ^11.0.0
+  app_links: ^6.4.0
 
 
 dev_dependencies:
@@ -100,6 +102,7 @@ flutter:
     - assets/icons/settings_icon.png
     - assets/icons/notifications_icon.png
     - assets/images/logo.jpeg
+    - assets/images/user_profile.png
     - assets/json_data/points.json
     - assets/json_data/sensors.json
 

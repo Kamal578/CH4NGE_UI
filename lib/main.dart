@@ -96,7 +96,10 @@ class MyApp extends StatelessWidget {
         ),
         GoRoute(
           path: '/settings',
-          builder: (context, state) => SettingsPage(),
+          builder: (context, state) => SettingsPage(
+            key: UniqueKey(),
+            getUserUseCase: serviceLocator(),
+          ),
         ),
       ],
     );

@@ -11,7 +11,7 @@ abstract class IAuthenticationDatasource {
 
 class AuthenticationRemote extends IAuthenticationDatasource {
   final ApiService _apiService = ApiService.instance;
-    final _mockUser = {
+  final _mockUser = {
     'user_id': '12345',
     'email': 'd.kuramshin@ufaz.az',
     'password': 'Qwerty123@',
@@ -43,12 +43,12 @@ class AuthenticationRemote extends IAuthenticationDatasource {
   //         "password": password,
   //       },
   //     );
-      
+
   //     if (response.statusCode == 200) {
   //       final token = response.data?["token"] ?? response.data?["access_token"];
   //       final userId = response.data?["user_id"] ?? response.data?["id"];
   //       final username = response.data?["username"] ?? response.data?["name"];
-        
+
   //       if (token != null) {
   //         AuthManager.saveToken(token);
   //         if (userId != null) AuthManager.saveId(userId.toString());
@@ -104,7 +104,7 @@ class AuthenticationRemote extends IAuthenticationDatasource {
   //         "password": password,
   //       },
   //     );
-      
+
   //     if (response.statusCode == 200 || response.statusCode == 201) {
   //       if (response.data?["token"] != null) {
   //         await login(email, password);
@@ -126,7 +126,7 @@ class AuthenticationRemote extends IAuthenticationDatasource {
     AuthManager.logout();
   }
 
-  // TODO: Uncomment when API is ready  
+  // TODO: Uncomment when API is ready
   // @override
   // Future<void> logout() async {
   //   try {
