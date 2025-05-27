@@ -12,7 +12,7 @@ abstract class GreenModel with _$GreenModel {
     required List<double> location,
   }) = _GreenModel;
 
-factory GreenModel.fromEntity(GreenEntity entity) {
+  factory GreenModel.fromEntity(GreenEntity entity) {
     return GreenModel(
       option: entity.option,
       location: entity.location,

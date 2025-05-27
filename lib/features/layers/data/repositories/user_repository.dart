@@ -15,7 +15,6 @@ class UserRepositoryImpl implements UserRepository {
     UserEntity(
       userId: '12345',
       username: 'Dima',
-      password: 'Qwerty123@',
       profilePicUrl:
           'https://media.licdn.com/dms/image/v2/D4E03AQE6_00Lbd-Itw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1697047665155?e=1750291200&v=beta&t=_BBvq5lAMPw3-cY4lHbN1M2_Y2aBYAsVfnJriLT1auA',
       email: 'd.kuramshin@ufaz.az',
@@ -28,7 +27,6 @@ class UserRepositoryImpl implements UserRepository {
     UserEntity(
       userId: '12346',
       username: 'Kamal',
-      password: 'Qwerty123@@',
       profilePicUrl:
           'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
       email: 'kamal.ahmadov@ufaz.az',
@@ -41,7 +39,6 @@ class UserRepositoryImpl implements UserRepository {
     UserEntity(
       userId: '12347',
       username: 'Pavel',
-      password: 'Password123!',
       profilePicUrl:
           'https://media.licdn.com/dms/image/v2/C4E03AQGrdlO8sT78ug/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1663355766652?e=1749081600&v=beta&t=wKnfP2SW9E27yg6owE7tjLAPKOx5GlAhzqMN5BOWC-w',
       email: 'p.kuznetsov@ufaz.az',
@@ -91,7 +88,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12346',
         username: 'Kamal',
-        password: 'Qwerty123@@',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'kamal.ahmadov@ufaz.az',
@@ -104,7 +100,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12345',
         username: 'Dima',
-        password: 'Qwerty123@',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQE6_00Lbd-Itw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1697047665155?e=1750291200&v=beta&t=_BBvq5lAMPw3-cY4lHbN1M2_Y2aBYAsVfnJriLT1auA',
         email: 'd.kuramshin@ufaz.az',
@@ -117,7 +112,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12347',
         username: 'Aydin',
-        password: 'Password123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'aydin.mammadov@ufaz.az',
@@ -130,7 +124,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12348',
         username: 'Leyla',
-        password: 'LeylaPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'leyla.aliyeva@ufaz.az',
@@ -143,7 +136,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12349',
         username: 'Farid',
-        password: 'FaridPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'farid.huseynov@ufaz.az',
@@ -156,7 +148,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12350',
         username: 'Nigar',
-        password: 'NigarPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'nigar.guliyeva@ufaz.az',
@@ -169,7 +160,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12351',
         username: 'Rashad',
-        password: 'RashadPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'rashad.mammadov@ufaz.az',
@@ -182,7 +172,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12352',
         username: 'Zeynab',
-        password: 'ZeynabPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'zeynab.aliyeva@ufaz.az',
@@ -195,7 +184,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12353',
         username: 'Elvin',
-        password: 'ElvinPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'elvin.huseynov@ufaz.az',
@@ -208,7 +196,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12354',
         username: 'Aysel',
-        password: 'AyselPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'aysel.guliyeva@ufaz.az',
@@ -221,7 +208,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12355',
         username: 'Murad',
-        password: 'MuradPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'murad.mammadov@ufaz.az',
@@ -234,7 +220,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12356',
         username: 'Sevda',
-        password: 'SevdaPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'sevda.aliyeva@ufaz.az',
@@ -247,7 +232,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12357',
         username: 'Orkhan',
-        password: 'OrkhanPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'orkhan.huseynov@ufaz.az',
@@ -260,7 +244,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12358',
         username: 'Gunel',
-        password: 'GunelPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'gunel.guliyeva@ufaz.az',
@@ -273,7 +256,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12359',
         username: 'Tural',
-        password: 'TuralPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'tural.mammadov@ufaz.az',
@@ -286,7 +268,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12360',
         username: 'Narmin',
-        password: 'NarminPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'narmin.aliyeva@ufaz.az',
@@ -299,7 +280,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12361',
         username: 'Ilkin',
-        password: 'IlkinPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'ilkin.huseynov@ufaz.az',
@@ -312,7 +292,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12362',
         username: 'Sabina',
-        password: 'SabinaPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'sabina.guliyeva@ufaz.az',
@@ -325,7 +304,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12363',
         username: 'Ramin',
-        password: 'RaminPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'ramin.mammadov@ufaz.az',
@@ -338,7 +316,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12364',
         username: 'Amina',
-        password: 'AminaPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'amina.aliyeva@ufaz.az',
@@ -351,7 +328,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12365',
         username: 'Emin',
-        password: 'EminPass123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'emin.huseynov@ufaz.az',
@@ -382,7 +358,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: userId,
         username: 'Dima',
-        password: 'Qwerty123@',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQE6_00Lbd-Itw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1697047665155?e=1750291200&v=beta&t=_BBvq5lAMPw3-cY4lHbN1M2_Y2aBYAsVfnJriLT1auA',
         email: 'd.kuramshin@ufaz.az',
@@ -395,7 +370,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12346',
         username: 'Kamal',
-        password: 'Qwerty123@@',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
         email: 'kamal.ahmadov@ufaz.az',
@@ -408,7 +382,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12347',
         username: 'Pavel',
-        password: 'Password123!',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/C4E03AQGrdlO8sT78ug/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1663355766652?e=1749081600&v=beta&t=wKnfP2SW9E27yg6owE7tjLAPKOx5GlAhzqMN5BOWC-w',
         email: 'p.kuznetsov@ufaz.az',
@@ -421,7 +394,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12348',
         username: 'Rena',
-        password: 'RenaPassword',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQFBIu9J-kB1vg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1719592835289?e=1749081600&v=beta&t=q0rtR0XkdszZIbllG59gYCvi9HYV65NlYVH0p0yZ990',
         email: 'rena@ufaz.az',
@@ -434,7 +406,6 @@ class UserRepositoryImpl implements UserRepository {
       UserEntity(
         userId: '12349',
         username: 'Suad',
-        password: 'SuadPassword',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQHIxVV2KRBqWw/profile-displayphoto-shrink_200_200/B4EZSVG6waHgAg-/0/1737668408302?e=1749081600&v=beta&t=f9lC_Wl9YLTU8Wbi0H2X_nCuFJq54csVo6vDxZZ5vW8',
         email: 'suad@ufaz.az',

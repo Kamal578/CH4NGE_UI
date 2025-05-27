@@ -106,7 +106,7 @@ class _GreenModel implements GreenModel {
     return EqualUnmodifiableListView(_location);
   }
 
-  GreenEntity toEntity() {
+    GreenEntity toEntity() {
     return GreenEntity(
       option: option,
       location: location,

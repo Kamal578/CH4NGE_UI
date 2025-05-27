@@ -4,7 +4,6 @@ class UserEntity {
   final String userId;
   final String username;
   final String email;
-  final String password;
   final String profilePicUrl;
   final int streak;
   final int points;
@@ -16,7 +15,6 @@ class UserEntity {
     required this.userId,
     required this.username,
     required this.email,
-    required this.password,
     required this.profilePicUrl,
     required this.streak,
     required this.points,

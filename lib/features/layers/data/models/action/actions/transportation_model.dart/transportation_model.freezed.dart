@@ -274,9 +274,12 @@ class _TransportationModel implements TransportationModel {
     // Add optional fields only if they are not null
     if (fuelType != null) payload['fuelType'] = fuelType;
     if (fuelConsumption != null) payload['fuelConsumption'] = fuelConsumption;
-    if (fuelConsumptionUnit != null) payload['fuelConsumptionUnit'] = fuelConsumptionUnit;
-    if (numberOfPassengers != null) payload['numberOfPassengers'] = numberOfPassengers;
-    if (publicTransportType != null) payload['publicTransportType'] = publicTransportType;
+    if (fuelConsumptionUnit != null)
+      payload['fuelConsumptionUnit'] = fuelConsumptionUnit;
+    if (numberOfPassengers != null)
+      payload['numberOfPassengers'] = numberOfPassengers;
+    if (publicTransportType != null)
+      payload['publicTransportType'] = publicTransportType;
 
     return ActionDTO(
       actionType: 'transportation',

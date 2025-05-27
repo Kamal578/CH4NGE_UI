@@ -18,7 +18,6 @@ mixin _$UserModel {
   String get userId;
   String get username;
   String get email;
-  String get password;
   String get profilePicUrl;
   int get streak;
   int get points;
@@ -45,8 +44,6 @@ mixin _$UserModel {
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.password, password) ||
-                other.password == password) &&
             (identical(other.profilePicUrl, profilePicUrl) ||
                 other.profilePicUrl == profilePicUrl) &&
             (identical(other.streak, streak) || other.streak == streak) &&
@@ -65,7 +62,6 @@ mixin _$UserModel {
       userId,
       username,
       email,
-      password,
       profilePicUrl,
       streak,
       points,
@@ -75,7 +71,7 @@ mixin _$UserModel {
 
   @override
   String toString() {
-    return 'UserModel(userId: $userId, username: $username, email: $email, password: $password, profilePicUrl: $profilePicUrl, streak: $streak, points: $points, ghgIndex: $ghgIndex, location: $location, friendsIds: $friendsIds)';
+    return 'UserModel(userId: $userId, username: $username, email: $email, profilePicUrl: $profilePicUrl, streak: $streak, points: $points, ghgIndex: $ghgIndex, location: $location, friendsIds: $friendsIds)';
   }
 }
 
@@ -88,7 +84,6 @@ abstract mixin class $UserModelCopyWith<$Res> {
       {String userId,
       String username,
       String email,
-      String password,
       String profilePicUrl,
       int streak,
       int points,
@@ -112,7 +107,6 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
     Object? userId = null,
     Object? username = null,
     Object? email = null,
-    Object? password = null,
     Object? profilePicUrl = null,
     Object? streak = null,
     Object? points = null,
@@ -132,10 +126,6 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
       email: null == email
           ? _self.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _self.password
-          : password // ignore: cast_nullable_to_non_nullable
               as String,
       profilePicUrl: null == profilePicUrl
           ? _self.profilePicUrl
@@ -172,7 +162,6 @@ class _UserModel implements UserModel {
       {required this.userId,
       required this.username,
       required this.email,
-      required this.password,
       required this.profilePicUrl,
       required this.streak,
       required this.points,
@@ -191,8 +180,6 @@ class _UserModel implements UserModel {
   @override
   final String email;
   @override
-  final String password;
-  @override
   final String profilePicUrl;
   @override
   final int streak;
@@ -201,13 +188,18 @@ class _UserModel implements UserModel {
   @override
   final double ghgIndex;
   final List<double> _location;
+  @override
+  List<double> get location {
+    if (_location is EqualUnmodifiableListView) return _location;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_location);
+  }
 
   UserEntity toEntity() {
     return UserEntity(
       userId: userId,
       username: username,
       email: email,
-      password: password,
       profilePicUrl: profilePicUrl,
       streak: streak,
       points: points,
@@ -215,13 +207,6 @@ class _UserModel implements UserModel {
       location: LatLng(location[0], location[1]),
       friendsIds: friendsIds,
     );
-  }
-
-  @override
-  List<double> get location {
-    if (_location is EqualUnmodifiableListView) return _location;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_location);
   }
 
   final List<String> _friendsIds;
@@ -256,8 +241,6 @@ class _UserModel implements UserModel {
             (identical(other.username, username) ||
                 other.username == username) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.password, password) ||
-                other.password == password) &&
             (identical(other.profilePicUrl, profilePicUrl) ||
                 other.profilePicUrl == profilePicUrl) &&
             (identical(other.streak, streak) || other.streak == streak) &&
@@ -276,7 +259,6 @@ class _UserModel implements UserModel {
       userId,
       username,
       email,
-      password,
       profilePicUrl,
       streak,
       points,
@@ -286,7 +268,7 @@ class _UserModel implements UserModel {
 
   @override
   String toString() {
-    return 'UserModel(userId: $userId, username: $username, email: $email, password: $password, profilePicUrl: $profilePicUrl, streak: $streak, points: $points, ghgIndex: $ghgIndex, location: $location, friendsIds: $friendsIds)';
+    return 'UserModel(userId: $userId, username: $username, email: $email, profilePicUrl: $profilePicUrl, streak: $streak, points: $points, ghgIndex: $ghgIndex, location: $location, friendsIds: $friendsIds)';
   }
 }
 
@@ -302,7 +284,6 @@ abstract mixin class _$UserModelCopyWith<$Res>
       {String userId,
       String username,
       String email,
-      String password,
       String profilePicUrl,
       int streak,
       int points,
@@ -326,7 +307,6 @@ class __$UserModelCopyWithImpl<$Res> implements _$UserModelCopyWith<$Res> {
     Object? userId = null,
     Object? username = null,
     Object? email = null,
-    Object? password = null,
     Object? profilePicUrl = null,
     Object? streak = null,
     Object? points = null,
@@ -346,10 +326,6 @@ class __$UserModelCopyWithImpl<$Res> implements _$UserModelCopyWith<$Res> {
       email: null == email
           ? _self.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      password: null == password
-          ? _self.password
-          : password // ignore: cast_nullable_to_non_nullable
               as String,
       profilePicUrl: null == profilePicUrl
           ? _self.profilePicUrl
