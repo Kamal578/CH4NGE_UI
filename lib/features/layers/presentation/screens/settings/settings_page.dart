@@ -495,7 +495,7 @@ class _SettingsPageState extends State<SettingsPage> {
       backgroundColor: Colors.white,
       leading: GestureDetector(
         onTap: () {
-          context.go('/');
+          context.pop();
         },
         child: Icon(
           Icons.arrow_back_rounded,
