@@ -42,7 +42,7 @@ class _SettingsPageState extends State<SettingsPage> {
       final profilePicUrl = await widget.getUserUseCase(userId).fold(
         (failure) {
           debugPrint('Error: $failure');
-          return null; 
+          return null;
         },
         (userEntity) => userEntity.profilePicUrl.isEmpty
             ? 'assets/images/user_profile.png'
@@ -351,7 +351,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         cardColor: Color.fromARGB(255, 125, 211, 52),
                         backgroundMotifColor: Colors.white,
                         userName: username,
-                        userProfilePicUrl: _profilePicUrl ,
+                        userProfilePicUrl: _profilePicUrl,
                         onTap: _showImageSourceDialog,
                       ),
                     ),

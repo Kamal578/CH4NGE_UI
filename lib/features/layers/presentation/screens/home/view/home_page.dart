@@ -106,28 +106,26 @@ class _HomePageState extends State<HomePage> {
         appBar: _buildCustomAppbarWidget(),
         bottomNavigationBar: _buildCustomNavbarWidget(),
         resizeToAvoidBottomInset: false,
-        body: Container(
-          padding:
-              // Platform.isIOS
-              //     ? EdgeInsets.zero : // Use only SafeArea's padding on iOS
-              EdgeInsets.only(
-            // Add custom padding on Android
-            left: 16.h,
-            right: 16.h,
-          ),
-          color: Colors.white,
-          child: Column(
-            children: [
-              _buildTitleWidget(),
-              _buildStreakWidget(),
-              SizedBox(height: 2.h),
-              _buildWeeklyChallengeWidget(),
-              SizedBox(height: 8.h),
-              _buildActionListButtonWidget(),
-              SizedBox(height: 8.h),
-              _buildNextAchievementWidget(),
-              SizedBox(height: 8.h),
-            ],
+        body: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.only(
+              left: 16.h,
+              right: 16.h,
+            ),
+            color: Colors.white,
+            child: Column(
+              children: [
+                _buildTitleWidget(),
+                _buildStreakWidget(),
+                SizedBox(height: 2.h),
+                _buildWeeklyChallengeWidget(),
+                SizedBox(height: 8.h),
+                _buildActionListButtonWidget(),
+                SizedBox(height: 8.h),
+                _buildNextAchievementWidget(),
+                SizedBox(height: 8.h),
+              ],
+            ),
           ),
         ),
       ),
@@ -146,6 +144,8 @@ class _HomePageState extends State<HomePage> {
           fontWeight: FontWeight.w600,
           color: Colors.black,
         ),
+        overflow: TextOverflow.ellipsis,
+        maxLines: 1,
       ),
     );
   }
@@ -165,12 +165,13 @@ class _HomePageState extends State<HomePage> {
         children: [
           Center(
             child: Text(
-              streak.toString(),
+              streak?.toString() ?? '0',
               style: TextStyle(
                 fontSize: 64.sp,
                 fontWeight: FontWeight.w600,
                 color: Colors.white,
               ),
+              overflow: TextOverflow.visible,
             ),
           ),
           Column(
@@ -188,7 +189,10 @@ class _HomePageState extends State<HomePage> {
               Align(
                 alignment: Alignment.centerRight,
                 child: Container(
-                  width: 140.w,
+                  constraints: BoxConstraints(
+                    minWidth: 100.w,
+                    maxWidth: 150.w,
+                  ),
                   height: 30.h,
                   alignment: Alignment.centerRight,
                   decoration: BoxDecoration(
@@ -200,7 +204,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
                   padding:
-                      EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+                      EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
                   child: Center(
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
@@ -210,6 +214,8 @@ class _HomePageState extends State<HomePage> {
                           fontSize: 12.sp,
                           fontWeight: FontWeight.w600,
                         ),
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 1,
                       ),
                     ),
                   ),
@@ -223,16 +229,17 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildWeeklyChallengeWidget() {
+    if (weeklyChallenge == null) return SizedBox.shrink();
+    
     return Container(
       width: double.maxFinite,
-      constraints: BoxConstraints(
-          minHeight: 90.h), // Use constraints instead of fixed height
+      constraints: BoxConstraints(minHeight: 90.h),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.r),
         border: Border.all(
           color: const Color.fromARGB(255, 144, 152, 177),
-          width: 0.5.w, // Make border width responsive
+          width: 0.5.w,
         ),
       ),
       child: Column(
@@ -252,7 +259,7 @@ class _HomePageState extends State<HomePage> {
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: 4.h),
@@ -263,7 +270,7 @@ class _HomePageState extends State<HomePage> {
                         fontWeight: FontWeight.w400,
                         color: const Color.fromARGB(255, 144, 152, 177),
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
@@ -273,7 +280,7 @@ class _HomePageState extends State<HomePage> {
               Container(
                 constraints: BoxConstraints(
                   minWidth: 90.w,
-                  maxWidth: 120.w, // Allow container to grow slightly
+                  maxWidth: 140.w,
                 ),
                 padding: EdgeInsets.symmetric(
                   horizontal: 4.w,
@@ -298,14 +305,17 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                     SizedBox(height: 2.h),
-                    Text(
-                      "days hrs min",
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: const Color.fromARGB(255, 217, 217, 217),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "days hrs min",
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: const Color.fromARGB(255, 217, 217, 217),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.visible,
                     ),
                   ],
                 ),
@@ -320,8 +330,11 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
-    double percentageCompleted =
-        weeklyChallenge!.currentValue / weeklyChallenge!.totalValue;
+    if (weeklyChallenge == null) return SizedBox.shrink();
+    
+    double percentageCompleted = weeklyChallenge!.totalValue > 0
+        ? (weeklyChallenge!.currentValue / weeklyChallenge!.totalValue).clamp(0.0, 1.0)
+        : 0.0;
 
     return SizedBox(
       height: 18.h,
@@ -348,15 +361,18 @@ class _HomePageState extends State<HomePage> {
                   padding: EdgeInsets.symmetric(horizontal: 8.w),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                      "${weeklyChallenge!.currentValue} / ${weeklyChallenge!.totalValue}",
-                      style: TextStyle(
-                        fontSize: 10.sp, // Reduced font size
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "${weeklyChallenge!.currentValue} / ${weeklyChallenge!.totalValue}",
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.fade,
                     ),
                   ),
                 ),
@@ -391,25 +407,25 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Make a step to Greener Future!",
+                  "Step Into a Greener Future",
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
                   ),
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  "Record a sustainable action to gain points and reach weekly goals. See the list of actions.",
+                  "Log green actions to earn points and hit your weekly goals.",
                   style: TextStyle(
-                    fontSize: 12.sp, // Increased from 10.sp
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w400,
                     color: Colors.white,
                     height: 1.2,
                   ),
-                  maxLines: 2,
+                  maxLines: 3,
                   overflow: TextOverflow.ellipsis,
                 ),
               ],
@@ -418,13 +434,13 @@ class _HomePageState extends State<HomePage> {
           SizedBox(width: 8.w),
           Container(
             width: 40.w,
-            height: 40.w, // Keep square aspect ratio
+            height: 40.w,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: const Color(0xFF7DD334),
               border: Border.all(
                 color: Colors.white,
-                width: 1.5.w, // Made responsive
+                width: 1.5.w,
               ),
             ),
             child: IconButton(
@@ -445,6 +461,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildNextAchievementWidget() {
+    if (achievement == null) return SizedBox.shrink();
+    
     return Container(
       width: double.maxFinite,
       constraints: BoxConstraints(minHeight: 110.h),
@@ -463,7 +481,7 @@ class _HomePageState extends State<HomePage> {
           Text(
             "Keep going! Next Goal:",
             style: TextStyle(
-              fontSize: 18.sp, // Reduced from 20.sp
+              fontSize: 18.sp,
               fontWeight: FontWeight.w600,
             ),
             maxLines: 1,
@@ -486,7 +504,7 @@ class _HomePageState extends State<HomePage> {
                     color: const Color(0x809098B1),
                   ),
                   Container(
-                    width: 50.r, // Responsive radius-based size
+                    width: 50.r,
                     height: 50.r,
                     decoration: BoxDecoration(
                       color: const Color(0x809098B1),
@@ -509,22 +527,22 @@ class _HomePageState extends State<HomePage> {
                     Text(
                       achievement!.title,
                       style: TextStyle(
-                        fontSize: 14.sp, // Reduced from 16.sp
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: 4.h),
                     Text(
                       achievement!.subtitle,
                       style: TextStyle(
-                        fontSize: 12.sp, // Increased from 10.sp
+                        fontSize: 12.sp,
                         color: const Color(0x809098B1),
                         height: 1.3,
                       ),
-                      maxLines: 2,
+                      maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],

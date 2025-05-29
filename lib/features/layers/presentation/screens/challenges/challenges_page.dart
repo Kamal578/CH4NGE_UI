@@ -133,28 +133,35 @@ class _ChallengesPageState extends State<ChallengesPage> {
       width: double.maxFinite,
       height: 32.h,
       alignment: Alignment.centerLeft,
-      child: Text(
-        "Weekly Challenges",
-        style: TextStyle(
-          fontSize: 20.sp,
-          fontWeight: FontWeight.w600,
-          color: Colors.black,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
+        child: Text(
+          "Weekly Challenges",
+          style: TextStyle(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );
   }
 
   Widget _buildWeeklyChallengeWidget() {
+    if (weeklyChallenge == null) return SizedBox.shrink();
+    
     return Container(
       width: double.maxFinite,
-      constraints: BoxConstraints(
-          minHeight: 90.h), // Use constraints instead of fixed height
+      constraints: BoxConstraints(minHeight: 90.h),
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.r),
         border: Border.all(
           color: const Color.fromARGB(255, 144, 152, 177),
-          width: 0.5.w, // Make border width responsive
+          width: 0.5.w,
         ),
       ),
       child: Column(
@@ -174,7 +181,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
                         fontSize: 16.sp,
                         fontWeight: FontWeight.w600,
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                     SizedBox(height: 4.h),
@@ -185,7 +192,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
                         fontWeight: FontWeight.w400,
                         color: const Color.fromARGB(255, 144, 152, 177),
                       ),
-                      maxLines: 1,
+                      maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
@@ -195,7 +202,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
               Container(
                 constraints: BoxConstraints(
                   minWidth: 90.w,
-                  maxWidth: 120.w, // Allow container to grow slightly
+                  maxWidth: 140.w,
                 ),
                 padding: EdgeInsets.symmetric(
                   horizontal: 4.w,
@@ -220,14 +227,17 @@ class _ChallengesPageState extends State<ChallengesPage> {
                       ),
                     ),
                     SizedBox(height: 2.h),
-                    Text(
-                      "days hrs min",
-                      style: TextStyle(
-                        fontSize: 10.sp,
-                        color: const Color.fromARGB(255, 217, 217, 217),
+                    FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "days hrs min",
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          color: const Color.fromARGB(255, 217, 217, 217),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.visible,
                     ),
                   ],
                 ),
@@ -242,8 +252,11 @@ class _ChallengesPageState extends State<ChallengesPage> {
   }
 
   Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
-    double percentageCompleted =
-        weeklyChallenge!.currentValue / weeklyChallenge!.totalValue;
+    if (weeklyChallenge == null) return SizedBox.shrink();
+    
+    double percentageCompleted = weeklyChallenge!.totalValue > 0
+        ? (weeklyChallenge!.currentValue / weeklyChallenge!.totalValue).clamp(0.0, 1.0)
+        : 0.0;
 
     return SizedBox(
       height: 18.h,
@@ -270,15 +283,18 @@ class _ChallengesPageState extends State<ChallengesPage> {
                   padding: EdgeInsets.symmetric(horizontal: 8.w),
                   child: Align(
                     alignment: Alignment.centerLeft,
-                    child: Text(
-                      "${weeklyChallenge!.currentValue} / ${weeklyChallenge!.totalValue}",
-                      style: TextStyle(
-                        fontSize: 10.sp, // Reduced font size
-                        fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Text(
+                        "${weeklyChallenge!.currentValue} / ${weeklyChallenge!.totalValue}",
+                        style: TextStyle(
+                          fontSize: 10.sp,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.white,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.fade,
                     ),
                   ),
                 ),
@@ -291,6 +307,8 @@ class _ChallengesPageState extends State<ChallengesPage> {
   }
 
   Widget _buildAchievementsWidget() {
+    if (achievementProgress == null || achievementProgress!.isEmpty) return SizedBox.shrink();
+    
     return Container(
       width: double.maxFinite,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
@@ -309,15 +327,19 @@ class _ChallengesPageState extends State<ChallengesPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Flexible(
-                child: Text(
-                  "Achievements Progress",
-                  style: TextStyle(
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w600,
+              Expanded(
+                child: FittedBox(
+                  fit: BoxFit.scaleDown,
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "Achievements Progress",
+                    style: TextStyle(
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
                 ),
               ),
               IconButton(
@@ -342,34 +364,29 @@ class _ChallengesPageState extends State<ChallengesPage> {
             thickness: 0.5.h,
           ),
 
-          // First Achievement Item
-          _buildAchievementItem(
-            topLineColor: Color.fromARGB(128, 125, 211, 52),
-            circleColor: Color.fromARGB(128, 125, 211, 52),
-            bottomLineColor: Color.fromARGB(128, 125, 211, 52),
-            titleColor: Colors.black.withAlpha(128),
-            title: achievementProgress![0].title,
-            subtitle: achievementProgress![0].subtitle,
-          ),
-
-          // Second Achievement Item
-          _buildAchievementItem(
-            topLineColor: Color.fromARGB(128, 125, 211, 52),
-            circleColor: Color.fromARGB(255, 125, 211, 52),
-            bottomLineColor: Color.fromARGB(128, 144, 152, 177),
-            titleColor: Colors.black,
-            title: achievementProgress![1].title,
-            subtitle: achievementProgress![1].subtitle,
-          ),
-
-          // Third Achievement Item
-          _buildAchievementItem(
-            topLineColor: Color.fromARGB(128, 144, 152, 177),
-            circleColor: Color.fromARGB(128, 144, 152, 177),
-            bottomLineColor: Color.fromARGB(128, 144, 152, 177),
-            titleColor: Colors.black,
-            title: achievementProgress![1].title,
-            subtitle: achievementProgress![1].subtitle,
+          // Achievement Items
+          ...List.generate(
+            achievementProgress!.length.clamp(0, 3),
+            (index) => _buildAchievementItem(
+              topLineColor: index == 0 
+                  ? Color.fromARGB(128, 125, 211, 52)
+                  : index == 1 
+                      ? Color.fromARGB(128, 125, 211, 52)
+                      : Color.fromARGB(128, 144, 152, 177),
+              circleColor: index == 0
+                  ? Color.fromARGB(128, 125, 211, 52)
+                  : index == 1
+                      ? Color.fromARGB(255, 125, 211, 52)
+                      : Color.fromARGB(128, 144, 152, 177),
+              bottomLineColor: index == 0
+                  ? Color.fromARGB(128, 125, 211, 52)
+                  : Color.fromARGB(128, 144, 152, 177),
+              titleColor: index == 0
+                  ? Colors.black.withAlpha(128)
+                  : Colors.black,
+              title: achievementProgress![index].title,
+              subtitle: achievementProgress![index].subtitle,
+            ),
           ),
         ],
       ),
@@ -427,17 +444,18 @@ class _ChallengesPageState extends State<ChallengesPage> {
                   fontWeight: FontWeight.bold,
                   color: titleColor,
                 ),
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
+              SizedBox(height: 2.h),
               Text(
                 subtitle,
                 style: TextStyle(
                   fontSize: 12.sp,
                   color: Color.fromARGB(128, 144, 152, 177),
-                  height: 1.2,
+                  height: 1.3,
                 ),
-                maxLines: 2,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
               ),
             ],
@@ -448,56 +466,76 @@ class _ChallengesPageState extends State<ChallengesPage> {
   }
 
   _buildMiniChallengesWidget() {
+    if (miniChallenges == null || miniChallenges!.isEmpty) return SizedBox.shrink();
+    
     return Container(
       width: double.maxFinite,
-      height: 250.h,
-      padding: EdgeInsets.fromLTRB(16, 12, 16, 4),
+      constraints: BoxConstraints(minHeight: 200.h, maxHeight: 300.h),
+      padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 4.h),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            "Mini Challenges",
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            alignment: Alignment.centerLeft,
+            child: Text(
+              "Mini Challenges",
+              style: TextStyle(
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
           ),
           SizedBox(height: 10.h),
-          SizedBox(
-            height: 200.h,
+          Expanded(
             child: CarouselView(
               enableSplash: false,
               itemExtent: 200,
-              children: miniChallenges?.map((challenge) {
-                    return Container(
-                      color: const Color.fromARGB(255, 125, 211, 52),
-                      padding: EdgeInsets.all(16.h),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
+              children: miniChallenges!.map((challenge) {
+                return Container(
+                  color: const Color.fromARGB(255, 125, 211, 52),
+                  padding: EdgeInsets.all(16.h),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Flexible(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Text(
                             challenge.title,
                             style: TextStyle(
-                              fontSize: 14.sp,
+                              fontSize: 18.sp,
                               fontWeight: FontWeight.w600,
                               color: Colors.white,
                             ),
+                            textAlign: TextAlign.center,
+                            maxLines: 2,
+                            overflow: TextOverflow.visible,
                           ),
-                          SizedBox(height: 8.h),
-                          Text(
-                            challenge.subtitle,
-                            style: TextStyle(
-                              fontSize: 10.sp,
-                              color: const Color.fromARGB(255, 255, 255, 255),
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
-                    );
-                  }).toList() ??
-                  [],
+                      SizedBox(height: 8.h),
+                      Flexible(
+                        child: Text(
+                          challenge.subtitle,
+                          style: TextStyle(
+                            fontSize: 14.sp,
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                            height: 1.2,
+                          ),
+                          textAlign: TextAlign.center,
+                          maxLines: 4,
+                          overflow: TextOverflow.visible,
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
             ),
           ),
         ],

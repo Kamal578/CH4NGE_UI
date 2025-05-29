@@ -3,7 +3,6 @@ import 'package:ch4nge/features/layers/domain/entities/achievement_entity.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_all_achievements.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_navbar.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -41,14 +40,23 @@ class _AchievementsPageState extends State<AchievementsPage> {
     } catch (e) {
       setState(() => isLoading = false);
       debugPrint('Error loading data: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load data. Please try again.')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to load data. Please try again.')),
+        );
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    if (isLoading) {
+      return const Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
+
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -56,10 +64,7 @@ class _AchievementsPageState extends State<AchievementsPage> {
         bottomNavigationBar: _buildCustomNavbarWidget(),
         resizeToAvoidBottomInset: false,
         body: SingleChildScrollView(
-          padding: EdgeInsets.only(
-            left: 16.h,
-            right: 16.h,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(
             children: [
               _buildTitleWidget(),
@@ -72,17 +77,23 @@ class _AchievementsPageState extends State<AchievementsPage> {
     );
   }
 
-  _buildTitleWidget() {
+  Widget _buildTitleWidget() {
     return Container(
       width: double.maxFinite,
       height: 32.h,
       alignment: Alignment.centerLeft,
-      child: Text(
-        "Achievements Progress",
-        style: TextStyle(
-          fontSize: 20.sp,
-          fontWeight: FontWeight.w600,
-          color: Colors.black,
+      child: FittedBox(
+        fit: BoxFit.scaleDown,
+        alignment: Alignment.centerLeft,
+        child: Text(
+          "Achievements Progress",
+          style: TextStyle(
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w600,
+            color: Colors.black,
+          ),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
         ),
       ),
     );
@@ -109,14 +120,14 @@ class _AchievementsPageState extends State<AchievementsPage> {
               Color topLineColor = index == 0
                   ? Colors.transparent
                   : (achievement.isAchieved == true
-                      ? Color.fromARGB(128, 125, 211, 52)
-                      : Color.fromARGB(128, 144, 152, 177));
+                      ? const Color.fromARGB(128, 125, 211, 52)
+                      : const Color.fromARGB(128, 144, 152, 177));
               Color circleColor = achievement.isAchieved == true
-                  ? Color.fromARGB(255, 125, 211, 52)
-                  : Color.fromARGB(128, 144, 152, 177);
+                  ? const Color.fromARGB(255, 125, 211, 52)
+                  : const Color.fromARGB(128, 144, 152, 177);
               Color bottomLineColor = achievement.isAchieved == true
-                  ? Color.fromARGB(128, 125, 211, 52)
-                  : Color.fromARGB(128, 144, 152, 177);
+                  ? const Color.fromARGB(128, 125, 211, 52)
+                  : const Color.fromARGB(128, 144, 152, 177);
               bottomLineColor =
                   index == achievements!.length - 1 ? Colors.transparent : bottomLineColor;
               Color titleColor =
@@ -181,7 +192,7 @@ class _AchievementsPageState extends State<AchievementsPage> {
         SizedBox(width: 12.w),
 
         // Text Content
-        Expanded(
+        Flexible(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -193,7 +204,7 @@ class _AchievementsPageState extends State<AchievementsPage> {
                   fontWeight: FontWeight.bold,
                   color: titleColor,
                 ),
-                maxLines: 1,
+                maxLines: 2,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.start,
               ),
@@ -201,10 +212,10 @@ class _AchievementsPageState extends State<AchievementsPage> {
                 subtitle,
                 style: TextStyle(
                   fontSize: 12.sp,
-                  color: Color.fromARGB(128, 144, 152, 177),
+                  color: const Color.fromARGB(128, 144, 152, 177),
                   height: 1.2,
                 ),
-                maxLines: 2,
+                maxLines: 3,
                 overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.start,
               ),
@@ -215,13 +226,13 @@ class _AchievementsPageState extends State<AchievementsPage> {
     );
   }
 
-  _buildCustomNavbarWidget() {
-    return CustomBottomNavBar(
+  Widget _buildCustomNavbarWidget() {
+    return const CustomBottomNavBar(
       selectedIndex: 3,
     );
   }
 
-  _buildCustomAppbarWidget(BuildContext context) {
+  PreferredSizeWidget _buildCustomAppbarWidget(BuildContext context) {
     return CustomAppBar(
       backgroundColor: Colors.white,
       leading: GestureDetector(
