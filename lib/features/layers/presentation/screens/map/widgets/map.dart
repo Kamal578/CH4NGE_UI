@@ -24,6 +24,13 @@ class GHGMap extends StatefulWidget {
 
 class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
   final StreamController<void> _rebuildStream = StreamController.broadcast();
+
+  // Static cache with proper initialization tracking
+  static List<WeightedLatLng>? _cachedData;
+  static List<LatLng>? _cachedSensors;
+  static bool _isInitialized = false;
+  static Future<void>? _initializationFuture;
+
   List<WeightedLatLng> data = [];
   List<LatLng> sensors = [];
   List<Map<double, MaterialColor>> gradients = [
@@ -34,12 +41,13 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
   var index = 0;
   String? currentModalName;
   bool isModalSensor = false;
-  late Map<String, Map<String, dynamic>> personDetails;
+  Map<String, Map<String, dynamic>> personDetails = {};
+  bool _isReady = false;
 
   @override
   void initState() {
     super.initState();
-    _loadData();
+    _initializeMapData();
   }
 
   @override
@@ -48,15 +56,71 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
     super.dispose();
   }
 
-  Future<void> _loadData() async {
+  Future<void> _initializeMapData() async {
+    // If already initialized, use cached data immediately
+    if (_isInitialized && _cachedData != null && _cachedSensors != null) {
+      _setDataFromCache();
+      return;
+    }
 
-    var str = await rootBundle.loadString('assets/json_data/points.json');
-    List<dynamic> result = jsonDecode(str);
+    // If initialization is in progress, wait for it
+    if (_initializationFuture != null) {
+      await _initializationFuture;
+      _setDataFromCache();
+      return;
+    }
 
-    var str2 = await rootBundle.loadString('assets/json_data/sensors.json');
-    List<dynamic> result2 = jsonDecode(str2);
+    // Start initialization
+    _initializationFuture = _loadStaticData();
+    await _initializationFuture;
+    _setDataFromCache();
+  }
 
-    Map<String, Map<String, dynamic>> personDetails = {
+  void _setDataFromCache() {
+    if (mounted) {
+      setState(() {
+        data = _cachedData ?? [];
+        sensors = _cachedSensors ?? [];
+        _buildPersonDetails();
+        _isReady = true;
+      });
+    }
+  }
+
+  static Future<void> _loadStaticData() async {
+    if (_isInitialized) return;
+
+    try {
+      // Load both JSON files
+      final pointsJson = await rootBundle.loadString('assets/json_data/points.json');
+      final sensorsJson = await rootBundle.loadString('assets/json_data/sensors.json');
+
+      final pointsData = jsonDecode(pointsJson) as List<dynamic>;
+      final sensorsData = jsonDecode(sensorsJson) as List<dynamic>;
+
+      // Process and cache the data
+      _cachedData = pointsData
+          .cast<List<dynamic>>()
+          .map((e) => WeightedLatLng(LatLng(e[0] as double, e[1] as double), 1.0))
+          .toList();
+
+      _cachedSensors = sensorsData
+          .cast<List<dynamic>>()
+          .map((e) => LatLng(e[0] as double, e[1] as double))
+          .toList();
+
+      _isInitialized = true;
+    } catch (e) {
+      debugPrint('Error loading map data: $e');
+      // Initialize with empty data on error
+      _cachedData = <WeightedLatLng>[];
+      _cachedSensors = <LatLng>[];
+      _isInitialized = true;
+    }
+  }
+
+  void _buildPersonDetails() {
+    personDetails = {
       for (var user in widget.users)
         user.username: {
           "avatarUrl": user.profilePicUrl,
@@ -67,22 +131,9 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
                   "type": activity.value > 0 ? "good" : "bad",
                 };
               }).toList() ??
-              [],
+              <Map<String, dynamic>>[],
         }
     };
-
-    print(personDetails);
-    setState(() {
-      data = result
-          .map((e) => e as List<dynamic>)
-          .map((e) => WeightedLatLng(LatLng(e[0], e[1]), 1))
-          .toList();
-      sensors = result2
-          .map((e) => e as List<dynamic>)
-          .map((e) => LatLng(e[0], e[1]))
-          .toList();
-      this.personDetails = personDetails;
-    });
   }
 
   void _showModal(String name, bool isSensor) {
@@ -101,24 +152,51 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
         personDetails: personDetails,
       ),
     ).then((_) {
-      setState(() {
-        currentModalName = null;
-        isModalSensor = false;
-      });
+      if (mounted) {
+        setState(() {
+          currentModalName = null;
+          isModalSensor = false;
+        });
+      }
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => _rebuildStream.add(null));
+    // Show loading until everything is ready
+    if (!_isReady) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
 
+    // Build markers
     final sensorMarkers = sensors
-        .map((e) => Marker(
-              point: e,
+        .asMap()
+        .entries
+        .map((entry) => Marker(
+              key: ValueKey('sensor_${entry.key}'),
+              point: entry.value,
               child: GestureDetector(
                 onTap: () => _showModal("Sensor", true),
                 child: const Icon(Icons.sensors, color: Colors.red, size: 50),
+              ),
+            ))
+        .toList();
+
+    final userMarkers = widget.users
+        .map((user) => Marker(
+              key: ValueKey('user_${user.username}'),
+              point: user.location,
+              width: 120.0,
+              height: 120.0,
+              child: GestureDetector(
+                onTap: () => _showModal(user.username, false),
+                child: Person(
+                  key: ValueKey('person_${user.username}'),
+                  name: user.username,
+                  url: user.profilePicUrl,
+                ),
               ),
             ))
         .toList();
@@ -134,32 +212,19 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
           ),
           children: [
             TileLayer(
-                urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png"),
+              urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+            ),
             if (data.isNotEmpty)
               HeatMapLayer(
                 heatMapDataSource: InMemoryHeatMapDataSource(data: data),
-                heatMapOptions:
-                    HeatMapOptions(gradient: gradients[index], minOpacity: 0.1),
+                heatMapOptions: HeatMapOptions(
+                  gradient: gradients[index], 
+                  minOpacity: 0.1,
+                ),
                 reset: _rebuildStream.stream,
               ),
             MarkerLayer(
-              markers: [
-                ...sensorMarkers,
-                ...widget.users.map((user) {
-                  return Marker(
-                    point: user.location,
-                    width: 120.0,
-                    height: 120.0,
-                    child: GestureDetector(
-                      onTap: () => _showModal(user.username, false),
-                      child: Person(
-                        name: user.username,
-                        url: user.profilePicUrl,
-                      ),
-                    ),
-                  );
-                }),
-              ],
+              markers: [...sensorMarkers, ...userMarkers],
             ),
           ],
         ),
@@ -177,7 +242,7 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
 class _ModalContent extends StatelessWidget {
   final String name;
   final bool isSensor;
-  final Map<String, dynamic> personDetails;
+  final Map<String, Map<String, dynamic>> personDetails;
 
   const _ModalContent({
     required this.name,
@@ -218,6 +283,7 @@ class _ModalContent extends StatelessWidget {
             ),
           if (!isSensor)
             CircleAvatar(
+              key: ValueKey('modal_avatar_$name'),
               radius: 40,
               backgroundImage:
                   NetworkImage(personDetails[name]?['avatarUrl'] ?? ''),
@@ -314,7 +380,7 @@ class _ModalContent extends StatelessWidget {
                             : Colors.red,
                       ),
                       const SizedBox(width: 8),
-                      Text(activity['label']),
+                      Text(activity['label'] ?? ''),
                     ],
                   );
                 },
@@ -337,18 +403,16 @@ class Person extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(4.0),
       decoration: BoxDecoration(
-        color: Colors.blueAccent
-            .withValues(blue: 1.0, alpha: 0.2), // Background color
-        borderRadius: BorderRadius.circular(16.0), // Rounded corners
+        color: Colors.blueAccent.withValues(blue: 1.0, alpha: 0.2),
+        borderRadius: BorderRadius.circular(16.0),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           CircleAvatar(
+            key: ValueKey('avatar_$name'),
             radius: 40,
-            backgroundImage: NetworkImage(
-              url,
-            ),
+            backgroundImage: NetworkImage(url),
           ),
           const SizedBox(height: 4),
           Text(

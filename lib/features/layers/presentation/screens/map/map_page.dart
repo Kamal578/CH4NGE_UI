@@ -171,6 +171,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
 
       setState(() {
         users = allUsers.right;
+
         this.friends = friends.right;
         this.activities = result;
         isLoading = false;
@@ -213,6 +214,16 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
           body: Stack(
             children: [
               GHGMap(users: friends!, activities: activities!),
+              if (_isSearchExpanded)
+                Positioned.fill(
+                  child: GestureDetector(
+                    onTap: _collapseSearch,
+                    child: AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      color: Colors.black54,
+                    ),
+                  ),
+                ),
               _buildExpandableSearchWidget(),
               FriendsActivitySheet(users: friends!, activities: activities!),
             ],
@@ -227,13 +238,13 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
       animation: _expandAnimation,
       builder: (context, child) {
         return Container(
-          padding: EdgeInsets.only(bottom: 12.h),
+          padding: EdgeInsets.fromLTRB(0, 4.h, 0, 12.h),
           height: _isSearchExpanded
-              ? 32.h +
+              ? 36.h +
                   12.h +
                   (200.h *
                       _expandAnimation.value) // Base height + expanded content
-              : 32.h + 12.h, // Just the search bar height
+              : 36.h + 12.h, // Just the search bar height
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.only(
