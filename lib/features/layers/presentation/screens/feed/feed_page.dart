@@ -123,7 +123,25 @@ class _FeedPageState extends State<FeedPage> {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: _buildCustomAppbarWidget(),
+        bottomNavigationBar: _buildCustomNavbarWidget(),
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          child: Column(
+            children: [
+              _buildTitleWidget(),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.3),
+              Center(
+                child: CircularProgressIndicator(
+                  color: Color(0xFF7DD334),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
     }
 
     return SafeArea(
