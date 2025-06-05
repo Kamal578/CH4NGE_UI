@@ -51,7 +51,7 @@ class UserRemoteDatasource implements IUserDatasource {
 
         await _cacheData(cacheKey, usersData);
 
-        return users.firstWhere((user) => user.userId == userId).toEntity();
+        return users.firstWhere((user) => user.userId.toString() == userId).toEntity();
       } else {
         throw Exception('Failed to fetch user: ${response.statusCode}');
       }

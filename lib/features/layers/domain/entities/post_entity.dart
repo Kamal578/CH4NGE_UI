@@ -10,8 +10,8 @@ class PostEntity {
     this.username,
   });
 
-  final String postId;
-  final String userId;
+  final int postId;
+  final int userId;
   final String title;
   final String imageUrl;
   final int likeNumber;
