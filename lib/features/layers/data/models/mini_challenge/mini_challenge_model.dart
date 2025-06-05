@@ -7,8 +7,8 @@ part 'mini_challenge_model.g.dart';
 @freezed
 abstract class MiniChallengeModel with _$MiniChallengeModel {
   const factory MiniChallengeModel({
-    required String miniChallengeId,
-    required String userId,
+    required int miniChallengeId,
+    required int userId,
     required String title,
     required String subtitle,
     required bool isAchieved,

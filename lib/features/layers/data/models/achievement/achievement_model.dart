@@ -7,8 +7,8 @@ part 'achievement_model.g.dart';
 @freezed
 abstract class AchievementModel with _$AchievementModel {
   const factory AchievementModel({
-    required String achievementId,
-    required String userId,
+    required int achievementId,
+    required int userId,
     required String title,
     required String subtitle,
     required bool isAchieved,

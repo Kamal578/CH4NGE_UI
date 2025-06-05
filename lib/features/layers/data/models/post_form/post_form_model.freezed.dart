@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$PostFormModel {
-  String get userId;
+  int get userId;
   String get title;
   String get imageUrl;
   String get imageName;
@@ -61,7 +61,7 @@ abstract mixin class $PostFormModelCopyWith<$Res> {
           PostFormModel value, $Res Function(PostFormModel) _then) =
       _$PostFormModelCopyWithImpl;
   @useResult
-  $Res call({String userId, String title, String imageUrl, String imageName});
+  $Res call({int userId, String title, String imageUrl, String imageName});
 }
 
 /// @nodoc
@@ -86,7 +86,7 @@ class _$PostFormModelCopyWithImpl<$Res>
       userId: null == userId
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -115,13 +115,22 @@ class _PostFormModel implements PostFormModel {
       _$PostFormModelFromJson(json);
 
   @override
-  final String userId;
+  final int userId;
   @override
   final String title;
   @override
   final String imageUrl;
   @override
   final String imageName;
+
+  PostFormModel toEntity() {
+    return PostFormModel(
+      userId: userId,
+      title: title,
+      imageUrl: imageUrl,
+      imageName: imageName,
+    );
+  }
 
   /// Create a copy of PostFormModel
   /// with the given fields replaced by the non-null parameter values.
@@ -170,7 +179,7 @@ abstract mixin class _$PostFormModelCopyWith<$Res>
       __$PostFormModelCopyWithImpl;
   @override
   @useResult
-  $Res call({String userId, String title, String imageUrl, String imageName});
+  $Res call({int userId, String title, String imageUrl, String imageName});
 }
 
 /// @nodoc
@@ -195,7 +204,7 @@ class __$PostFormModelCopyWithImpl<$Res>
       userId: null == userId
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable

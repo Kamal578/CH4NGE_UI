@@ -15,8 +15,8 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$ActivityModel {
-  String get activityId;
-  String get userId;
+  int get activityId;
+  int get userId;
   String get title;
   int get points;
 
@@ -60,7 +60,7 @@ abstract mixin class $ActivityModelCopyWith<$Res> {
           ActivityModel value, $Res Function(ActivityModel) _then) =
       _$ActivityModelCopyWithImpl;
   @useResult
-  $Res call({String activityId, String userId, String title, int points});
+  $Res call({int activityId, int userId, String title, int points});
 }
 
 /// @nodoc
@@ -85,11 +85,11 @@ class _$ActivityModelCopyWithImpl<$Res>
       activityId: null == activityId
           ? _self.activityId
           : activityId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       userId: null == userId
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -114,9 +114,9 @@ class _ActivityModel implements ActivityModel {
       _$ActivityModelFromJson(json);
 
   @override
-  final String activityId;
+  final int activityId;
   @override
-  final String userId;
+  final int userId;
   @override
   final String title;
   @override
@@ -177,7 +177,7 @@ abstract mixin class _$ActivityModelCopyWith<$Res>
       __$ActivityModelCopyWithImpl;
   @override
   @useResult
-  $Res call({String activityId, String userId, String title, int points});
+  $Res call({int activityId, int userId, String title, int points});
 }
 
 /// @nodoc
@@ -202,11 +202,11 @@ class __$ActivityModelCopyWithImpl<$Res>
       activityId: null == activityId
           ? _self.activityId
           : activityId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       userId: null == userId
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable

@@ -160,7 +160,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
       };
 
       final friendIds = friendIdToUsername.keys.toList();
-      final activities = await widget.getFriendsActivitiesUseCase(friendIds);
+      final activities = await widget.getFriendsActivitiesUseCase(friendIds.cast<String>());
 
       final Map<String, List<ActivityEntity>> result = {};
 

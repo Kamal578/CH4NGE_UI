@@ -20,8 +20,8 @@ class WeeklyChallengeRepositoryImpl implements WeeklyChallengeRepository {
   @override
   Future<WeeklyChallengeEntity> getWeeklyChallenge(String userId) async {
     return WeeklyChallengeEntity(
-      weekklyChallengeId: '1',
-      userId: userId,
+      weeklyChallengeId: 1,
+      userId: int.parse(userId),
       title: 'Pedal Power Challenge',
       subtitle: '75 KM on a bicycle in 7 Days!',
       currentValue: 3,

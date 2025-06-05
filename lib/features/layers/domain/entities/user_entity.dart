@@ -1,7 +1,7 @@
 import 'package:latlong2/latlong.dart';
 
 class UserEntity {
-  final String userId;
+  final int userId;
   final String username;
   final String email;
   final String profilePicUrl;

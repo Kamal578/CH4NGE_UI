@@ -39,8 +39,8 @@ class DeepLinkHandler {
       final post = posts.firstWhere(
         (p) => p.postId == postId,
         orElse: () => PostEntity(
-          postId: postId!,
-          userId: postData["userId"] ?? '',
+          postId: int.tryParse(postId!) ?? 0,
+          userId: int.tryParse(postData["userId"] ?? '') ?? 0,
           username: postData['username'],
           title: postData['title'] ?? '',
           imageUrl: '',

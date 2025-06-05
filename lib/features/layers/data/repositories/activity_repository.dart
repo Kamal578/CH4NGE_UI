@@ -4,100 +4,100 @@ import 'package:ch4nge/features/layers/domain/repositories/activity_repository.d
 
 List<ActivityEntity> activities = [
   ActivityEntity(
-    activityId: '1',
-    userId: '12345',
+    activityId: 1,
+    userId: 12345,
     title: 'Walked to work.',
     value: 12,
   ),
   ActivityEntity(
-    activityId: '2',
-    userId: '12345',
+    activityId: 2,
+    userId: 12345,
     title: 'Recycled plastic.',
     value: 8,
   ),
   ActivityEntity(
-    activityId: '3',
-    userId: '12345',
+    activityId: 3,
+    userId: 12345,
     title: 'Used public transport.',
     value: 10,
   ),
 
   // Activities for Kamal
   ActivityEntity(
-    activityId: '4',
-    userId: '12346',
+    activityId: 4,
+    userId: 12346,
     title: 'Planted a tree.',
     value: 15,
   ),
   ActivityEntity(
-    activityId: '5',
-    userId: '12346',
+    activityId: 5,
+    userId: 12346,
     title: 'Turned off lights.',
     value: 5,
   ),
   ActivityEntity(
-    activityId: '6',
-    userId: '12346',
+    activityId: 6,
+    userId: 12346,
     title: 'Rode a bike.',
     value: 10,
   ),
 
   // Activities for Pavel
   ActivityEntity(
-    activityId: '7',
-    userId: '12347',
+    activityId: 7,
+    userId: 12347,
     title: 'Took a long flight.',
     value: -25,
   ),
   ActivityEntity(
-    activityId: '8',
-    userId: '12347',
+    activityId: 8,
+    userId: 12347,
     title: 'Recycled paper.',
     value: 7,
   ),
   ActivityEntity(
-    activityId: '9',
-    userId: '12347',
+    activityId: 9,
+    userId: 12347,
     title: 'Used reusable bags.',
     value: 5,
   ),
 
   // Activities for Rena
   ActivityEntity(
-    activityId: '10',
-    userId: '12348',
+    activityId: 10,
+    userId: 12348,
     title: 'Walked to the grocery store.',
     value: 10,
   ),
   ActivityEntity(
-    activityId: '11',
-    userId: '12348',
+    activityId: 11,
+    userId: 12348,
     title: 'Drove to work.',
     value: -12,
   ),
   ActivityEntity(
-    activityId: '12',
-    userId: '12348',
+    activityId: 12,
+    userId: 12348,
     title: 'Turned off appliances.',
     value: 6,
   ),
 
   // Activities for Suad
   ActivityEntity(
-    activityId: '13',
-    userId: '12349',
+    activityId: 13,
+    userId: 12349,
     title: 'Used solar panels.',
     value: 20,
   ),
   ActivityEntity(
-    activityId: '14',
-    userId: '12349',
+    activityId: 14,
+    userId: 12349,
     title: 'Carpooled to work.',
     value: 12,
   ),
   ActivityEntity(
-    activityId: '15',
-    userId: '12349',
+    activityId: 15,
+    userId: 12349,
     title: 'Composted food waste.',
     value: 8,
   ),

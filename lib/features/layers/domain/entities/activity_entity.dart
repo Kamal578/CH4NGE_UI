@@ -6,8 +6,8 @@ class ActivityEntity {
     required this.value,
   });
 
-  final String activityId;
-  final String userId;
+  final int activityId;
+  final int userId;
   final String title;
   final int value;
 }

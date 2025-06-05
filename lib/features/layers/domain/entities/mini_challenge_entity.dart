@@ -8,8 +8,8 @@ class MiniChallengeEntity {
     required this.points,
   });
 
-  final String miniChallengeId;
-  final String userId;
+  final int miniChallengeId;
+  final int userId;
   final String title;
   final String subtitle;
   final bool isAchieved;

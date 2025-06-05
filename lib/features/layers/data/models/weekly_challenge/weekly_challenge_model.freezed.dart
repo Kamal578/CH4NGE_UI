@@ -15,8 +15,8 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$WeeklyChallengeModel {
-  String get weekklyChallengeId;
-  String get userId;
+  int get weekklyChallengeId;
+  int get userId;
   String get title;
   String get subtitle;
   double get currentValue;
@@ -70,8 +70,8 @@ abstract mixin class $WeeklyChallengeModelCopyWith<$Res> {
       _$WeeklyChallengeModelCopyWithImpl;
   @useResult
   $Res call(
-      {String weekklyChallengeId,
-      String userId,
+      {int weekklyChallengeId,
+      int userId,
       String title,
       String subtitle,
       double currentValue,
@@ -104,11 +104,11 @@ class _$WeeklyChallengeModelCopyWithImpl<$Res>
       weekklyChallengeId: null == weekklyChallengeId
           ? _self.weekklyChallengeId
           : weekklyChallengeId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       userId: null == userId
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
@@ -148,9 +148,9 @@ class _WeeklyChallengeModel implements WeeklyChallengeModel {
       _$WeeklyChallengeModelFromJson(json);
 
   @override
-  final String weekklyChallengeId;
+  final int weekklyChallengeId;
   @override
-  final String userId;
+  final int userId;
   @override
   final String title;
   @override
@@ -164,7 +164,7 @@ class _WeeklyChallengeModel implements WeeklyChallengeModel {
 
   WeeklyChallengeEntity toEntity() {
     return WeeklyChallengeEntity(
-      weekklyChallengeId: weekklyChallengeId,
+      weeklyChallengeId: weekklyChallengeId,
       userId: userId,
       title: title,
       subtitle: subtitle,
@@ -228,8 +228,8 @@ abstract mixin class _$WeeklyChallengeModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String weekklyChallengeId,
-      String userId,
+      {int weekklyChallengeId,
+      int userId,
       String title,
       String subtitle,
       double currentValue,
@@ -262,11 +262,11 @@ class __$WeeklyChallengeModelCopyWithImpl<$Res>
       weekklyChallengeId: null == weekklyChallengeId
           ? _self.weekklyChallengeId
           : weekklyChallengeId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       userId: null == userId
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       title: null == title
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable

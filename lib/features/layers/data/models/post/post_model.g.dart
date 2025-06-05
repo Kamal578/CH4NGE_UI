@@ -7,8 +7,8 @@ part of 'post_model.dart';
 // **************************************************************************
 
 _PostModel _$PostModelFromJson(Map<String, dynamic> json) => _PostModel(
-      postId: json['postId'] as String,
-      userId: json['userId'] as String,
+      postId: (json['postId'] as num).toInt(),
+      userId: (json['userId'] as num).toInt(),
       title: json['title'] as String,
       imageUrl: json['imageUrl'] as String,
       likeNumber: (json['likeNumber'] as num).toInt(),

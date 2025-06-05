@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$UserModel {
-  String get userId;
+  int get userId;
   String get username;
   String get email;
   String get profilePicUrl;
@@ -81,7 +81,7 @@ abstract mixin class $UserModelCopyWith<$Res> {
       _$UserModelCopyWithImpl;
   @useResult
   $Res call(
-      {String userId,
+      {int userId,
       String username,
       String email,
       String profilePicUrl,
@@ -118,7 +118,7 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
       userId: null == userId
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       username: null == username
           ? _self.username
           : username // ignore: cast_nullable_to_non_nullable
@@ -174,7 +174,7 @@ class _UserModel implements UserModel {
       _$UserModelFromJson(json);
 
   @override
-  final String userId;
+  final int userId;
   @override
   final String username;
   @override
@@ -281,7 +281,7 @@ abstract mixin class _$UserModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String userId,
+      {int userId,
       String username,
       String email,
       String profilePicUrl,
@@ -318,7 +318,7 @@ class __$UserModelCopyWithImpl<$Res> implements _$UserModelCopyWith<$Res> {
       userId: null == userId
           ? _self.userId
           : userId // ignore: cast_nullable_to_non_nullable
-              as String,
+              as int,
       username: null == username
           ? _self.username
           : username // ignore: cast_nullable_to_non_nullable

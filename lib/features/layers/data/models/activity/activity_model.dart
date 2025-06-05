@@ -7,8 +7,8 @@ part 'activity_model.g.dart';
 @freezed
 abstract class ActivityModel with _$ActivityModel {
   const factory ActivityModel({
-    required String activityId,
-    required String userId,
+    required int activityId,
+    required int userId,
     required String title,
     required int points
   }) = _ActivityModel;

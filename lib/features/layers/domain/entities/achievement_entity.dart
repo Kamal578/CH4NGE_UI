@@ -7,8 +7,8 @@ class AchievementEntity {
     required this.isAchieved,
   });
 
-  final String achievementId;
-  final String userId;
+  final int achievementId;
+  final int userId;
   final String title;
   final String subtitle;
   final bool isAchieved;

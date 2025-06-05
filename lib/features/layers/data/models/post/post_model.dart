@@ -7,8 +7,8 @@ part 'post_model.g.dart';
 @freezed
 abstract class PostModel with _$PostModel {
   const factory PostModel({
-    required String postId,
-    required String userId,
+    required int postId,
+    required int userId,
     required String title,
     required String imageUrl,
     required int likeNumber,
@@ -25,7 +25,7 @@ abstract class PostModel with _$PostModel {
       sharesNumber: sharesNumber,
     );
   }
-
+  
   factory PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);
 }

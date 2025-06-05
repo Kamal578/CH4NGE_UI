@@ -8,8 +8,8 @@ part of 'achievement_model.dart';
 
 _AchievementModel _$AchievementModelFromJson(Map<String, dynamic> json) =>
     _AchievementModel(
-      achievementId: json['achievementId'] as String,
-      userId: json['userId'] as String,
+      achievementId: (json['achievementId'] as num).toInt(),
+      userId: (json['userId'] as num).toInt(),
       title: json['title'] as String,
       subtitle: json['subtitle'] as String,
       isAchieved: json['isAchieved'] as bool,

@@ -8,7 +8,7 @@ part of 'post_form_model.dart';
 
 _PostFormModel _$PostFormModelFromJson(Map<String, dynamic> json) =>
     _PostFormModel(
-      userId: json['userId'] as String,
+      userId: (json['userId'] as num).toInt(),
       title: json['title'] as String,
       imageUrl: json['imageUrl'] as String,
       imageName: json['imageName'] as String,

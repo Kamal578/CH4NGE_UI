@@ -203,8 +203,7 @@ class _HomePageState extends State<HomePage> {
                       width: 1,
                     ),
                   ),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
+                  padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 8.h),
                   child: Center(
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
@@ -230,7 +229,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildWeeklyChallengeWidget() {
     if (weeklyChallenge == null) return SizedBox.shrink();
-    
+
     return Container(
       width: double.maxFinite,
       constraints: BoxConstraints(minHeight: 90.h),
@@ -331,9 +330,10 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
     if (weeklyChallenge == null) return SizedBox.shrink();
-    
+
     double percentageCompleted = weeklyChallenge!.totalValue > 0
-        ? (weeklyChallenge!.currentValue / weeklyChallenge!.totalValue).clamp(0.0, 1.0)
+        ? (weeklyChallenge!.currentValue / weeklyChallenge!.totalValue)
+            .clamp(0.0, 1.0)
         : 0.0;
 
     return SizedBox(
@@ -462,7 +462,7 @@ class _HomePageState extends State<HomePage> {
 
   Widget _buildNextAchievementWidget() {
     if (achievement == null) return SizedBox.shrink();
-    
+
     return Container(
       width: double.maxFinite,
       constraints: BoxConstraints(minHeight: 110.h),

@@ -12,8 +12,8 @@ class PostRepositoryImpl implements PostRepository {
   // TODO: Remove this mock data when API is ready
   List<PostEntity> postCardData = [
     PostEntity(
-      postId: "1",
-      userId: "12346",
+      postId: 1,
+      userId: 12346,
       imageUrl:
           "https://www.vintagetreecare.com/wp-content/uploads/2023/06/planting-tree.jpg",
       likeNumber: 100,
@@ -21,8 +21,8 @@ class PostRepositoryImpl implements PostRepository {
       title: "This is a sample comment.",
     ),
     PostEntity(
-      postId: "2",
-      userId: "12347",
+      postId: 2,
+      userId: 12347,
       imageUrl:
           "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW-ux6VpEBhUHhFTFjB_CcZ-BY3vE6PliafQ&s",
       likeNumber: 200,
@@ -108,7 +108,7 @@ class PostRepositoryImpl implements PostRepository {
   }
 
   String? _validatePostForm(PostFormEntity post) {
-    if (post.userId.isEmpty) {
+    if (post.userId.isNaN) {
       return "User ID is required";
     }
     

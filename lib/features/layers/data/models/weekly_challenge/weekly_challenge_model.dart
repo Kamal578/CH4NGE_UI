@@ -7,8 +7,8 @@ part 'weekly_challenge_model.g.dart';
 @freezed
 abstract class WeeklyChallengeModel with _$WeeklyChallengeModel {
   const factory WeeklyChallengeModel({
-    required String weekklyChallengeId,
-    required String userId,
+    required int weekklyChallengeId,
+    required int userId,
     required String title,
     required String subtitle,
     required double currentValue,
@@ -18,7 +18,7 @@ abstract class WeeklyChallengeModel with _$WeeklyChallengeModel {
 
   WeeklyChallengeEntity toEntity() {
     return WeeklyChallengeEntity(
-      weekklyChallengeId: weekklyChallengeId,
+      weeklyChallengeId: weekklyChallengeId,
       userId: userId,
       title: title,
       subtitle: subtitle,

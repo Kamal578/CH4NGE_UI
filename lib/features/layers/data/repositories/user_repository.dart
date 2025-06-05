@@ -13,7 +13,7 @@ class UserRepositoryImpl implements UserRepository {
   // TODO: Remove this mock data when API is ready
   final List<UserEntity> _users = [
     UserEntity(
-      userId: '12345',
+      userId: 12345,
       username: 'Dima',
       profilePicUrl:
           'https://media.licdn.com/dms/image/v2/D4E03AQE6_00Lbd-Itw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1697047665155?e=1750291200&v=beta&t=_BBvq5lAMPw3-cY4lHbN1M2_Y2aBYAsVfnJriLT1auA',
@@ -25,7 +25,7 @@ class UserRepositoryImpl implements UserRepository {
       friendsIds: ['12346', '12347', '12348'],
     ),
     UserEntity(
-      userId: '12346',
+      userId: 12346,
       username: 'Kamal',
       profilePicUrl:
           'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -37,7 +37,7 @@ class UserRepositoryImpl implements UserRepository {
       friendsIds: ['12345', '12347', '12348', '12349'],
     ),
     UserEntity(
-      userId: '12347',
+      userId: 12347,
       username: 'Pavel',
       profilePicUrl:
           'https://media.licdn.com/dms/image/v2/C4E03AQGrdlO8sT78ug/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1663355766652?e=1749081600&v=beta&t=wKnfP2SW9E27yg6owE7tjLAPKOx5GlAhzqMN5BOWC-w',
@@ -51,23 +51,23 @@ class UserRepositoryImpl implements UserRepository {
   ];
 
   // TODO: Uncomment when API is ready
-  // @override
-  // Future<Either<String, UserEntity>> getUser(String userId) async {
-  //   try {
-  //     // Fetch from datasource (which handles its own caching)
-  //     final userEntity = await _remoteDatasource.getUser(userId);
-
-  //     return Right(userEntity);
-  //   } catch (e) {
-  //     throw Exception('Failed to fetch user: ${e.toString()}');
-  //   }
-  // }
-
-  // TODO: Remove when API is ready
   @override
   Future<Either<String, UserEntity>> getUser(String userId) async {
-    return Right(_users.firstWhere((user) => user.userId == userId));
+    try {
+      // Fetch from datasource (which handles its own caching)
+      final userEntity = await _remoteDatasource.getUser(userId);
+
+      return Right(userEntity);
+    } catch (e) {
+      throw Exception('Failed to fetch user: ${e.toString()}');
+    }
   }
+
+  // TODO: Remove when API is ready
+  // @override
+  // Future<Either<String, UserEntity>> getUser(String userId) async {
+  //   return Right(_users.firstWhere((user) => user.userId == userId));
+  // }
 
   // TODO: Uncomment when API is ready
   // @override
@@ -86,7 +86,7 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<String, List<UserEntity>>> getAllUsers() async {
     return Right([
       UserEntity(
-        userId: '12346',
+        userId: 12346,
         username: 'Kamal',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -98,7 +98,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['1', '3'],
       ),
       UserEntity(
-        userId: '12345',
+        userId: 12345,
         username: 'Dima',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQE6_00Lbd-Itw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1697047665155?e=1750291200&v=beta&t=_BBvq5lAMPw3-cY4lHbN1M2_Y2aBYAsVfnJriLT1auA',
@@ -110,7 +110,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['2', '3'],
       ),
       UserEntity(
-        userId: '12347',
+        userId: 12347,
         username: 'Aydin',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -122,7 +122,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['1', '2'],
       ),
       UserEntity(
-        userId: '12348',
+        userId: 12348,
         username: 'Leyla',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -134,7 +134,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['3', '4'],
       ),
       UserEntity(
-        userId: '12349',
+        userId: 12349,
         username: 'Farid',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -146,7 +146,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['5', '6'],
       ),
       UserEntity(
-        userId: '12350',
+        userId: 12350,
         username: 'Nigar',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -158,7 +158,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['7', '8'],
       ),
       UserEntity(
-        userId: '12351',
+        userId: 12351,
         username: 'Rashad',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -170,7 +170,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['9', '10'],
       ),
       UserEntity(
-        userId: '12352',
+        userId: 12352,
         username: 'Zeynab',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -182,7 +182,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['11', '12'],
       ),
       UserEntity(
-        userId: '12353',
+        userId: 12353,
         username: 'Elvin',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -194,7 +194,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['13', '14'],
       ),
       UserEntity(
-        userId: '12354',
+        userId: 12354,
         username: 'Aysel',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -206,7 +206,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['15', '16'],
       ),
       UserEntity(
-        userId: '12355',
+        userId: 12355,
         username: 'Murad',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -218,7 +218,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['17', '18'],
       ),
       UserEntity(
-        userId: '12356',
+        userId: 12356,
         username: 'Sevda',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -230,7 +230,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['19', '20'],
       ),
       UserEntity(
-        userId: '12357',
+        userId: 12357,
         username: 'Orkhan',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -242,7 +242,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['21', '22'],
       ),
       UserEntity(
-        userId: '12358',
+        userId: 12358,
         username: 'Gunel',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -254,7 +254,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['23', '24'],
       ),
       UserEntity(
-        userId: '12359',
+        userId: 12359,
         username: 'Tural',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -266,7 +266,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['25', '26'],
       ),
       UserEntity(
-        userId: '12360',
+        userId: 12360,
         username: 'Narmin',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -278,7 +278,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['27', '28'],
       ),
       UserEntity(
-        userId: '12361',
+        userId: 12361,
         username: 'Ilkin',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -290,7 +290,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['29', '30'],
       ),
       UserEntity(
-        userId: '12362',
+        userId: 12362,
         username: 'Sabina',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -302,7 +302,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['31', '32'],
       ),
       UserEntity(
-        userId: '12363',
+        userId: 12363,
         username: 'Ramin',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -314,7 +314,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['33', '34'],
       ),
       UserEntity(
-        userId: '12364',
+        userId: 12364,
         username: 'Amina',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -326,7 +326,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['35', '36'],
       ),
       UserEntity(
-        userId: '12365',
+        userId: 12365,
         username: 'Emin',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -356,7 +356,7 @@ class UserRepositoryImpl implements UserRepository {
   Future<Either<String, List<UserEntity>>> getFriends(String userId) async {
     return Right([
       UserEntity(
-        userId: userId,
+        userId: int.parse(userId),
         username: 'Dima',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQE6_00Lbd-Itw/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1697047665155?e=1750291200&v=beta&t=_BBvq5lAMPw3-cY4lHbN1M2_Y2aBYAsVfnJriLT1auA',
@@ -368,7 +368,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['12346', '12347', '12348'],
       ),
       UserEntity(
-        userId: '12346',
+        userId: 12346,
         username: 'Kamal',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQGmDNSQfbfNyA/profile-displayphoto-shrink_800_800/B4EZRLVsZ5HsAg-/0/1736430768821?e=1749081600&v=beta&t=07-DpvjdQwq44Z5hByz1y8S0nppacCm1b6RNsbA6THE',
@@ -380,7 +380,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['12345', '12347', '12348', '12349'],
       ),
       UserEntity(
-        userId: '12347',
+        userId: 12347,
         username: 'Pavel',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/C4E03AQGrdlO8sT78ug/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1663355766652?e=1749081600&v=beta&t=wKnfP2SW9E27yg6owE7tjLAPKOx5GlAhzqMN5BOWC-w',
@@ -392,7 +392,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['12345', '12346', '12348', '12349'],
       ),
       UserEntity(
-        userId: '12348',
+        userId: 12348,
         username: 'Rena',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQFBIu9J-kB1vg/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1719592835289?e=1749081600&v=beta&t=q0rtR0XkdszZIbllG59gYCvi9HYV65NlYVH0p0yZ990',
@@ -404,7 +404,7 @@ class UserRepositoryImpl implements UserRepository {
         friendsIds: ['12345', '12346', '12347', '12349'],
       ),
       UserEntity(
-        userId: '12349',
+        userId: 12349,
         username: 'Suad',
         profilePicUrl:
             'https://media.licdn.com/dms/image/v2/D4E03AQHIxVV2KRBqWw/profile-displayphoto-shrink_200_200/B4EZSVG6waHgAg-/0/1737668408302?e=1749081600&v=beta&t=f9lC_Wl9YLTU8Wbi0H2X_nCuFJq54csVo6vDxZZ5vW8',

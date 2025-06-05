@@ -21,48 +21,48 @@ class MiniChallengeRepositoryImpl implements MiniChallengeRepository {
   Future<List<MiniChallengeEntity>> getMiniChallenges(String userId) async {
     return [
       MiniChallengeEntity(
-          miniChallengeId: '1',
-          userId: userId,
+          miniChallengeId: 1,
+          userId: int.parse(userId),
           title: 'Stealthy Water Warrior',
           subtitle:
               'Saving 1,000+ l of water in a month through mindful habits',
           isAchieved: false,
           points: 40),
       MiniChallengeEntity(
-          miniChallengeId: '1',
-          userId: userId,
+          miniChallengeId: 1,
+          userId: int.parse(userId),
           title: 'Stealthy Water Warrior',
           subtitle:
               'Saving 1,000+ l of water in a month through mindful habits',
           isAchieved: false,
           points: 40),
       MiniChallengeEntity(
-          miniChallengeId: '1',
-          userId: userId,
+          miniChallengeId: 1,
+          userId: int.parse(userId),
           title: 'Stealthy Water Warrior',
           subtitle:
               'Saving 1,000+ l of water in a month through mindful habits',
           isAchieved: false,
           points: 40),
       MiniChallengeEntity(
-          miniChallengeId: '1',
-          userId: userId,
+          miniChallengeId: 1,
+          userId: int.parse(userId),
           title: 'Stealthy Water Warrior',
           subtitle:
               'Saving 1,000+ l of water in a month through mindful habits',
           isAchieved: false,
           points: 40),
       MiniChallengeEntity(
-          miniChallengeId: '1',
-          userId: userId,
+          miniChallengeId: 1,
+          userId: int.parse(userId),
           title: 'Stealthy Water Warrior',
           subtitle:
               'Saving 1,000+ l of water in a month through mindful habits',
           isAchieved: false,
           points: 40),
       MiniChallengeEntity(
-          miniChallengeId: '1',
-          userId: userId,
+          miniChallengeId: 1,
+          userId: int.parse(userId),
           title: 'Stealthy Water Warrior',
           subtitle:
               'Saving 1,000+ l of water in a month through mindful habits',

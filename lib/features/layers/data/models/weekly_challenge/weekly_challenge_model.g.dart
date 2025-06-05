@@ -9,8 +9,8 @@ part of 'weekly_challenge_model.dart';
 _WeeklyChallengeModel _$WeeklyChallengeModelFromJson(
         Map<String, dynamic> json) =>
     _WeeklyChallengeModel(
-      weekklyChallengeId: json['weekklyChallengeId'] as String,
-      userId: json['userId'] as String,
+      weekklyChallengeId: (json['weekklyChallengeId'] as num).toInt(),
+      userId: (json['userId'] as num).toInt(),
       title: json['title'] as String,
       subtitle: json['subtitle'] as String,
       currentValue: (json['currentValue'] as num).toDouble(),

@@ -8,8 +8,8 @@ part of 'activity_model.dart';
 
 _ActivityModel _$ActivityModelFromJson(Map<String, dynamic> json) =>
     _ActivityModel(
-      activityId: json['activityId'] as String,
-      userId: json['userId'] as String,
+      activityId: (json['activityId'] as num).toInt(),
+      userId: (json['userId'] as num).toInt(),
       title: json['title'] as String,
       points: (json['points'] as num).toInt(),
     );

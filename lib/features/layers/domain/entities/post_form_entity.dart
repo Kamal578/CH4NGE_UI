@@ -1,7 +1,7 @@
 import 'dart:io';
 
 class PostFormEntity {
-  String userId;
+  int userId;
   final String title;
   final File image;
 

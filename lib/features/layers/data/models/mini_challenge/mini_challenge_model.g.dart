@@ -8,8 +8,8 @@ part of 'mini_challenge_model.dart';
 
 _MiniChallengeModel _$MiniChallengeModelFromJson(Map<String, dynamic> json) =>
     _MiniChallengeModel(
-      miniChallengeId: json['miniChallengeId'] as String,
-      userId: json['userId'] as String,
+      miniChallengeId: (json['miniChallengeId'] as num).toInt(),
+      userId: (json['userId'] as num).toInt(),
       title: json['title'] as String,
       subtitle: json['subtitle'] as String,
       isAchieved: json['isAchieved'] as bool,

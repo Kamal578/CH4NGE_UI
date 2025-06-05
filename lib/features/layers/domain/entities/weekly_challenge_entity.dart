@@ -1,6 +1,6 @@
 class WeeklyChallengeEntity{
   WeeklyChallengeEntity({
-    required this.weekklyChallengeId,
+    required this.weeklyChallengeId,
     required this.userId,
     required this.title,
     required this.subtitle,
@@ -9,8 +9,8 @@ class WeeklyChallengeEntity{
     required this.points,
   });
 
-  final String weekklyChallengeId;
-  final String userId;
+  final int weeklyChallengeId;
+  final int userId;
   final String title;
   final String subtitle;
   final double currentValue;
