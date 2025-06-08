@@ -22,17 +22,19 @@ class ApiService {
     await _networkClient.initialize();
   }
 
-  // Generic API methods
+  // Generic API methods that return full Response object
   Future<Response<T>> get<T>(
     String path, {
     Map<String, dynamic>? queryParameters,
     Options? options,
+    Object? data,
   }) async {
     try {
       return await _networkClient.dio.get<T>(
         path,
         queryParameters: queryParameters,
         options: options,
+        data: data,
       );
     } on DioException catch (e) {
       throw ApiException.fromDioException(e);

@@ -108,21 +108,20 @@ class ActivityRepositoryImpl implements ActivityRepository {
 
   ActivityRepositoryImpl({required this.datasource});
 
-  // TODO: Uncomment when API is ready
-  // @override
-  // Future<List<ActivityEntity>> getFriendsActivities(
-  //     List<String> userIds) async {
-  //   try {
-  //     // Try to get data from datasource (which will check cache first, then API)
-  //     return await datasource.getFriendsActivities(userIds);
-  //   } catch (e) {
-  //     throw Exception('Failed to fetch friends activities');
-  //   }
-  // }
-
   @override
   Future<List<ActivityEntity>> getFriendsActivities(
       List<String> userIds) async {
-    return Future.value(activities);
+    try {
+      // Try to get data from datasource (which will check cache first, then API)
+      return await datasource.getFriendsActivities(userIds);
+    } catch (e) {
+      throw Exception('Failed to fetch friends activities');
+    }
   }
+
+  // @override
+  // Future<List<ActivityEntity>> getFriendsActivities(
+  //     List<String> userIds) async {
+  //   return Future.value(activities);
+  // }
 }

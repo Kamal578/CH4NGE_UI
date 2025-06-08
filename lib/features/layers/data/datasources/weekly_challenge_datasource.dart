@@ -19,10 +19,11 @@ class WeeklyChallengeRemote implements IWeeklyChallengeDatasource {
   @override
   Future<WeeklyChallengeEntity> getWeeklyChallenge(String userId) async {
     final cacheKey = '$_cacheKeyPrefix$userId';
-    
+
     final cachedData = await _getCachedData(cacheKey);
     if (cachedData != null) {
-      final WeeklyChallengeModel challengeModel = WeeklyChallengeModel.fromJson(cachedData);
+      final WeeklyChallengeModel challengeModel =
+          WeeklyChallengeModel.fromJson(cachedData);
       return challengeModel.toEntity();
     }
 
@@ -37,25 +38,28 @@ class WeeklyChallengeRemote implements IWeeklyChallengeDatasource {
           validateStatus: (status) => status! < 500,
         ),
       );
-      
+
       if (response.statusCode == 200 && response.data != null) {
         final challengeData = response.data as Map<String, dynamic>;
         final challenge = WeeklyChallengeModel.fromJson(challengeData);
-        
+
         // Cache the data
         await _cacheData(cacheKey, challengeData);
 
+
         WeeklyChallengeEntity challengeEntity = challenge.toEntity();
-        
+
         return challengeEntity;
       } else {
-        throw Exception('Failed to fetch weekly challenge: ${response.statusCode}');
+        throw Exception(
+            'Failed to fetch weekly challenge: ${response.statusCode}');
       }
     } catch (e) {
       // If API fails and we have no cache, return fallback or rethrow
       final cachedData = await _getCachedData(cacheKey, ignoreExpiry: true);
       if (cachedData != null) {
-        final WeeklyChallengeModel challengeModel = WeeklyChallengeModel.fromJson(cachedData);
+        final WeeklyChallengeModel challengeModel =
+            WeeklyChallengeModel.fromJson(cachedData);
         return challengeModel.toEntity();
       }
       rethrow;
@@ -66,7 +70,7 @@ class WeeklyChallengeRemote implements IWeeklyChallengeDatasource {
   Future<void> clearCache() async {
     final prefs = await SharedPreferences.getInstance();
     final keys = prefs.getKeys();
-    
+
     // Remove all weekly challenge-related cache keys
     for (final key in keys) {
       if (key.startsWith(_cacheKeyPrefix)) {
@@ -75,23 +79,26 @@ class WeeklyChallengeRemote implements IWeeklyChallengeDatasource {
     }
   }
 
-  Future<Map<String, dynamic>?> _getCachedData(String key, {bool ignoreExpiry = false}) async {
+  Future<Map<String, dynamic>?> _getCachedData(String key,
+      {bool ignoreExpiry = false}) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final cachedString = prefs.getString(key);
-      
+
       if (cachedString == null) return null;
-      
+
       final cachedMap = jsonDecode(cachedString) as Map<String, dynamic>;
-      final timestamp = DateTime.fromMillisecondsSinceEpoch(cachedMap['timestamp']);
+      final timestamp =
+          DateTime.fromMillisecondsSinceEpoch(cachedMap['timestamp']);
       final data = cachedMap['data'] as Map<String, dynamic>;
-      
+
       // Check if cache is still valid
-      if (!ignoreExpiry && DateTime.now().difference(timestamp) > _cacheValidityDuration) {
+      if (!ignoreExpiry &&
+          DateTime.now().difference(timestamp) > _cacheValidityDuration) {
         await prefs.remove(key);
         return null;
       }
-      
+
       return data;
     } catch (e) {
       // If there's any error reading cache, return null
@@ -106,7 +113,7 @@ class WeeklyChallengeRemote implements IWeeklyChallengeDatasource {
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'data': data,
       };
-      
+
       await prefs.setString(key, jsonEncode(cacheMap));
     } catch (e) {
       // If caching fails, continue without caching

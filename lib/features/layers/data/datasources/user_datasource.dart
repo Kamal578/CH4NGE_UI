@@ -45,13 +45,11 @@ class UserRemoteDatasource implements IUserDatasource {
       );
 
       if (response.statusCode == 200 && response.data != null) {
-        final List<dynamic> usersData = response.data as List<dynamic>;
-        final users =
-            usersData.map((json) => UserModel.fromJson(json)).toList();
+        final Map<String, dynamic> userData = response.data;
+        final user = UserModel.fromJson(userData);
 
-        await _cacheData(cacheKey, usersData);
-
-        return users.firstWhere((user) => user.userId.toString() == userId).toEntity();
+        await _cacheData(cacheKey, [userData]);
+        return user.toEntity();
       } else {
         throw Exception('Failed to fetch user: ${response.statusCode}');
       }
@@ -70,7 +68,7 @@ class UserRemoteDatasource implements IUserDatasource {
     const cacheKey = _allUsersKey;
 
     final cachedData = await _getCachedData(cacheKey);
-    if (cachedData != null) {
+    if (cachedData != null ) {
       return cachedData
           .map((json) => UserModel.fromJson(json).toEntity())
           .toList();
@@ -88,7 +86,8 @@ class UserRemoteDatasource implements IUserDatasource {
       );
 
       if (response.statusCode == 200 && response.data != null) {
-        final List<dynamic> usersData = response.data as List<dynamic>;
+        final List<dynamic> usersData =
+            (response.data as List<dynamic>).sublist(1);
         final users =
             usersData.map((json) => UserModel.fromJson(json)).toList();
 

@@ -16,8 +16,22 @@ abstract class UserModel with _$UserModel {
     required int points,
     required double ghgIndex,
     required List<double> location,
-    required List<String> friendsIds,
+    required List<String>? friendsIds,
   }) = _UserModel;
+
+  factory UserModel.fromEntity(UserEntity entity) {
+    return UserModel(
+      userId: entity.userId,
+      username: entity.username,
+      email: entity.email,
+      profilePicUrl: entity.profilePicUrl,
+      streak: entity.streak,
+      points: entity.points,
+      ghgIndex: entity.ghgIndex,
+      location: [entity.location.latitude, entity.location.longitude],
+      friendsIds: entity.friendsIds,
+    );
+  }
 
   UserEntity toEntity() {
     return UserEntity(
@@ -29,7 +43,7 @@ abstract class UserModel with _$UserModel {
       points: points,
       ghgIndex: ghgIndex,
       location: LatLng(location[0], location[1]),
-      friendsIds: friendsIds,
+      friendsIds: friendsIds ?? [],
     );
   }
 

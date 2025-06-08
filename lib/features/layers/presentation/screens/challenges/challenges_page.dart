@@ -44,7 +44,6 @@ class _ChallengesPageState extends State<ChallengesPage> {
 
   Future<void> _loadData() async {
     try {
-
       final now = DateTime.now();
 
       final weeklyChallengeCacheTimestamp =
@@ -79,7 +78,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
       final challenge = await widget.getWeeklyChallengeUseCase(userId);
       final achievements = await widget.getAchievementProgressUseCase(userId);
       final miniChallenges = await widget.getMiniChallengesUseCase(userId);
-      
+
       setState(() {
         weeklyChallenge = challenge;
         achievementProgress = achievements;
@@ -90,7 +89,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
       setState(() => isLoading = false);
       debugPrint('Error loading data: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load data. Please try again.')),
+        const SnackBar(content: Text('Failed to load data. Please try again.')),
       );
     }
   }
@@ -128,7 +127,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
     );
   }
 
-  _buildTitleWidget() {
+  Container _buildTitleWidget() {
     return Container(
       width: double.maxFinite,
       height: 32.h,
@@ -151,8 +150,8 @@ class _ChallengesPageState extends State<ChallengesPage> {
   }
 
   Widget _buildWeeklyChallengeWidget() {
-    if (weeklyChallenge == null) return SizedBox.shrink();
-    
+    if (weeklyChallenge == null) return const SizedBox.shrink();
+
     return Container(
       width: double.maxFinite,
       constraints: BoxConstraints(minHeight: 90.h),
@@ -252,10 +251,11 @@ class _ChallengesPageState extends State<ChallengesPage> {
   }
 
   Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
-    if (weeklyChallenge == null) return SizedBox.shrink();
-    
+    if (weeklyChallenge == null) return const SizedBox.shrink();
+
     double percentageCompleted = weeklyChallenge!.totalValue > 0
-        ? (weeklyChallenge!.currentValue / weeklyChallenge!.totalValue).clamp(0.0, 1.0)
+        ? (weeklyChallenge!.currentValue / weeklyChallenge!.totalValue)
+            .clamp(0.0, 1.0)
         : 0.0;
 
     return SizedBox(
@@ -307,8 +307,10 @@ class _ChallengesPageState extends State<ChallengesPage> {
   }
 
   Widget _buildAchievementsWidget() {
-    if (achievementProgress == null || achievementProgress!.isEmpty) return SizedBox.shrink();
-    
+    if (achievementProgress == null || achievementProgress!.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
       width: double.maxFinite,
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
@@ -352,7 +354,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
                   color: const Color.fromARGB(255, 144, 152, 177),
                 ),
                 padding: EdgeInsets.zero,
-                constraints: BoxConstraints(),
+                constraints: const BoxConstraints(),
               ),
             ],
           ),
@@ -367,26 +369,41 @@ class _ChallengesPageState extends State<ChallengesPage> {
           // Achievement Items
           ...List.generate(
             achievementProgress!.length.clamp(0, 3),
-            (index) => _buildAchievementItem(
-              topLineColor: index == 0 
-                  ? Color.fromARGB(128, 125, 211, 52)
-                  : index == 1 
-                      ? Color.fromARGB(128, 125, 211, 52)
-                      : Color.fromARGB(128, 144, 152, 177),
-              circleColor: index == 0
-                  ? Color.fromARGB(128, 125, 211, 52)
-                  : index == 1
-                      ? Color.fromARGB(255, 125, 211, 52)
-                      : Color.fromARGB(128, 144, 152, 177),
-              bottomLineColor: index == 0
-                  ? Color.fromARGB(128, 125, 211, 52)
-                  : Color.fromARGB(128, 144, 152, 177),
-              titleColor: index == 0
-                  ? Colors.black.withAlpha(128)
-                  : Colors.black,
-              title: achievementProgress![index].title,
-              subtitle: achievementProgress![index].subtitle,
-            ),
+            (index) {
+              final achievement = achievementProgress![index];
+              final isAchieved = achievement.isAchieved;
+
+              Color itemColor;
+              Color titleColor;
+
+              if (isAchieved) {
+                // Green for achieved
+                itemColor = const Color.fromARGB(255, 125, 211, 52);
+                titleColor = Colors.black.withAlpha(128);
+              } else if (index == 0) {
+                // Blue for next/current
+                itemColor = const Color.fromARGB(255, 5, 149, 186);
+                titleColor = Colors.black;
+              } else {
+                // Gray for pending
+                itemColor = const Color.fromARGB(128, 144, 152, 177);
+                titleColor = Colors.black;
+              }
+
+              return _buildAchievementItem(
+                topLineColor: index == 0
+                    ? itemColor
+                    : index == 1
+                        ? itemColor
+                        : const Color.fromARGB(128, 144, 152, 177),
+                circleColor: itemColor,
+                bottomLineColor:
+                    index == 0 ? itemColor : const Color.fromARGB(128, 144, 152, 177),
+                titleColor: titleColor,
+                title: achievement.title,
+                subtitle: achievement.subtitle,
+              );
+            },
           ),
         ],
       ),
@@ -402,7 +419,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
     required String subtitle,
   }) {
     return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         // Vertical lines and circle
         Column(
@@ -452,7 +469,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
                 subtitle,
                 style: TextStyle(
                   fontSize: 12.sp,
-                  color: Color.fromARGB(128, 144, 152, 177),
+                  color: const Color.fromARGB(128, 144, 152, 177),
                   height: 1.3,
                 ),
                 maxLines: 3,
@@ -465,9 +482,11 @@ class _ChallengesPageState extends State<ChallengesPage> {
     );
   }
 
-  _buildMiniChallengesWidget() {
-    if (miniChallenges == null || miniChallenges!.isEmpty) return SizedBox.shrink();
-    
+  Widget _buildMiniChallengesWidget() {
+    if (miniChallenges == null || miniChallenges!.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
     return Container(
       width: double.maxFinite,
       constraints: BoxConstraints(minHeight: 200.h, maxHeight: 300.h),
@@ -492,7 +511,6 @@ class _ChallengesPageState extends State<ChallengesPage> {
           SizedBox(height: 10.h),
           Expanded(
             child: CarouselView(
-              enableSplash: false,
               itemExtent: 200,
               children: miniChallenges!.map((challenge) {
                 return Container(
@@ -543,14 +561,14 @@ class _ChallengesPageState extends State<ChallengesPage> {
     );
   }
 
-  _buildCustomNavbarWidget() {
-    return CustomBottomNavBar(
+  CustomBottomNavBar _buildCustomNavbarWidget() {
+    return const CustomBottomNavBar(
       selectedIndex: 3,
     );
   }
 
-  _buildCustomAppbarWidget() {
-    return CustomAppBar(
+  CustomAppBar _buildCustomAppbarWidget() {
+    return const CustomAppBar(
       backgroundColor: Colors.white,
     );
   }

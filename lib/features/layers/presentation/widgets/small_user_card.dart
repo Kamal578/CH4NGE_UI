@@ -64,30 +64,38 @@ class MySmallUserCard extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       Expanded(
-                          child: CircleAvatar(
-                        radius: mediaQueryHeight / 18,
-                        child: userProfilePicUrl != null
-                            ? ClipRRect(
-                                borderRadius: BorderRadius.circular(100),
-                                child: Image.network(
-                                  userProfilePicUrl!,
-                                  fit: BoxFit.cover,
-                                  width: mediaQueryHeight / 9,
-                                  height: mediaQueryHeight / 9,
+                        child: CircleAvatar(
+                          radius: mediaQueryHeight / 18,
+                          child: userProfilePicUrl == null ||
+                                  userProfilePicUrl?.isEmpty == true
+                              ? ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Image.asset(
+                                    'assets/images/user_profile.png',
+                                    fit: BoxFit.cover,
+                                    width: mediaQueryHeight / 9,
+                                    height: mediaQueryHeight / 9,
+                                  ),
+                                )
+                              : ClipRRect(
+                                  borderRadius: BorderRadius.circular(100),
+                                  child: Image.network(
+                                    userProfilePicUrl!,
+                                    fit: BoxFit.cover,
+                                    width: mediaQueryHeight / 9,
+                                    height: mediaQueryHeight / 9,
+                                    errorBuilder: (context, error, stackTrace) {
+                                      return Image.asset(
+                                        'assets/images/user_profile.png',
+                                        fit: BoxFit.cover,
+                                        width: mediaQueryHeight / 9,
+                                        height: mediaQueryHeight / 9,
+                                      );
+                                    },
+                                  ),
                                 ),
-                              )
-                            : Image(
-                                image: userProfilePic == null
-                                    ? Image.asset(
-                                        'assets/images/user.png',
-                                      ).image
-                                    : userProfilePic!.image,
-                                color: userProfilePic == null
-                                    ? Color.fromARGB(255, 125, 211, 52)
-                                    : null,
-                                fit: BoxFit.cover,
-                              ),
-                      )),
+                        ),
+                      ),
                       Expanded(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,

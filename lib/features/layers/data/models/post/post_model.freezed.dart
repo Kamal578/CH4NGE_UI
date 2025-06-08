@@ -19,6 +19,8 @@ mixin _$PostModel {
   int get userId;
   String get title;
   String get imageUrl;
+  List<int> get likedBy;
+  List<int> get sharedBy;
   int get likeNumber;
   int get sharesNumber;
 
@@ -42,6 +44,8 @@ mixin _$PostModel {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
+            const DeepCollectionEquality().equals(other.likedBy, likedBy) &&
+            const DeepCollectionEquality().equals(other.sharedBy, sharedBy) &&
             (identical(other.likeNumber, likeNumber) ||
                 other.likeNumber == likeNumber) &&
             (identical(other.sharesNumber, sharesNumber) ||
@@ -51,11 +55,19 @@ mixin _$PostModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, postId, userId, title, imageUrl, likeNumber, sharesNumber);
+      runtimeType,
+      postId,
+      userId,
+      title,
+      imageUrl,
+      const DeepCollectionEquality().hash(likedBy),
+      const DeepCollectionEquality().hash(sharedBy),
+      likeNumber,
+      sharesNumber);
 
   @override
   String toString() {
-    return 'PostModel(postId: $postId, userId: $userId, title: $title, imageUrl: $imageUrl, likeNumber: $likeNumber, sharesNumber: $sharesNumber)';
+    return 'PostModel(postId: $postId, userId: $userId, title: $title, imageUrl: $imageUrl, likedBy: $likedBy, sharedBy: $sharedBy, likeNumber: $likeNumber, sharesNumber: $sharesNumber)';
   }
 }
 
@@ -69,6 +81,8 @@ abstract mixin class $PostModelCopyWith<$Res> {
       int userId,
       String title,
       String imageUrl,
+      List<int> likedBy,
+      List<int> sharedBy,
       int likeNumber,
       int sharesNumber});
 }
@@ -89,6 +103,8 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
     Object? userId = null,
     Object? title = null,
     Object? imageUrl = null,
+    Object? likedBy = null,
+    Object? sharedBy = null,
     Object? likeNumber = null,
     Object? sharesNumber = null,
   }) {
@@ -109,6 +125,14 @@ class _$PostModelCopyWithImpl<$Res> implements $PostModelCopyWith<$Res> {
           ? _self.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      likedBy: null == likedBy
+          ? _self.likedBy
+          : likedBy // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+      sharedBy: null == sharedBy
+          ? _self.sharedBy
+          : sharedBy // ignore: cast_nullable_to_non_nullable
+              as List<int>,
       likeNumber: null == likeNumber
           ? _self.likeNumber
           : likeNumber // ignore: cast_nullable_to_non_nullable
@@ -129,8 +153,12 @@ class _PostModel implements PostModel {
       required this.userId,
       required this.title,
       required this.imageUrl,
+      required final List<int> likedBy,
+      required final List<int> sharedBy,
       required this.likeNumber,
-      required this.sharesNumber});
+      required this.sharesNumber})
+      : _likedBy = likedBy,
+        _sharedBy = sharedBy;
   factory _PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);
 
@@ -142,10 +170,13 @@ class _PostModel implements PostModel {
   final String title;
   @override
   final String imageUrl;
+  final List<int> _likedBy;
   @override
-  final int likeNumber;
-  @override
-  final int sharesNumber;
+  List<int> get likedBy {
+    if (_likedBy is EqualUnmodifiableListView) return _likedBy;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_likedBy);
+  }
 
   PostEntity toEntity() {
     return PostEntity(
@@ -153,10 +184,25 @@ class _PostModel implements PostModel {
       userId: userId,
       title: title,
       imageUrl: imageUrl,
+      likedBy: likedBy,
+      sharedBy: sharedBy,
       likeNumber: likeNumber,
       sharesNumber: sharesNumber,
     );
   }
+
+  final List<int> _sharedBy;
+  @override
+  List<int> get sharedBy {
+    if (_sharedBy is EqualUnmodifiableListView) return _sharedBy;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_sharedBy);
+  }
+
+  @override
+  final int likeNumber;
+  @override
+  final int sharesNumber;
 
   /// Create a copy of PostModel
   /// with the given fields replaced by the non-null parameter values.
@@ -183,6 +229,8 @@ class _PostModel implements PostModel {
             (identical(other.title, title) || other.title == title) &&
             (identical(other.imageUrl, imageUrl) ||
                 other.imageUrl == imageUrl) &&
+            const DeepCollectionEquality().equals(other._likedBy, _likedBy) &&
+            const DeepCollectionEquality().equals(other._sharedBy, _sharedBy) &&
             (identical(other.likeNumber, likeNumber) ||
                 other.likeNumber == likeNumber) &&
             (identical(other.sharesNumber, sharesNumber) ||
@@ -192,11 +240,19 @@ class _PostModel implements PostModel {
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(
-      runtimeType, postId, userId, title, imageUrl, likeNumber, sharesNumber);
+      runtimeType,
+      postId,
+      userId,
+      title,
+      imageUrl,
+      const DeepCollectionEquality().hash(_likedBy),
+      const DeepCollectionEquality().hash(_sharedBy),
+      likeNumber,
+      sharesNumber);
 
   @override
   String toString() {
-    return 'PostModel(postId: $postId, userId: $userId, title: $title, imageUrl: $imageUrl, likeNumber: $likeNumber, sharesNumber: $sharesNumber)';
+    return 'PostModel(postId: $postId, userId: $userId, title: $title, imageUrl: $imageUrl, likedBy: $likedBy, sharedBy: $sharedBy, likeNumber: $likeNumber, sharesNumber: $sharesNumber)';
   }
 }
 
@@ -213,6 +269,8 @@ abstract mixin class _$PostModelCopyWith<$Res>
       int userId,
       String title,
       String imageUrl,
+      List<int> likedBy,
+      List<int> sharedBy,
       int likeNumber,
       int sharesNumber});
 }
@@ -233,6 +291,8 @@ class __$PostModelCopyWithImpl<$Res> implements _$PostModelCopyWith<$Res> {
     Object? userId = null,
     Object? title = null,
     Object? imageUrl = null,
+    Object? likedBy = null,
+    Object? sharedBy = null,
     Object? likeNumber = null,
     Object? sharesNumber = null,
   }) {
@@ -253,6 +313,14 @@ class __$PostModelCopyWithImpl<$Res> implements _$PostModelCopyWith<$Res> {
           ? _self.imageUrl
           : imageUrl // ignore: cast_nullable_to_non_nullable
               as String,
+      likedBy: null == likedBy
+          ? _self._likedBy
+          : likedBy // ignore: cast_nullable_to_non_nullable
+              as List<int>,
+      sharedBy: null == sharedBy
+          ? _self._sharedBy
+          : sharedBy // ignore: cast_nullable_to_non_nullable
+              as List<int>,
       likeNumber: null == likeNumber
           ? _self.likeNumber
           : likeNumber // ignore: cast_nullable_to_non_nullable

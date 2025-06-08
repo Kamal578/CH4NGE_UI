@@ -37,7 +37,7 @@ class DeepLinkHandler {
       
       // Try to find the post in the current posts list
       final post = posts.firstWhere(
-        (p) => p.postId == postId,
+        (p) => p.postId == int.parse(postId ?? ''),
         orElse: () => PostEntity(
           postId: int.tryParse(postId!) ?? 0,
           userId: int.tryParse(postData["userId"] ?? '') ?? 0,
@@ -45,6 +45,8 @@ class DeepLinkHandler {
           title: postData['title'] ?? '',
           imageUrl: '',
           profileImageUrl: '',
+          likedBy: [],
+          sharedBy: [],
           likeNumber: 0,
           sharesNumber: 0,
         ),

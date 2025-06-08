@@ -33,7 +33,8 @@ class PostRemoteDatasource implements IPostDatasource {
 
       // Create multipart form data if we have an image file
       FormData? formData;
-      if (postFormModel.imageUrl.isNotEmpty && !postFormModel.imageUrl.startsWith('http')) {
+      if (postFormModel.imageUrl.isNotEmpty &&
+          !postFormModel.imageUrl.startsWith('http')) {
         // Assuming imageUrl is a file path when not starting with http
         final file = File(postFormModel.imageUrl);
         if (await file.exists()) {
@@ -55,9 +56,8 @@ class PostRemoteDatasource implements IPostDatasource {
         options: Options(
           headers: {
             'Authorization': 'Bearer ${AuthManager.readAuth()}',
-            'Content-Type': formData != null 
-                ? 'multipart/form-data' 
-                : 'application/json',
+            'Content-Type':
+                formData != null ? 'multipart/form-data' : 'application/json',
           },
           validateStatus: (status) => status! < 500,
         ),
@@ -68,8 +68,7 @@ class PostRemoteDatasource implements IPostDatasource {
       }
 
       // Clear cache after successful upload
-      await _clearCache();
-      
+      await clearCache();
     } catch (e) {
       if (e is DioException) {
         throw Exception('Network error uploading post: ${e.message}');
@@ -82,7 +81,9 @@ class PostRemoteDatasource implements IPostDatasource {
   Future<List<PostEntity>> getRecentPosts() async {
     final cachedData = await _getCachedData();
     if (cachedData != null) {
-      return cachedData.map((json) => PostModel.fromJson(json).toEntity()).toList();
+      return cachedData
+          .map((json) => PostModel.fromJson(json).toEntity())
+          .toList();
     }
 
     try {
@@ -98,9 +99,8 @@ class PostRemoteDatasource implements IPostDatasource {
 
       if (response.statusCode == 200 && response.data != null) {
         final List<dynamic> postsData = response.data as List<dynamic>;
-        final posts = postsData
-            .map((json) => PostModel.fromJson(json))
-            .toList();
+        final posts =
+            postsData.map((json) => PostModel.fromJson(json)).toList();
 
         // Cache the data
         await _cacheData(postsData);
@@ -113,7 +113,9 @@ class PostRemoteDatasource implements IPostDatasource {
       // If API fails and we have no cache, rethrow
       final cachedData = await _getCachedData(ignoreExpiry: true);
       if (cachedData != null) {
-        return cachedData.map((json) => PostModel.fromJson(json).toEntity()).toList();
+        return cachedData
+            .map((json) => PostModel.fromJson(json).toEntity())
+            .toList();
       }
       rethrow;
     }
@@ -135,9 +137,9 @@ class PostRemoteDatasource implements IPostDatasource {
       );
 
       if (response.statusCode == 200 && response.data != null) {
-        final postData = response.data as Map<String, dynamic>;
+        final postData = response.data["post"] as Map<String, dynamic>;
         final updatedPost = PostModel.fromJson(postData);
-        
+
         // Update cache with the new post data
         await _updatePostInCache(updatedPost);
         
@@ -171,10 +173,10 @@ class PostRemoteDatasource implements IPostDatasource {
       if (response.statusCode == 200 && response.data != null) {
         final postData = response.data as Map<String, dynamic>;
         final updatedPost = PostModel.fromJson(postData);
-        
+
         // Update cache with the new post data
         await _updatePostInCache(updatedPost);
-        
+
         return updatedPost.toEntity();
       } else {
         throw Exception('Failed to share post: ${response.statusCode}');
@@ -191,19 +193,21 @@ class PostRemoteDatasource implements IPostDatasource {
     try {
       final prefs = await SharedPreferences.getInstance();
       final cachedString = prefs.getString(_cacheKey);
-      
+
       if (cachedString == null) return null;
-      
+
       final cachedMap = jsonDecode(cachedString) as Map<String, dynamic>;
-      final timestamp = DateTime.fromMillisecondsSinceEpoch(cachedMap['timestamp']);
+      final timestamp =
+          DateTime.fromMillisecondsSinceEpoch(cachedMap['timestamp']);
       final data = cachedMap['data'] as List<dynamic>;
-      
+
       // Check if cache is still valid
-      if (!ignoreExpiry && DateTime.now().difference(timestamp) > _cacheValidityDuration) {
+      if (!ignoreExpiry &&
+          DateTime.now().difference(timestamp) > _cacheValidityDuration) {
         await prefs.remove(_cacheKey);
         return null;
       }
-      
+
       return data;
     } catch (e) {
       return null;
@@ -217,14 +221,14 @@ class PostRemoteDatasource implements IPostDatasource {
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'data': data,
       };
-      
+
       await prefs.setString(_cacheKey, jsonEncode(cacheMap));
     } catch (e) {
       throw Exception('Failed to cache data: ${e.toString()}');
     }
   }
 
-  Future<void> _clearCache() async {
+  Future<void> clearCache() async {
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove(_cacheKey);
@@ -239,7 +243,8 @@ class PostRemoteDatasource implements IPostDatasource {
       if (cachedData == null) return;
 
       // Find the index of the post to update
-      final index = cachedData.indexWhere((json) => json['id'] == updatedPost.postId);
+      final index =
+          cachedData.indexWhere((json) => json['id'] == updatedPost.postId);
       if (index != -1) {
         cachedData[index] = updatedPost.toJson();
         await _cacheData(cachedData);

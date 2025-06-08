@@ -48,6 +48,7 @@ class ActivityRemote implements IActivityDatasource {
       
       if (response.statusCode == 200 && response.data != null) {
         final List<dynamic> activitiesData = response.data as List<dynamic>;
+
         final activities = activitiesData
             .map((json) => ActivityModel.fromJson(json))
             .toList();

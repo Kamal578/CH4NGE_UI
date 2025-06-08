@@ -22,4 +22,28 @@ class UserEntity {
     required this.location,
     required this.friendsIds,
   });
+
+  UserEntity copyWith({
+    int? userId,
+    String? username,
+    String? email,
+    String? profilePicUrl,
+    int? streak,
+    int? points,
+    double? ghgIndex,
+    LatLng? location,
+    List<String>? friendsIds,
+  }) {
+    return UserEntity(
+      userId: userId ?? this.userId,
+      username: username ?? this.username,
+      email: email ?? this.email,
+      profilePicUrl: profilePicUrl ?? this.profilePicUrl,
+      streak: streak ?? this.streak,
+      points: points ?? this.points,
+      ghgIndex: ghgIndex ?? this.ghgIndex,
+      location: location ?? this.location,
+      friendsIds: friendsIds ?? this.friendsIds,
+    );
+  }
 }

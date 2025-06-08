@@ -11,6 +11,8 @@ abstract class PostModel with _$PostModel {
     required int userId,
     required String title,
     required String imageUrl,
+    required List<int> likedBy,
+    required List<int> sharedBy,
     required int likeNumber,
     required int sharesNumber,
   }) = _PostModel;
@@ -21,11 +23,13 @@ abstract class PostModel with _$PostModel {
       userId: userId,
       title: title,
       imageUrl: imageUrl,
+      likedBy: likedBy,
+      sharedBy: sharedBy,
       likeNumber: likeNumber,
       sharesNumber: sharesNumber,
     );
   }
-  
+
   factory PostModel.fromJson(Map<String, dynamic> json) =>
       _$PostModelFromJson(json);
 }

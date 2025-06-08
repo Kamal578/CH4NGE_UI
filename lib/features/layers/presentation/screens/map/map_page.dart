@@ -114,32 +114,40 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
   }
 
   Future<void> _toggleFollowStatus(UserEntity user) async {
-    // Implement your follow/unfollow logic here
-    // This is a placeholder - replace with your actual implementation
     try {
-      // await followUserUseCase(user.userId) or unfollowUserUseCase(user.userId)
+      // Optimistically update the UI
+      setState(() {
+        if (friends!.any((friend) => friend.userId == user.userId)) {
+          friends!.removeWhere((friend) => friend.userId == user.userId);
+        } else {
+          friends!.add(user);
+        }
+      });
+
+      List<String> friendIds =
+          friends!.map((friend) => friend.userId.toString()).toList();
+
+      await widget.updateFriendsUseCase(
+        userId,
+        friendIds,
+      );
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-              '${friends!.contains(user) ? 'Unfollowed' : 'Followed'} ${user.username}'),
-          duration: const Duration(seconds: 2),
+              '${friends!.any((friend) => friend.userId == user.userId) ? 'Followed' : 'Unfollowed'} ${user.username}'),
         ),
       );
-
-      // Update the user's follow status locally
+    } catch (e) {
+      // Revert the optimistic update in case of an error
       setState(() {
-        final index = users!.indexWhere((u) => u.userId == user.userId);
-        if (index != -1) {
-          // users![index] = user.copyWith(isFollowing: !user.isFollowing);
-          // Update filtered users as well
-          final filteredIndex =
-              _filteredUsers.indexWhere((u) => u.userId == user.userId);
-          if (filteredIndex != -1) {
-            // _filteredUsers[filteredIndex] = users![index];
-          }
+        if (friends!.any((friend) => friend.userId == user.userId)) {
+          friends!.removeWhere((friend) => friend.userId == user.userId);
+        } else {
+          friends!.add(user);
         }
       });
-    } catch (e) {
+
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Failed to update follow status')),
       );
@@ -149,18 +157,24 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
   Future<void> _loadData() async {
     try {
       final id = AuthManager.getId();
-      final friends = await widget.getFriendsUseCase(id);
-      // TODO: Uncomment when API is ready
-      // final friendsList = await widget.getFriendsUseCase(userId);
-      // final friends = friendsList.where((user) => user.userId != id).toList();
+
+      final friendsList = await widget.getFriendsUseCase(userId);
+      final friends = friendsList.right
+          .where((user) => user.userId != int.parse(id))
+          .toList();
       final allUsers = await widget.getAllUsersUseCase();
+      debugPrint(
+          'All Users: ${allUsers.right.map((user) => user.username).toList()}');
+      debugPrint(
+          'Friends: ${friends.map((friend) => friend.username).toList()}');
 
       final friendIdToUsername = {
-        for (final user in friends.right) user.userId: user.username,
+        for (final user in friends) user.userId: user.username,
       };
 
       final friendIds = friendIdToUsername.keys.toList();
-      final activities = await widget.getFriendsActivitiesUseCase(friendIds.cast<String>());
+      final activities =
+          await widget.getFriendsActivitiesUseCase(friendIds.map((e) => e.toString()).toList());
 
       final Map<String, List<ActivityEntity>> result = {};
 
@@ -170,9 +184,11 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
       }
 
       setState(() {
-        users = allUsers.right;
+        users = allUsers.right.where((element) {
+          return element.userId.toString() != id;
+        }).toList();
 
-        this.friends = friends.right;
+        this.friends = friends;
         this.activities = result;
         isLoading = false;
       });
@@ -253,7 +269,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 224),
+                color: Colors.black.withAlpha(224),
                 blurRadius: 3,
                 spreadRadius: 0.5,
                 offset: const Offset(0, 5),
@@ -367,15 +383,22 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
           // Profile Picture
           CircleAvatar(
             radius: 24.r,
-            backgroundColor: Color(0xFF7DD334).withValues(alpha: .1),
+            backgroundColor: const Color(0xFF7DD334).withValues(alpha: .1),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(24.r),
-              child: Image.network(
-                user.profilePicUrl,
-                fit: BoxFit.cover,
-                width: 32.r,
-                height: 32.r,
-              ),
+              child: (user.profilePicUrl.isEmpty)
+                  ? Image.asset(
+                      'assets/images/user_profile.png',
+                      fit: BoxFit.cover,
+                      width: 32.r,
+                      height: 32.r,
+                    )
+                  : Image.network(
+                      user.profilePicUrl,
+                      fit: BoxFit.cover,
+                      width: 32.r,
+                      height: 32.r,
+                    ),
             ),
           ),
 
@@ -400,11 +423,14 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
             child: ElevatedButton(
               onPressed: () => _toggleFollowStatus(user),
               style: ElevatedButton.styleFrom(
-                backgroundColor: friends!.contains(user)
-                    ? Colors.grey.shade300
-                    : Color(0xFF7DD334),
+                backgroundColor:
+                    friends!.any((friend) => friend.userId == user.userId)
+                        ? Colors.grey.shade300
+                        : const Color(0xFF7DD334),
                 foregroundColor:
-                    friends!.contains(user) ? Colors.black87 : Colors.white,
+                    friends!.any((friend) => friend.userId == user.userId)
+                        ? Colors.black87
+                        : Colors.white,
                 elevation: 0,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16.r),
@@ -412,7 +438,9 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
                 padding: EdgeInsets.symmetric(horizontal: 16.w),
               ),
               child: Text(
-                friends!.contains(user) ? 'Unfollow' : 'Follow',
+                friends!.any((friend) => friend.userId == user.userId)
+                    ? 'Unfollow'
+                    : 'Follow',
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w500,
@@ -425,14 +453,14 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
     );
   }
 
-  _buildCustomNavbarWidget() {
-    return CustomBottomNavBar(
+  CustomBottomNavBar _buildCustomNavbarWidget() {
+    return const CustomBottomNavBar(
       selectedIndex: 4,
     );
   }
 
-  _buildCustomAppbarWidget() {
-    return CustomAppBar(
+  CustomAppBar _buildCustomAppbarWidget() {
+    return const CustomAppBar(
       backgroundColor: Colors.white,
     );
   }

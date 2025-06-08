@@ -13,13 +13,14 @@ class ActionRemoteDatasource implements IActionDatasource {
   final ApiService _apiService = ApiService.instance;
 
   @override
-  Future<void> uploadGreenAction(GreenModel action) async {
+  Future<void> uploadTransportationAction(TransportationModel action) async {
     try {
       final actionDTO = action.toActionDTO();
-      
+      final jsonData = actionDTO.toJson();
+
       final response = await _apiService.post(
-        '/actions/green',
-        data: actionDTO.toJson(),
+        '/actions/transportation',
+        data: jsonData,
         options: Options(
           headers: {
             'Authorization': 'Bearer ${AuthManager.readAuth()}',
@@ -28,26 +29,29 @@ class ActionRemoteDatasource implements IActionDatasource {
           validateStatus: (status) => status! < 500,
         ),
       );
-      
+
       if (response.statusCode != 200 && response.statusCode != 201) {
-        throw Exception('Failed to upload green action: ${response.statusCode}');
+        throw Exception(
+            'Failed to upload transportation action: ${response.statusCode} - ${response.data}');
       }
     } catch (e) {
       if (e is DioException) {
-        throw Exception('Network error uploading green action: ${e.message}');
+        throw Exception(
+            'Network error uploading transportation action: ${e.message} - ${e.response?.data}');
       }
       rethrow;
     }
   }
 
   @override
-  Future<void> uploadTransportationAction(TransportationModel action) async {
+  Future<void> uploadGreenAction(GreenModel action) async {
     try {
       final actionDTO = action.toActionDTO();
-      
+      final jsonData = actionDTO.toJson();
+
       final response = await _apiService.post(
-        '/actions/transportation',
-        data: actionDTO.toJson(),
+        '/actions/green',
+        data: jsonData,
         options: Options(
           headers: {
             'Authorization': 'Bearer ${AuthManager.readAuth()}',
@@ -56,13 +60,15 @@ class ActionRemoteDatasource implements IActionDatasource {
           validateStatus: (status) => status! < 500,
         ),
       );
-      
+
       if (response.statusCode != 200 && response.statusCode != 201) {
-        throw Exception('Failed to upload transportation action: ${response.statusCode}');
+        throw Exception(
+            'Failed to upload green action: ${response.statusCode} - ${response.data}');
       }
     } catch (e) {
       if (e is DioException) {
-        throw Exception('Network error uploading transportation action: ${e.message}');
+        throw Exception(
+            'Network error uploading green action: ${e.message} - ${e.response?.data}');
       }
       rethrow;
     }

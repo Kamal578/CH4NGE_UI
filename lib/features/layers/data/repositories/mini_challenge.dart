@@ -7,67 +7,12 @@ class MiniChallengeRepositoryImpl implements MiniChallengeRepository {
 
   MiniChallengeRepositoryImpl({required this.datasource});
 
-  // TODO: Uncomment when API is ready
-  // @override
-  // Future<List<MiniChallengeEntity>> getMiniChallenges(String userId) async {
-  //   try {
-  //     return await datasource.getMiniChallenges(userId);
-  //   } catch (e) {
-  //     throw Exception('Failed to fetch mini challenges');
-  //   }
-  // }
-
   @override
   Future<List<MiniChallengeEntity>> getMiniChallenges(String userId) async {
-    return [
-      MiniChallengeEntity(
-          miniChallengeId: 1,
-          userId: int.parse(userId),
-          title: 'Stealthy Water Warrior',
-          subtitle:
-              'Saving 1,000+ l of water in a month through mindful habits',
-          isAchieved: false,
-          points: 40),
-      MiniChallengeEntity(
-          miniChallengeId: 1,
-          userId: int.parse(userId),
-          title: 'Stealthy Water Warrior',
-          subtitle:
-              'Saving 1,000+ l of water in a month through mindful habits',
-          isAchieved: false,
-          points: 40),
-      MiniChallengeEntity(
-          miniChallengeId: 1,
-          userId: int.parse(userId),
-          title: 'Stealthy Water Warrior',
-          subtitle:
-              'Saving 1,000+ l of water in a month through mindful habits',
-          isAchieved: false,
-          points: 40),
-      MiniChallengeEntity(
-          miniChallengeId: 1,
-          userId: int.parse(userId),
-          title: 'Stealthy Water Warrior',
-          subtitle:
-              'Saving 1,000+ l of water in a month through mindful habits',
-          isAchieved: false,
-          points: 40),
-      MiniChallengeEntity(
-          miniChallengeId: 1,
-          userId: int.parse(userId),
-          title: 'Stealthy Water Warrior',
-          subtitle:
-              'Saving 1,000+ l of water in a month through mindful habits',
-          isAchieved: false,
-          points: 40),
-      MiniChallengeEntity(
-          miniChallengeId: 1,
-          userId: int.parse(userId),
-          title: 'Stealthy Water Warrior',
-          subtitle:
-              'Saving 1,000+ l of water in a month through mindful habits',
-          isAchieved: false,
-          points: 40),
-    ];
+    try {
+      return await datasource.getMiniChallenges(userId);
+    } catch (e) {
+      throw Exception('Failed to fetch mini challenges');
+    }
   }
 }

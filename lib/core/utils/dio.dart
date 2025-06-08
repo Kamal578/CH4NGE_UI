@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 class DioProvider {
   static Dio createDio({String? baseUrl}) {
@@ -13,7 +14,7 @@ class DioProvider {
     dio.interceptors.add(LogInterceptor(
       requestBody: true,
       responseBody: true,
-      logPrint: (object) => print(object),
+      logPrint: (object) => debugPrint(object as String?),
     ));
     
     return dio;

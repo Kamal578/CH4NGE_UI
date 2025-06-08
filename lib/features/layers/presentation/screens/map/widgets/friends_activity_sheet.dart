@@ -84,15 +84,27 @@ class FriendsActivitySheet extends StatelessWidget {
         contentPadding: EdgeInsets.all(12.r),
         leading: CircleAvatar(
           radius: 24.r,
-          backgroundColor: Color(0xFF7DD334).withValues(alpha: .1),
+          backgroundColor: const Color(0xFF7DD334).withValues(alpha: 0.1),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(24.r),
-            child: Image.network(
-              profilePicUrl,
-              fit: BoxFit.cover,
-              width: 32.r,
-              height: 32.r,
-            ),
+            child: (profilePicUrl.isEmpty)
+                ? Image.asset(
+                    'assets/images/user_profile.png',
+                    fit: BoxFit.cover,
+                    height: 24.h,
+                    width: 24.h,
+                  )
+                : Image.network(
+                    profilePicUrl,
+                    fit: BoxFit.cover,
+                    height: 24.h,
+                    width: 24.h,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        'assets/images/user_profile.png',
+                      );
+                    },
+                  ),
           ),
         ),
         title: RichText(
@@ -105,12 +117,12 @@ class FriendsActivitySheet extends StatelessWidget {
             children: [
               TextSpan(
                 text: username,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.black,
                 ),
               ),
-              TextSpan(text: '  '),
+              const TextSpan(text: '  '),
               TextSpan(text: action),
             ],
           ),
@@ -121,7 +133,7 @@ class FriendsActivitySheet extends StatelessWidget {
             if (points > 0)
               Icon(
                 Icons.eco,
-                color: Color(0xFF7DD334),
+                color: const Color(0xFF7DD334),
                 size: 20.sp,
               ),
             SizedBox(width: 4.w),

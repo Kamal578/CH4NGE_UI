@@ -187,7 +187,7 @@ class CacheTimestampMapper {
 
   /// Set timestamp to current time for any cache type
   static Future<bool> setNewTimestamp(String cacheType, {String? userId, List<String>? userIds, DateTime? newTimestamp}) async {
-    final timestamp = newTimestamp ?? DateTime.now();
+    final timestamp = newTimestamp ?? DateTime.now().subtract(const Duration(seconds: 6));
     
     switch (cacheType) {
       case 'user':

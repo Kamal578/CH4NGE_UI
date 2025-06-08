@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:ch4nge/features/layers/presentation/screens/feed/widgets/upload_post_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class UploadPostButton extends StatelessWidget {
-  final Function(String comment, dynamic imageData) onUpload;
+  final Function(String comment, File? imageData) onUpload;
 
   const UploadPostButton({
     super.key,

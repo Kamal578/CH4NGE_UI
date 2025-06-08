@@ -9,7 +9,7 @@ part of 'weekly_challenge_model.dart';
 _WeeklyChallengeModel _$WeeklyChallengeModelFromJson(
         Map<String, dynamic> json) =>
     _WeeklyChallengeModel(
-      weekklyChallengeId: (json['weekklyChallengeId'] as num).toInt(),
+      weeklyChallengeId: (json['weeklyChallengeId'] as num).toInt(),
       userId: (json['userId'] as num).toInt(),
       title: json['title'] as String,
       subtitle: json['subtitle'] as String,
@@ -21,7 +21,7 @@ _WeeklyChallengeModel _$WeeklyChallengeModelFromJson(
 Map<String, dynamic> _$WeeklyChallengeModelToJson(
         _WeeklyChallengeModel instance) =>
     <String, dynamic>{
-      'weekklyChallengeId': instance.weekklyChallengeId,
+      'weeklyChallengeId': instance.weeklyChallengeId,
       'userId': instance.userId,
       'title': instance.title,
       'subtitle': instance.subtitle,

@@ -1,6 +1,7 @@
 import 'package:ch4nge/core/shared/config.dart';
 import 'package:ch4nge/core/auth/auth_manager.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 class NetworkClient {
   late final Dio _dio;
@@ -50,7 +51,7 @@ class NetworkClient {
     _dio.interceptors.add(LogInterceptor(
       requestBody: true,
       responseBody: true,
-      logPrint: (object) => print('[API] $object'),
+      logPrint: (object) => debugPrint('[API] $object'),
     ));
   }
 

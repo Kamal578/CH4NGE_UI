@@ -23,7 +23,7 @@ mixin _$UserModel {
   int get points;
   double get ghgIndex;
   List<double> get location;
-  List<String> get friendsIds;
+  List<String>? get friendsIds;
 
   /// Create a copy of UserModel
   /// with the given fields replaced by the non-null parameter values.
@@ -89,7 +89,7 @@ abstract mixin class $UserModelCopyWith<$Res> {
       int points,
       double ghgIndex,
       List<double> location,
-      List<String> friendsIds});
+      List<String>? friendsIds});
 }
 
 /// @nodoc
@@ -112,7 +112,7 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
     Object? points = null,
     Object? ghgIndex = null,
     Object? location = null,
-    Object? friendsIds = null,
+    Object? friendsIds = freezed,
   }) {
     return _then(_self.copyWith(
       userId: null == userId
@@ -147,10 +147,10 @@ class _$UserModelCopyWithImpl<$Res> implements $UserModelCopyWith<$Res> {
           ? _self.location
           : location // ignore: cast_nullable_to_non_nullable
               as List<double>,
-      friendsIds: null == friendsIds
+      friendsIds: freezed == friendsIds
           ? _self.friendsIds
           : friendsIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<String>?,
     ));
   }
 }
@@ -167,7 +167,7 @@ class _UserModel implements UserModel {
       required this.points,
       required this.ghgIndex,
       required final List<double> location,
-      required final List<String> friendsIds})
+      required final List<String>? friendsIds})
       : _location = location,
         _friendsIds = friendsIds;
   factory _UserModel.fromJson(Map<String, dynamic> json) =>
@@ -205,16 +205,18 @@ class _UserModel implements UserModel {
       points: points,
       ghgIndex: ghgIndex,
       location: LatLng(location[0], location[1]),
-      friendsIds: friendsIds,
+      friendsIds: friendsIds ?? [],
     );
   }
 
-  final List<String> _friendsIds;
+  final List<String>? _friendsIds;
   @override
-  List<String> get friendsIds {
+  List<String>? get friendsIds {
+    final value = _friendsIds;
+    if (value == null) return null;
     if (_friendsIds is EqualUnmodifiableListView) return _friendsIds;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_friendsIds);
+    return EqualUnmodifiableListView(value);
   }
 
   /// Create a copy of UserModel
@@ -289,7 +291,7 @@ abstract mixin class _$UserModelCopyWith<$Res>
       int points,
       double ghgIndex,
       List<double> location,
-      List<String> friendsIds});
+      List<String>? friendsIds});
 }
 
 /// @nodoc
@@ -312,7 +314,7 @@ class __$UserModelCopyWithImpl<$Res> implements _$UserModelCopyWith<$Res> {
     Object? points = null,
     Object? ghgIndex = null,
     Object? location = null,
-    Object? friendsIds = null,
+    Object? friendsIds = freezed,
   }) {
     return _then(_UserModel(
       userId: null == userId
@@ -347,10 +349,10 @@ class __$UserModelCopyWithImpl<$Res> implements _$UserModelCopyWith<$Res> {
           ? _self._location
           : location // ignore: cast_nullable_to_non_nullable
               as List<double>,
-      friendsIds: null == friendsIds
+      friendsIds: freezed == friendsIds
           ? _self._friendsIds
           : friendsIds // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<String>?,
     ));
   }
 }

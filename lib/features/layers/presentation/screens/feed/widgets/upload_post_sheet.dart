@@ -1,10 +1,11 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:image_picker/image_picker.dart';
 
 class UploadPostSheet extends StatefulWidget {
-  final Function(String comment, dynamic imageData) onUpload;
+  final Function(String comment, File? imageData) onUpload;
   const UploadPostSheet({super.key, required this.onUpload});
 
   @override
@@ -59,13 +60,15 @@ class UploadPostSheetState extends State<UploadPostSheet> {
                         ],
                       ),
                     )
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(
-                        _image!,
-                        fit: BoxFit.contain,
-                      ),
-                    ),
+                  : kIsWeb
+                      ? Image.network(
+                          _image!.path, // Use the path for web
+                          fit: BoxFit.contain,
+                        )
+                      : Image.file(
+                          _image!, // Use the file for mobile
+                          fit: BoxFit.contain,
+                        ),
             ),
           ),
           SizedBox(height: 16.h),
@@ -130,6 +133,11 @@ class UploadPostSheetState extends State<UploadPostSheet> {
       setState(() {
         _image = File(pickedFile.path);
       });
+    } else {
+      // Handle case where no image was selected
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("No image selected")),
+      );
     }
   }
 }

@@ -75,7 +75,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     );
   }
 
-  _buildTitleWidget() {
+  Padding _buildTitleWidget() {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16.w),
       child: Container(
@@ -142,13 +142,13 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     );
   }
 
-  _buildCustomNavbarWidget() {
+  CustomBottomNavBar _buildCustomNavbarWidget() {
     return CustomBottomNavBar(
       selectedIndex: 1,
     );
   }
 
-  _buildCustomAppbarWidget() {
+  CustomAppBar _buildCustomAppbarWidget() {
     return CustomAppBar(
       backgroundColor: Colors.white,
     );

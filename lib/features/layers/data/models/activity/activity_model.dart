@@ -10,7 +10,7 @@ abstract class ActivityModel with _$ActivityModel {
     required int activityId,
     required int userId,
     required String title,
-    required int points
+    required int value
   }) = _ActivityModel;
 
   ActivityEntity toEntity() {
@@ -18,7 +18,7 @@ abstract class ActivityModel with _$ActivityModel {
       activityId: activityId,
       userId: userId,
       title: title,
-      value: points,
+      value: value,
     );
   }
 

@@ -48,12 +48,24 @@ class LeaderboardItem extends StatelessWidget {
           const SizedBox(width: 12),
           ClipRRect(
             borderRadius: BorderRadius.circular(100),
-            child: Image.network(
-              entry.profilePicUrl,
-              fit: BoxFit.cover,
-              width: 24.w,
-              height: 24.h,
-            ),
+            child: (entry.profilePicUrl.isEmpty)
+                ? Image.asset(
+                    'assets/images/user_profile.png',
+                    fit: BoxFit.cover,
+                    height: 24.h,
+                    width: 24.h,
+                  )
+                : Image.network(
+                    entry.profilePicUrl,
+                    fit: BoxFit.cover,
+                    height: 24.h,
+                    width: 24.h,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Image.asset(
+                        'assets/images/user_profile.png',
+                      );
+                    },
+                  ),
           ),
           const SizedBox(width: 20),
           Expanded(

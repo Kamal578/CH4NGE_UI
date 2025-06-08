@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:location/location.dart';
 
 class GetCurrentLocationUseCase {
@@ -6,6 +7,15 @@ class GetCurrentLocationUseCase {
 
     bool serviceEnabled;
     PermissionStatus permissionGranted;
+
+    if (kIsWeb) {
+      try {
+        final LocationData locationData = await location.getLocation();
+        return _extractCoordinates(locationData);
+      } catch (_) {
+        return null;
+      }
+    }
 
     // Check if location services are enabled
     serviceEnabled = await location.serviceEnabled();
@@ -26,11 +36,12 @@ class GetCurrentLocationUseCase {
     }
 
     final LocationData locationData = await location.getLocation();
+    return _extractCoordinates(locationData);
+  }
+
+  List<double>? _extractCoordinates(LocationData locationData) {
     if (locationData.latitude != null && locationData.longitude != null) {
-      return [
-        locationData.latitude!,
-        locationData.longitude!,
-      ];
+      return [locationData.latitude!, locationData.longitude!];
     }
     return null;
   }

@@ -26,7 +26,7 @@ extension LeaderboardConverter on UserEntity {
       name: username,
       points: points,
       profilePicUrl: profilePicUrl,
-      isCurrentUser: userId == currentUserId,
+      isCurrentUser: userId.toString() == currentUserId,
     );
   }
 }

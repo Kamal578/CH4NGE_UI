@@ -11,7 +11,7 @@ _ActivityModel _$ActivityModelFromJson(Map<String, dynamic> json) =>
       activityId: (json['activityId'] as num).toInt(),
       userId: (json['userId'] as num).toInt(),
       title: json['title'] as String,
-      points: (json['points'] as num).toInt(),
+      value: (json['value'] as num).toInt(),
     );
 
 Map<String, dynamic> _$ActivityModelToJson(_ActivityModel instance) =>
@@ -19,5 +19,5 @@ Map<String, dynamic> _$ActivityModelToJson(_ActivityModel instance) =>
       'activityId': instance.activityId,
       'userId': instance.userId,
       'title': instance.title,
-      'points': instance.points,
+      'value': instance.value,
     };

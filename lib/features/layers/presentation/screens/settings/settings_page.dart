@@ -1,9 +1,9 @@
 import 'package:ch4nge/core/auth/auth_manager.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_user.dart';
 import 'package:ch4nge/features/layers/presentation/screens/authentication/bloc/auth_bloc.dart';
+import 'package:ch4nge/features/layers/presentation/screens/settings/widgets/custom_settings_widgets.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/small_user_card.dart';
-import 'package:babstrap_settings_screen/babstrap_settings_screen.dart';
 import 'package:either_dart/either.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -58,7 +58,7 @@ class _SettingsPageState extends State<SettingsPage> {
       setState(() => _isUploadingImage = false);
       debugPrint('Error loading data: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load data. Please try again.')),
+        const SnackBar(content: Text('Failed to load data. Please try again.')),
       );
     }
   }
@@ -163,14 +163,14 @@ class _SettingsPageState extends State<SettingsPage> {
               decoration: BoxDecoration(
                 color: isDestructive
                     ? Colors.red[50]
-                    : Color.fromARGB(255, 125, 211, 52).withValues(alpha: 0.1),
+                    : const Color.fromARGB(255, 125, 211, 52).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8.r),
               ),
               child: Icon(
                 icon,
                 color: isDestructive
                     ? Colors.red
-                    : Color.fromARGB(255, 125, 211, 52),
+                    : const Color.fromARGB(255, 125, 211, 52),
                 size: 20.sp,
               ),
             ),
@@ -253,7 +253,7 @@ class _SettingsPageState extends State<SettingsPage> {
     try {
       // Here you would typically upload the image to your server
       // For now, we'll simulate the upload process
-      await Future.delayed(Duration(seconds: 2));
+      await Future.delayed(const Duration(seconds: 2));
 
       setState(() {
         _isUploadingImage = false;
@@ -287,7 +287,7 @@ class _SettingsPageState extends State<SettingsPage> {
           color: Colors.white,
         ),
       ),
-      backgroundColor: Color.fromARGB(255, 125, 211, 52),
+      backgroundColor: const Color.fromARGB(255, 125, 211, 52),
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8.r),
@@ -348,7 +348,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     SizedBox(
                       width: double.maxFinite,
                       child: MySmallUserCard(
-                        cardColor: Color.fromARGB(255, 125, 211, 52),
+                        cardColor: const Color.fromARGB(255, 125, 211, 52),
                         backgroundMotifColor: Colors.white,
                         userName: username,
                         userProfilePicUrl: _profilePicUrl,
@@ -372,7 +372,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               child: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  CircularProgressIndicator(
+                                  const CircularProgressIndicator(
                                     color: Color.fromARGB(255, 125, 211, 52),
                                   ),
                                   SizedBox(height: 8.h),
@@ -430,7 +430,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       return Stack(
                         children: [
                           _accountSettings(context),
-                          Center(
+                          const Center(
                             child: CircularProgressIndicator(
                               color: Colors.white,
                             ),
@@ -442,15 +442,15 @@ class _SettingsPageState extends State<SettingsPage> {
                       return _accountSettings(context);
                     }
                     if (state is AuthRequestSuccessState) {
-                      Widget widget = Text('');
+                      Widget widget = const Text('');
                       state.response.fold((l) {
                         widget = _accountSettings(context);
                       }, (r) {
-                        widget = Text('');
+                        widget = const Text('');
                       });
                       return widget;
                     }
-                    return Text('');
+                    return const Text('');
                   },
                 ),
                 _otherSettings(context),
@@ -466,19 +466,19 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _buildProfilePictureSettings() {
     return SizedBox(
       width: double.maxFinite,
-      child: SettingsGroup(
+      child: CustomSettingsGroup(
         backgroundColor: Colors.grey[50],
         settingsGroupTitle: 'Profile Settings',
         settingsGroupTitleStyle: TextStyle(
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w700,
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w600,
           color: Colors.black,
         ),
         items: [
-          SettingsItem(
+          CustomSettingsItem(
             icons: Icons.photo_camera_rounded,
             iconStyle: IconStyle(
-                iconsColor: Color.fromARGB(255, 125, 211, 52),
+                iconsColor: const Color.fromARGB(255, 125, 211, 52),
                 backgroundColor: Colors.white),
             title: 'Update Profile Picture',
             titleStyle: settingsItemTitleStyle,
@@ -490,7 +490,7 @@ class _SettingsPageState extends State<SettingsPage> {
     );
   }
 
-  _buildCustomAppbarWidget(BuildContext context) {
+  CustomAppBar _buildCustomAppbarWidget(BuildContext context) {
     return CustomAppBar(
       backgroundColor: Colors.white,
       leading: GestureDetector(
@@ -510,19 +510,19 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _accountSettings(BuildContext context) {
     return SizedBox(
       width: double.maxFinite,
-      child: SettingsGroup(
+      child: CustomSettingsGroup(
         backgroundColor: Colors.grey[50],
         settingsGroupTitle: 'Account Settings',
         settingsGroupTitleStyle: TextStyle(
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w700,
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w600,
           color: Colors.black,
         ),
         items: [
-          SettingsItem(
+          CustomSettingsItem(
             icons: Icons.logout_rounded,
             iconStyle: IconStyle(
-                iconsColor: Color.fromARGB(255, 125, 211, 52),
+                iconsColor: const Color.fromARGB(255, 125, 211, 52),
                 backgroundColor: Colors.white),
             title: 'Sign Out',
             titleStyle: settingsItemTitleStyle,
@@ -538,19 +538,19 @@ class _SettingsPageState extends State<SettingsPage> {
   Widget _otherSettings(BuildContext content) {
     return SizedBox(
       width: double.maxFinite,
-      child: SettingsGroup(
+      child: CustomSettingsGroup(
         backgroundColor: Colors.grey[50],
         settingsGroupTitle: 'Other',
         settingsGroupTitleStyle: TextStyle(
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w700,
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w600,
           color: Colors.black,
         ),
         items: [
-          SettingsItem(
+          CustomSettingsItem(
             icons: Icons.info_rounded,
             iconStyle: IconStyle(
-                iconsColor: Color.fromARGB(255, 125, 211, 52),
+                iconsColor: const Color.fromARGB(255, 125, 211, 52),
                 backgroundColor: Colors.white),
             title: 'About',
             titleStyle: settingsItemTitleStyle,
@@ -558,10 +558,10 @@ class _SettingsPageState extends State<SettingsPage> {
             subtitleStyle: settingsItemSubtitleStyle,
             onTap: () {},
           ),
-          SettingsItem(
+          CustomSettingsItem(
             icons: Icons.help_rounded,
             iconStyle: IconStyle(
-                iconsColor: Color.fromARGB(255, 125, 211, 52),
+                iconsColor: const Color.fromARGB(255, 125, 211, 52),
                 backgroundColor: Colors.white),
             title: 'Help & Support',
             titleStyle: settingsItemTitleStyle,

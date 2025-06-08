@@ -16,6 +16,7 @@ import 'core/di/service_locator.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   if (kReleaseMode) {
     await dotenv.load(fileName: '.env.prod');
   } else {
@@ -23,6 +24,7 @@ void main() async {
   }
 
   setupServiceLocator();
+  await serviceLocator.allReady();
   runApp(MyApp());
 }
 
@@ -59,6 +61,9 @@ class MyApp extends StatelessWidget {
           builder: (context, state) => FeedPage(
             key: UniqueKey(),
             getPostsUseCase: serviceLocator(),
+            uploadPostFormUseCase: serviceLocator(),
+            likePostUseCase: serviceLocator(),
+            sharePostUseCase: serviceLocator(),
           ),
         ),
         GoRoute(

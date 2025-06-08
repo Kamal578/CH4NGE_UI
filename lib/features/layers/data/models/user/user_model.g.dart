@@ -17,8 +17,8 @@ _UserModel _$UserModelFromJson(Map<String, dynamic> json) => _UserModel(
       location: (json['location'] as List<dynamic>)
           .map((e) => (e as num).toDouble())
           .toList(),
-      friendsIds: (json['friendsIds'] as List<dynamic>)
-          .map((e) => e as String)
+      friendsIds: (json['friendsIds'] as List<dynamic>?)
+          ?.map((e) => e as String)
           .toList(),
     );
 

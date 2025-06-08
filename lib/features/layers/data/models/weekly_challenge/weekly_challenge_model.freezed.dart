@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 
 /// @nodoc
 mixin _$WeeklyChallengeModel {
-  int get weekklyChallengeId;
+  int get weeklyChallengeId;
   int get userId;
   String get title;
   String get subtitle;
@@ -39,8 +39,8 @@ mixin _$WeeklyChallengeModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is WeeklyChallengeModel &&
-            (identical(other.weekklyChallengeId, weekklyChallengeId) ||
-                other.weekklyChallengeId == weekklyChallengeId) &&
+            (identical(other.weeklyChallengeId, weeklyChallengeId) ||
+                other.weeklyChallengeId == weeklyChallengeId) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.subtitle, subtitle) ||
@@ -54,12 +54,12 @@ mixin _$WeeklyChallengeModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, weekklyChallengeId, userId,
-      title, subtitle, currentValue, totalValue, points);
+  int get hashCode => Object.hash(runtimeType, weeklyChallengeId, userId, title,
+      subtitle, currentValue, totalValue, points);
 
   @override
   String toString() {
-    return 'WeeklyChallengeModel(weekklyChallengeId: $weekklyChallengeId, userId: $userId, title: $title, subtitle: $subtitle, currentValue: $currentValue, totalValue: $totalValue, points: $points)';
+    return 'WeeklyChallengeModel(weeklyChallengeId: $weeklyChallengeId, userId: $userId, title: $title, subtitle: $subtitle, currentValue: $currentValue, totalValue: $totalValue, points: $points)';
   }
 }
 
@@ -70,7 +70,7 @@ abstract mixin class $WeeklyChallengeModelCopyWith<$Res> {
       _$WeeklyChallengeModelCopyWithImpl;
   @useResult
   $Res call(
-      {int weekklyChallengeId,
+      {int weeklyChallengeId,
       int userId,
       String title,
       String subtitle,
@@ -92,7 +92,7 @@ class _$WeeklyChallengeModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? weekklyChallengeId = null,
+    Object? weeklyChallengeId = null,
     Object? userId = null,
     Object? title = null,
     Object? subtitle = null,
@@ -101,9 +101,9 @@ class _$WeeklyChallengeModelCopyWithImpl<$Res>
     Object? points = null,
   }) {
     return _then(_self.copyWith(
-      weekklyChallengeId: null == weekklyChallengeId
-          ? _self.weekklyChallengeId
-          : weekklyChallengeId // ignore: cast_nullable_to_non_nullable
+      weeklyChallengeId: null == weeklyChallengeId
+          ? _self.weeklyChallengeId
+          : weeklyChallengeId // ignore: cast_nullable_to_non_nullable
               as int,
       userId: null == userId
           ? _self.userId
@@ -137,7 +137,7 @@ class _$WeeklyChallengeModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _WeeklyChallengeModel implements WeeklyChallengeModel {
   const _WeeklyChallengeModel(
-      {required this.weekklyChallengeId,
+      {required this.weeklyChallengeId,
       required this.userId,
       required this.title,
       required this.subtitle,
@@ -148,7 +148,7 @@ class _WeeklyChallengeModel implements WeeklyChallengeModel {
       _$WeeklyChallengeModelFromJson(json);
 
   @override
-  final int weekklyChallengeId;
+  final int weeklyChallengeId;
   @override
   final int userId;
   @override
@@ -164,7 +164,7 @@ class _WeeklyChallengeModel implements WeeklyChallengeModel {
 
   WeeklyChallengeEntity toEntity() {
     return WeeklyChallengeEntity(
-      weeklyChallengeId: weekklyChallengeId,
+      weeklyChallengeId: weeklyChallengeId,
       userId: userId,
       title: title,
       subtitle: subtitle,
@@ -195,8 +195,8 @@ class _WeeklyChallengeModel implements WeeklyChallengeModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _WeeklyChallengeModel &&
-            (identical(other.weekklyChallengeId, weekklyChallengeId) ||
-                other.weekklyChallengeId == weekklyChallengeId) &&
+            (identical(other.weeklyChallengeId, weeklyChallengeId) ||
+                other.weeklyChallengeId == weeklyChallengeId) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.title, title) || other.title == title) &&
             (identical(other.subtitle, subtitle) ||
@@ -210,12 +210,12 @@ class _WeeklyChallengeModel implements WeeklyChallengeModel {
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, weekklyChallengeId, userId,
-      title, subtitle, currentValue, totalValue, points);
+  int get hashCode => Object.hash(runtimeType, weeklyChallengeId, userId, title,
+      subtitle, currentValue, totalValue, points);
 
   @override
   String toString() {
-    return 'WeeklyChallengeModel(weekklyChallengeId: $weekklyChallengeId, userId: $userId, title: $title, subtitle: $subtitle, currentValue: $currentValue, totalValue: $totalValue, points: $points)';
+    return 'WeeklyChallengeModel(weeklyChallengeId: $weeklyChallengeId, userId: $userId, title: $title, subtitle: $subtitle, currentValue: $currentValue, totalValue: $totalValue, points: $points)';
   }
 }
 
@@ -228,7 +228,7 @@ abstract mixin class _$WeeklyChallengeModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int weekklyChallengeId,
+      {int weeklyChallengeId,
       int userId,
       String title,
       String subtitle,
@@ -250,7 +250,7 @@ class __$WeeklyChallengeModelCopyWithImpl<$Res>
   @override
   @pragma('vm:prefer-inline')
   $Res call({
-    Object? weekklyChallengeId = null,
+    Object? weeklyChallengeId = null,
     Object? userId = null,
     Object? title = null,
     Object? subtitle = null,
@@ -259,9 +259,9 @@ class __$WeeklyChallengeModelCopyWithImpl<$Res>
     Object? points = null,
   }) {
     return _then(_WeeklyChallengeModel(
-      weekklyChallengeId: null == weekklyChallengeId
-          ? _self.weekklyChallengeId
-          : weekklyChallengeId // ignore: cast_nullable_to_non_nullable
+      weeklyChallengeId: null == weeklyChallengeId
+          ? _self.weeklyChallengeId
+          : weeklyChallengeId // ignore: cast_nullable_to_non_nullable
               as int,
       userId: null == userId
           ? _self.userId

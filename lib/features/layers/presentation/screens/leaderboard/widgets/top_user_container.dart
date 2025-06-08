@@ -32,10 +32,18 @@ class TopUserContainer extends StatelessWidget {
                       backgroundColor: Colors.white,
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(90),
-                        child: Image.network(
-                          entry.profilePicUrl,
-                          fit: BoxFit.fitHeight,
-                        ),
+                        child: (entry.profilePicUrl.isEmpty)
+                            ? Image.asset('assets/images/user_profile.png',
+                                fit: BoxFit.fitHeight)
+                            : Image.network(
+                                entry.profilePicUrl,
+                                fit: BoxFit.fitHeight,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return Image.asset(
+                                    'assets/images/user_profile.png',
+                                  );
+                                },
+                              ),
                       ),
                     ),
                   ),

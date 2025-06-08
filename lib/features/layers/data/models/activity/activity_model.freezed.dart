@@ -18,7 +18,7 @@ mixin _$ActivityModel {
   int get activityId;
   int get userId;
   String get title;
-  int get points;
+  int get value;
 
   /// Create a copy of ActivityModel
   /// with the given fields replaced by the non-null parameter values.
@@ -40,17 +40,17 @@ mixin _$ActivityModel {
                 other.activityId == activityId) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.points, points) || other.points == points));
+            (identical(other.value, value) || other.value == value));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, activityId, userId, title, points);
+      Object.hash(runtimeType, activityId, userId, title, value);
 
   @override
   String toString() {
-    return 'ActivityModel(activityId: $activityId, userId: $userId, title: $title, points: $points)';
+    return 'ActivityModel(activityId: $activityId, userId: $userId, title: $title, value: $value)';
   }
 }
 
@@ -60,7 +60,7 @@ abstract mixin class $ActivityModelCopyWith<$Res> {
           ActivityModel value, $Res Function(ActivityModel) _then) =
       _$ActivityModelCopyWithImpl;
   @useResult
-  $Res call({int activityId, int userId, String title, int points});
+  $Res call({int activityId, int userId, String title, int value});
 }
 
 /// @nodoc
@@ -79,7 +79,7 @@ class _$ActivityModelCopyWithImpl<$Res>
     Object? activityId = null,
     Object? userId = null,
     Object? title = null,
-    Object? points = null,
+    Object? value = null,
   }) {
     return _then(_self.copyWith(
       activityId: null == activityId
@@ -94,9 +94,9 @@ class _$ActivityModelCopyWithImpl<$Res>
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      points: null == points
-          ? _self.points
-          : points // ignore: cast_nullable_to_non_nullable
+      value: null == value
+          ? _self.value
+          : value // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }
@@ -109,7 +109,7 @@ class _ActivityModel implements ActivityModel {
       {required this.activityId,
       required this.userId,
       required this.title,
-      required this.points});
+      required this.value});
   factory _ActivityModel.fromJson(Map<String, dynamic> json) =>
       _$ActivityModelFromJson(json);
 
@@ -120,14 +120,14 @@ class _ActivityModel implements ActivityModel {
   @override
   final String title;
   @override
-  final int points;
+  final int value;
 
   ActivityEntity toEntity() {
     return ActivityEntity(
       activityId: activityId,
       userId: userId,
       title: title,
-      value: points,
+      value: value,
     );
   }
 
@@ -155,17 +155,17 @@ class _ActivityModel implements ActivityModel {
                 other.activityId == activityId) &&
             (identical(other.userId, userId) || other.userId == userId) &&
             (identical(other.title, title) || other.title == title) &&
-            (identical(other.points, points) || other.points == points));
+            (identical(other.value, value) || other.value == value));
   }
 
   @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, activityId, userId, title, points);
+      Object.hash(runtimeType, activityId, userId, title, value);
 
   @override
   String toString() {
-    return 'ActivityModel(activityId: $activityId, userId: $userId, title: $title, points: $points)';
+    return 'ActivityModel(activityId: $activityId, userId: $userId, title: $title, value: $value)';
   }
 }
 
@@ -177,7 +177,7 @@ abstract mixin class _$ActivityModelCopyWith<$Res>
       __$ActivityModelCopyWithImpl;
   @override
   @useResult
-  $Res call({int activityId, int userId, String title, int points});
+  $Res call({int activityId, int userId, String title, int value});
 }
 
 /// @nodoc
@@ -196,7 +196,7 @@ class __$ActivityModelCopyWithImpl<$Res>
     Object? activityId = null,
     Object? userId = null,
     Object? title = null,
-    Object? points = null,
+    Object? value = null,
   }) {
     return _then(_ActivityModel(
       activityId: null == activityId
@@ -211,9 +211,9 @@ class __$ActivityModelCopyWithImpl<$Res>
           ? _self.title
           : title // ignore: cast_nullable_to_non_nullable
               as String,
-      points: null == points
-          ? _self.points
-          : points // ignore: cast_nullable_to_non_nullable
+      value: null == value
+          ? _self.value
+          : value // ignore: cast_nullable_to_non_nullable
               as int,
     ));
   }

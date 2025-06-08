@@ -1,3 +1,8 @@
+import 'package:ch4nge/features/layers/data/datasources/achievement_datasource.dart';
+import 'package:ch4nge/features/layers/data/datasources/activity_datasource.dart';
+import 'package:ch4nge/features/layers/data/datasources/mini_challenge_datasource.dart';
+import 'package:ch4nge/features/layers/data/datasources/user_datasource.dart';
+import 'package:ch4nge/features/layers/data/datasources/weekly_challenge_datasource.dart';
 import 'package:ch4nge/features/layers/domain/entities/action/green_entity.dart';
 import 'package:ch4nge/features/layers/domain/entities/action/transportation_entity.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_current_location.dart';
@@ -31,8 +36,27 @@ class _ActionsPageState extends State<ActionsPage> {
   String _selectedPublicTransport = 'Bus';
   final TextEditingController _distanceController = TextEditingController();
   final TextEditingController _durationController = TextEditingController();
-  final TextEditingController _fuelConsumptionController = TextEditingController();
+  final TextEditingController _fuelConsumptionController =
+      TextEditingController();
   final TextEditingController _passengersController = TextEditingController();
+
+  void _resetFormFields() {
+    setState(() {
+      _selectedTransportMode = null;
+      _selectedVehicle = null;
+      _selectedGreenAction = null;
+      _selectedDistanceUnit = 'km';
+      _selectedDurationUnit = 'minutes';
+      _selectedFuelType = 'Gasoline';
+      _selectedPublicTransport = 'Bus';
+    });
+
+    // Clear all text controllers
+    _distanceController.clear();
+    _durationController.clear();
+    _fuelConsumptionController.clear();
+    _passengersController.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,16 +88,19 @@ class _ActionsPageState extends State<ActionsPage> {
                   );
                 } else {
                   final location = await widget.getCurrentLocationUseCase();
-                  final distance = double.tryParse(_distanceController.text) ?? 0.0;
-                  final duration = double.tryParse(_durationController.text) ?? 0.0;
-                  
+                  final distance =
+                      double.tryParse(_distanceController.text) ?? 0.0;
+                  final duration =
+                      double.tryParse(_durationController.text) ?? 0.0;
+
                   TransportationEntity action;
-                  
+
                   switch (_selectedTransportMode) {
                     case "Active Commute":
                       if (_selectedVehicle == null) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text("Please select a transport mode")),
+                          SnackBar(
+                              content: Text("Please select a transport mode")),
                         );
                         return;
                       }
@@ -94,9 +121,11 @@ class _ActionsPageState extends State<ActionsPage> {
                         distanceUnit: _selectedDistanceUnit,
                         durationUnit: _selectedDurationUnit,
                         fuelType: _selectedFuelType,
-                        fuelConsumption: double.tryParse(_fuelConsumptionController.text),
+                        fuelConsumption:
+                            double.tryParse(_fuelConsumptionController.text),
                         fuelConsumptionUnit: "L/100km",
-                        numberOfPassengers: int.tryParse(_passengersController.text),
+                        numberOfPassengers:
+                            int.tryParse(_passengersController.text),
                       );
                       break;
                     case "Public Transport":
@@ -111,11 +140,12 @@ class _ActionsPageState extends State<ActionsPage> {
                       break;
                     default:
                       ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text("Invalid transport mode selected")),
+                        SnackBar(
+                            content: Text("Invalid transport mode selected")),
                       );
                       return;
                   }
-                  
+
                   widget.uploadActionUseCase(action);
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -123,7 +153,9 @@ class _ActionsPageState extends State<ActionsPage> {
                       backgroundColor: Colors.green,
                     ),
                   );
-                  
+
+                  _resetFormFields();
+
                   debugPrint("Recorded transport action: ${action.toString()}");
                 }
               },
@@ -302,6 +334,8 @@ class _ActionsPageState extends State<ActionsPage> {
                     location: location ?? [0.0, 0.0],
                   );
                   widget.uploadActionUseCase(action);
+                  _resetFormFields();
+
                   debugPrint("Recorded green action: $_selectedGreenAction");
                 }
               },
@@ -310,11 +344,15 @@ class _ActionsPageState extends State<ActionsPage> {
                   title: "Energy Conservation",
                   content: Column(
                     children: [
-                      _buildGreenActionRadio("Turned off lights", Icons.lightbulb_outline),
-                      _buildGreenActionRadio("Unplugged electronics", Icons.power_off),
+                      _buildGreenActionRadio(
+                          "Turned off lights", Icons.lightbulb_outline),
+                      _buildGreenActionRadio(
+                          "Unplugged electronics", Icons.power_off),
                       _buildGreenActionRadio("Used LED bulbs", Icons.lightbulb),
-                      _buildGreenActionRadio("Adjusted thermostat", Icons.thermostat),
-                      _buildGreenActionRadio("Air-dried clothes", Icons.dry_cleaning),
+                      _buildGreenActionRadio(
+                          "Adjusted thermostat", Icons.thermostat),
+                      _buildGreenActionRadio(
+                          "Air-dried clothes", Icons.dry_cleaning),
                     ],
                   ),
                 ),
@@ -324,9 +362,12 @@ class _ActionsPageState extends State<ActionsPage> {
                     children: [
                       _buildGreenActionRadio("Recycling", Icons.recycling),
                       _buildGreenActionRadio("Composting", Icons.compost),
-                      _buildGreenActionRadio("Used reusable bags", Icons.shopping_bag),
-                      _buildGreenActionRadio("Reduced plastic use", Icons.no_drinks),
-                      _buildGreenActionRadio("Repaired instead of replacing", Icons.build),
+                      _buildGreenActionRadio(
+                          "Used reusable bags", Icons.shopping_bag),
+                      _buildGreenActionRadio(
+                          "Reduced plastic use", Icons.no_drinks),
+                      _buildGreenActionRadio(
+                          "Repaired instead of replacing", Icons.build),
                     ],
                   ),
                 ),
@@ -335,10 +376,14 @@ class _ActionsPageState extends State<ActionsPage> {
                   content: Column(
                     children: [
                       _buildGreenActionRadio("Shorter shower", Icons.shower),
-                      _buildGreenActionRadio("Fixed water leak", Icons.plumbing),
-                      _buildGreenActionRadio("Used rainwater", Icons.water_drop),
-                      _buildGreenActionRadio("Full dishwasher load", Icons.kitchen),
-                      _buildGreenActionRadio("Turned off tap while brushing", Icons.water),
+                      _buildGreenActionRadio(
+                          "Fixed water leak", Icons.plumbing),
+                      _buildGreenActionRadio(
+                          "Used rainwater", Icons.water_drop),
+                      _buildGreenActionRadio(
+                          "Full dishwasher load", Icons.kitchen),
+                      _buildGreenActionRadio(
+                          "Turned off tap while brushing", Icons.water),
                     ],
                   ),
                 ),
@@ -347,10 +392,14 @@ class _ActionsPageState extends State<ActionsPage> {
                   content: Column(
                     children: [
                       _buildGreenActionRadio("Planted a tree", Icons.park),
-                      _buildGreenActionRadio("Cleaned up litter", Icons.cleaning_services),
-                      _buildGreenActionRadio("Participated in beach cleanup", Icons.waves),
-                      _buildGreenActionRadio("Created pollinator garden", Icons.local_florist),
-                      _buildGreenActionRadio("Joined environmental group", Icons.groups),
+                      _buildGreenActionRadio(
+                          "Cleaned up litter", Icons.cleaning_services),
+                      _buildGreenActionRadio(
+                          "Participated in beach cleanup", Icons.waves),
+                      _buildGreenActionRadio(
+                          "Created pollinator garden", Icons.local_florist),
+                      _buildGreenActionRadio(
+                          "Joined environmental group", Icons.groups),
                     ],
                   ),
                 ),
@@ -358,11 +407,15 @@ class _ActionsPageState extends State<ActionsPage> {
                   title: "Sustainable Consumption",
                   content: Column(
                     children: [
-                      _buildGreenActionRadio("Bought local produce", Icons.store),
+                      _buildGreenActionRadio(
+                          "Bought local produce", Icons.store),
                       _buildGreenActionRadio("Chose organic food", Icons.eco),
-                      _buildGreenActionRadio("Reduced meat consumption", Icons.restaurant),
-                      _buildGreenActionRadio("Bought second-hand", Icons.handshake),
-                      _buildGreenActionRadio("Used public library", Icons.library_books),
+                      _buildGreenActionRadio(
+                          "Reduced meat consumption", Icons.restaurant),
+                      _buildGreenActionRadio(
+                          "Bought second-hand", Icons.handshake),
+                      _buildGreenActionRadio(
+                          "Used public library", Icons.library_books),
                     ],
                   ),
                 ),
@@ -571,7 +624,8 @@ class _ActionsPageState extends State<ActionsPage> {
       ),
       value: value,
       groupValue: _selectedPublicTransport,
-      onChanged: (newValue) => setState(() => _selectedPublicTransport = newValue!),
+      onChanged: (newValue) =>
+          setState(() => _selectedPublicTransport = newValue!),
     );
   }
 
@@ -601,7 +655,7 @@ class _ActionsPageState extends State<ActionsPage> {
     );
   }
 
-  _buildTitleWidget() {
+  Container _buildTitleWidget() {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 8.w),
@@ -635,7 +689,7 @@ class _ActionsPageState extends State<ActionsPage> {
     );
   }
 
-  _buildCustomAppbarWidget(BuildContext context) {
+  CustomAppBar _buildCustomAppbarWidget(BuildContext context) {
     return CustomAppBar(
       backgroundColor: Colors.white,
       leading: GestureDetector(
@@ -713,9 +767,11 @@ class _ExpandableActionCardState extends State<ExpandableActionCard> {
 
   void _recordAction() {
     widget.onRecordAction();
+    _forceDataRefresh();
     setState(() {
       _showSuccess = true;
       _showError = false;
+      _expandedIndex = -1;
     });
   }
 
@@ -865,5 +921,22 @@ class _ExpandableActionCardState extends State<ExpandableActionCard> {
         ),
       ),
     );
+  }
+
+  Future<void> _forceDataRefresh() async {
+    final userDatasource = UserRemoteDatasource();
+    await userDatasource.clearCache();
+
+    final achievementDatasource = AchievementsRemote();
+    await achievementDatasource.clearCache();
+
+    final miniChallengeDatasource = MiniChallengeRemote();
+    await miniChallengeDatasource.clearCache();
+
+    final weeklyChallengeDatasource = WeeklyChallengeRemote();
+    await weeklyChallengeDatasource.clearCache();
+
+    final activityDatasource = ActivityRemote();
+    await activityDatasource.clearCache();
   }
 }

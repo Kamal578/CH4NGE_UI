@@ -1,5 +1,4 @@
 import 'package:ch4nge/core/auth/auth_manager.dart';
-import 'package:ch4nge/core/utils/timestamp_mapper.dart';
 import 'package:ch4nge/features/layers/domain/entities/achievement_entity.dart';
 import 'package:ch4nge/features/layers/domain/entities/weekly_challenge_entity.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_next_achievement.dart';
@@ -44,37 +43,6 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _loadData() async {
     try {
-      final now = DateTime.now();
-
-      final userCacheTimestamp =
-          await CacheTimestampMapper.getUserCacheTimestamp(userId);
-      final weeklyChallengeCacheTimestamp =
-          await CacheTimestampMapper.getWeeklyChallengeCacheTimestamp(userId);
-      final nextAchievementCacheTimestamp =
-          await CacheTimestampMapper.getNextAchievementCacheTimestamp(userId);
-
-      final cacheStamps = {
-        "user": userCacheTimestamp,
-        "weekly_challenge": weeklyChallengeCacheTimestamp,
-        "next_achievement": nextAchievementCacheTimestamp,
-      };
-
-      for (final cacheStamp in cacheStamps.entries) {
-        if (cacheStamp.value != null) {
-          final isDifferentDate = cacheStamp.value!.year != now.year ||
-              cacheStamp.value!.month != now.month ||
-              cacheStamp.value!.day != now.day;
-
-          if (isDifferentDate) {
-            CacheTimestampMapper.setNewTimestamp(
-              cacheStamp.key,
-              userId: userId,
-              newTimestamp: now.subtract(const Duration(minutes: 6)),
-            );
-          }
-        }
-      }
-
       final user = await widget.getUserUseCase(userId);
       final challenge = await widget.getWeeklyChallengeUseCase(userId);
       final achievement = await widget.getNextAchievementUseCase(userId);
@@ -89,7 +57,7 @@ class _HomePageState extends State<HomePage> {
       setState(() => isLoading = false);
       debugPrint('Error loading data: $e');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to load data. Please try again.')),
+        const SnackBar(content: Text('Failed to load data. Please try again.')),
       );
     }
   }
@@ -132,7 +100,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _buildTitleWidget() {
+  Container _buildTitleWidget() {
     return Container(
       width: double.maxFinite,
       height: 32.h,
@@ -150,13 +118,13 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _buildStreakWidget() {
+  Container _buildStreakWidget() {
     return Container(
       width: double.maxFinite,
       height: 180.h,
       alignment: Alignment.centerLeft,
-      decoration: BoxDecoration(
-        image: const DecorationImage(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
           image: AssetImage("assets/images/leaf_streak.png"),
           fit: BoxFit.none,
         ),
@@ -181,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                 height: 130.h,
                 alignment: Alignment.centerLeft,
                 padding: EdgeInsets.only(left: 16.h),
-                child: FittedBox(
+                child: const FittedBox(
                   fit: BoxFit.scaleDown,
                   alignment: Alignment.centerLeft,
                 ),
@@ -228,7 +196,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildWeeklyChallengeWidget() {
-    if (weeklyChallenge == null) return SizedBox.shrink();
+    if (weeklyChallenge == null) return const SizedBox.shrink();
 
     return Container(
       width: double.maxFinite,
@@ -329,13 +297,19 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
-    if (weeklyChallenge == null) return SizedBox.shrink();
+    if (weeklyChallenge == null) return const SizedBox.shrink();
+    debugPrint(
+        'HOME PAGE: Weekly Challenge: ${weeklyChallenge!.title}, Current Value: ${weeklyChallenge!.currentValue}, Total Value: ${weeklyChallenge!.totalValue}',
+      );
 
     double percentageCompleted = weeklyChallenge!.totalValue > 0
         ? (weeklyChallenge!.currentValue / weeklyChallenge!.totalValue)
             .clamp(0.0, 1.0)
-        : 0.0;
+        : 0.0;      
 
+    debugPrint(
+      'HOME PAGE: Percentage Completed: $percentageCompleted',
+    );
     return SizedBox(
       height: 18.h,
       child: Stack(
@@ -461,7 +435,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildNextAchievementWidget() {
-    if (achievement == null) return SizedBox.shrink();
+    if (achievement == null) return const SizedBox.shrink();
 
     return Container(
       width: double.maxFinite,
@@ -493,7 +467,7 @@ class _HomePageState extends State<HomePage> {
             thickness: 0.5.h,
           ),
           Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Column(
                 mainAxisSize: MainAxisSize.min,
@@ -506,8 +480,8 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     width: 50.r,
                     height: 50.r,
-                    decoration: BoxDecoration(
-                      color: const Color(0x809098B1),
+                    decoration: const BoxDecoration(
+                      color: Color(0x809098B1),
                       shape: BoxShape.circle,
                     ),
                   ),
@@ -555,14 +529,14 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  _buildCustomNavbarWidget() {
-    return CustomBottomNavBar(
+  CustomBottomNavBar _buildCustomNavbarWidget() {
+    return const CustomBottomNavBar(
       selectedIndex: 2,
     );
   }
 
-  _buildCustomAppbarWidget() {
-    return CustomAppBar(
+  CustomAppBar _buildCustomAppbarWidget() {
+    return const CustomAppBar(
       backgroundColor: Colors.white,
     );
   }

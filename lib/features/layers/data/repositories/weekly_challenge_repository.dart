@@ -7,26 +7,12 @@ class WeeklyChallengeRepositoryImpl implements WeeklyChallengeRepository {
 
   WeeklyChallengeRepositoryImpl({required this.datasource});
 
-  // TODO: Uncomment when API is ready
-  // @override
-  // Future<WeeklyChallengeEntity> getWeeklyChallenge(String userId) async {
-  //   try {
-  //     return await datasource.getWeeklyChallenge(userId);
-  //   } catch (e) {
-  //     throw Exception('Failed to fetch weekly challenge');
-  //   }
-  // }
-
   @override
   Future<WeeklyChallengeEntity> getWeeklyChallenge(String userId) async {
-    return WeeklyChallengeEntity(
-      weeklyChallengeId: 1,
-      userId: int.parse(userId),
-      title: 'Pedal Power Challenge',
-      subtitle: '75 KM on a bicycle in 7 Days!',
-      currentValue: 3,
-      totalValue: 5,
-      points: 20,
-    );
+    try {
+      return await datasource.getWeeklyChallenge(userId);
+    } catch (e) {
+      throw Exception('Failed to fetch weekly challenge');
+    }
   }
 }

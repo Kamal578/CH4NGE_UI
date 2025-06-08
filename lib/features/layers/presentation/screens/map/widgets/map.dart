@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:flutter_map_heatmap/flutter_map_heatmap.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:latlong2/latlong.dart';
 
 class GHGMap extends StatefulWidget {
@@ -92,8 +93,10 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
 
     try {
       // Load both JSON files
-      final pointsJson = await rootBundle.loadString('assets/json_data/points.json');
-      final sensorsJson = await rootBundle.loadString('assets/json_data/sensors.json');
+      final pointsJson =
+          await rootBundle.loadString('assets/json_data/points.json');
+      final sensorsJson =
+          await rootBundle.loadString('assets/json_data/sensors.json');
 
       final pointsData = jsonDecode(pointsJson) as List<dynamic>;
       final sensorsData = jsonDecode(sensorsJson) as List<dynamic>;
@@ -101,7 +104,8 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
       // Process and cache the data
       _cachedData = pointsData
           .cast<List<dynamic>>()
-          .map((e) => WeightedLatLng(LatLng(e[0] as double, e[1] as double), 1.0))
+          .map((e) =>
+              WeightedLatLng(LatLng(e[0] as double, e[1] as double), 1.0))
           .toList();
 
       _cachedSensors = sensorsData
@@ -218,7 +222,7 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
               HeatMapLayer(
                 heatMapDataSource: InMemoryHeatMapDataSource(data: data),
                 heatMapOptions: HeatMapOptions(
-                  gradient: gradients[index], 
+                  gradient: gradients[index],
                   minOpacity: 0.1,
                 ),
                 reset: _rebuildStream.stream,
@@ -285,8 +289,10 @@ class _ModalContent extends StatelessWidget {
             CircleAvatar(
               key: ValueKey('modal_avatar_$name'),
               radius: 40,
-              backgroundImage:
-                  NetworkImage(personDetails[name]?['avatarUrl'] ?? ''),
+              backgroundImage: personDetails[name]?['avatarUrl'] == null ||
+                      personDetails[name]?['avatarUrl'].isEmpty
+                  ? const AssetImage('assets/images/user_profile.png') as ImageProvider<Object>?
+                  : NetworkImage(personDetails[name]?['avatarUrl'] ?? ''),
             ),
           const SizedBox(height: 10),
           Text(
@@ -312,7 +318,7 @@ class _ModalContent extends StatelessWidget {
                       return Icon(
                         Icons.square,
                         size: 20,
-                        color: index < (personDetails[name]?['GHGIndex'] ?? 0)
+                        color: index < (personDetails[name]?['GHGIndex'] / 25 ?? 0)
                             ? Colors.yellow
                             : Colors.grey,
                       );
@@ -403,16 +409,16 @@ class Person extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(4.0),
       decoration: BoxDecoration(
-        color: Colors.blueAccent.withValues(blue: 1.0, alpha: 0.2),
+        color: Colors.blueAccent.withAlpha(50), // Original color with 0.2 alpha
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CircleAvatar(
-            key: ValueKey('avatar_$name'),
-            radius: 40,
-            backgroundImage: NetworkImage(url),
+          SizedBox(
+            width: 80, // Fixed size for consistent circle
+            height: 80,
+            child: _buildAvatar(),
           ),
           const SizedBox(height: 4),
           Text(
@@ -423,6 +429,38 @@ class Person extends StatelessWidget {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildAvatar() {
+    return CircleAvatar(
+      key: ValueKey('avatar_$name'),
+      radius: 100,
+      backgroundColor: Colors.transparent,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(100),
+        child: url.isNotEmpty
+            ? Image.network(
+                url,
+                fit: BoxFit.cover,
+                width: 80.w,
+                height: 80.h,
+                errorBuilder: (context, error, stackTrace) => _defaultAvatar(),
+              )
+            : _defaultAvatar(),
+      ),
+    );
+  }
+
+  Widget _defaultAvatar() {
+    return Container(
+      color: const Color(0xFF7DD334).withValues(alpha: .5),
+      child: Image.asset(
+        'assets/images/user_profile.png',
+        fit: BoxFit.cover,
+        width: 80.w,
+        height: 80.h,
       ),
     );
   }

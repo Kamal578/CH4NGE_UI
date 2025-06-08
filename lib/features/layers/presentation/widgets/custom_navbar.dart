@@ -47,7 +47,7 @@ class CustomBottomNavBarState extends State<CustomBottomNavBar> {
     return Container(
       height: 90.h,
       padding: EdgeInsets.only(bottom: 12.h),
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         color: Colors.white,
       ),
       child: CustomNavbar(
@@ -56,7 +56,7 @@ class CustomBottomNavBarState extends State<CustomBottomNavBar> {
         backgroundColor: Colors.white,
         selectedItemColor: const Color(0xFF7DD334),
         unselectedItemColor: const Color(0xFF9098B1),
-        iconPaths: [
+        iconPaths: const [
           'assets/icons/earth-13-svgrepo-com.svg',
           'assets/icons/trophy-material-7-svgrepo-com.svg',
           'assets/icons/leaf-svgrepo-com.svg',
