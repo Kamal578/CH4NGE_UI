@@ -9,9 +9,11 @@ import 'package:ch4nge/features/layers/presentation/screens/map/map_page.dart';
 import 'package:ch4nge/features/layers/presentation/screens/settings/settings_page.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'dart:io';
 import 'core/di/service_locator.dart';
 
 void main() async {
@@ -28,6 +30,87 @@ void main() async {
   runApp(MyApp());
 }
 
+// Custom page transition builder for iOS-style transitions
+Page<T> buildPageWithTransition<T extends Object?>(
+  BuildContext context,
+  GoRouterState state,
+  Widget child, {
+  PageTransitionType transitionType = PageTransitionType.slide,
+}) {
+  if (Platform.isIOS) {
+    switch (transitionType) {
+      case PageTransitionType.slide:
+        return CustomTransitionPage<T>(
+          key: state.pageKey,
+          child: child,
+          transitionDuration: const Duration(milliseconds: 300),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return SlideTransition(
+              position: animation.drive(
+                Tween(begin: const Offset(1.0, 0.0), end: Offset.zero).chain(
+                  CurveTween(curve: Curves.easeInOut),
+                ),
+              ),
+              child: child,
+            );
+          },
+        );
+      case PageTransitionType.fade:
+        return CustomTransitionPage<T>(
+          key: state.pageKey,
+          child: child,
+          transitionDuration: const Duration(milliseconds: 250),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return FadeTransition(
+              opacity: animation.drive(
+                CurveTween(curve: Curves.easeInOut),
+              ),
+              child: child,
+            );
+          },
+        );
+      case PageTransitionType.scale:
+        return CustomTransitionPage<T>(
+          key: state.pageKey,
+          child: child,
+          transitionDuration: const Duration(milliseconds: 300),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            return ScaleTransition(
+              scale: animation.drive(
+                Tween(begin: 0.8, end: 1.0).chain(
+                  CurveTween(curve: Curves.easeInOut),
+                ),
+              ),
+              child: FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            );
+          },
+        );
+      case PageTransitionType.cupertino:
+        return CupertinoPage<T>(
+          key: state.pageKey,
+          child: child,
+        );
+    }
+  }
+
+  // Default material page for Android
+  return MaterialPage<T>(
+    key: state.pageKey,
+    child: child,
+  );
+}
+
+// Enum for different transition types
+enum PageTransitionType {
+  slide,
+  fade,
+  scale,
+  cupertino,
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -38,72 +121,117 @@ class MyApp extends StatelessWidget {
       routes: [
         GoRoute(
           path: '/',
-          builder: (context, state) => HomePage(
-            key: UniqueKey(),
-            getUserUseCase: serviceLocator(),
-            getWeeklyChallengeUseCase: serviceLocator(),
-            getNextAchievementUseCase: serviceLocator(),
+          pageBuilder: (context, state) => buildPageWithTransition(
+            context,
+            state,
+            HomePage(
+              key: UniqueKey(),
+              getUserUseCase: serviceLocator(),
+              getWeeklyChallengeUseCase: serviceLocator(),
+              getNextAchievementUseCase: serviceLocator(),
+            ),
+            transitionType: PageTransitionType.cupertino,
           ),
         ),
         GoRoute(
           path: '/auth',
-          builder: (context, state) => AuthPage(),
+          pageBuilder: (context, state) => buildPageWithTransition(
+            context,
+            state,
+            AuthPage(),
+            transitionType: PageTransitionType.fade,
+          ),
         ),
         GoRoute(
           path: '/leaderboard',
-          builder: (context, state) => LeaderboardPage(
-            key: UniqueKey(),
-            getAllUsersUseCase: serviceLocator(),
+          pageBuilder: (context, state) => buildPageWithTransition(
+            context,
+            state,
+            LeaderboardPage(
+              key: UniqueKey(),
+              getAllUsersUseCase: serviceLocator(),
+            ),
+            transitionType: PageTransitionType.slide,
           ),
         ),
         GoRoute(
           path: '/feed',
-          builder: (context, state) => FeedPage(
-            key: UniqueKey(),
-            getPostsUseCase: serviceLocator(),
-            uploadPostFormUseCase: serviceLocator(),
-            likePostUseCase: serviceLocator(),
-            sharePostUseCase: serviceLocator(),
+          pageBuilder: (context, state) => buildPageWithTransition(
+            context,
+            state,
+            FeedPage(
+              key: UniqueKey(),
+              getPostsUseCase: serviceLocator(),
+              uploadPostFormUseCase: serviceLocator(),
+              likePostUseCase: serviceLocator(),
+              sharePostUseCase: serviceLocator(),
+            ),
+            transitionType: PageTransitionType.cupertino,
           ),
         ),
         GoRoute(
           path: '/challenges',
-          builder: (context, state) => ChallengesPage(
-            key: UniqueKey(),
-            getWeeklyChallengeUseCase: serviceLocator(),
-            getAchievementProgressUseCase: serviceLocator(),
-            getMiniChallengesUseCase: serviceLocator(),
+          pageBuilder: (context, state) => buildPageWithTransition(
+            context,
+            state,
+            ChallengesPage(
+              key: UniqueKey(),
+              getWeeklyChallengeUseCase: serviceLocator(),
+              getAchievementProgressUseCase: serviceLocator(),
+              getMiniChallengesUseCase: serviceLocator(),
+            ),
+            transitionType: PageTransitionType.slide,
           ),
         ),
         GoRoute(
           path: '/map',
-          builder: (context, state) => MapPage(
-            key: UniqueKey(),
-            getFriendsActivitiesUseCase: serviceLocator(),
-            getFriendsUseCase: serviceLocator(),
-            getAllUsersUseCase: serviceLocator(),
-            updateFriendsUseCase: serviceLocator(),
+          pageBuilder: (context, state) => buildPageWithTransition(
+            context,
+            state,
+            MapPage(
+              key: UniqueKey(),
+              getFriendsActivitiesUseCase: serviceLocator(),
+              getFriendsUseCase: serviceLocator(),
+              getAllUsersUseCase: serviceLocator(),
+              updateFriendsUseCase: serviceLocator(),
+            ),
+            transitionType: PageTransitionType.cupertino,
           ),
         ),
         GoRoute(
           path: '/achievements',
-          builder: (context, state) => AchievementsPage(
-            key: UniqueKey(),
-            getAllAchievementsUseCase: serviceLocator(),
+          pageBuilder: (context, state) => buildPageWithTransition(
+            context,
+            state,
+            AchievementsPage(
+              key: UniqueKey(),
+              getAllAchievementsUseCase: serviceLocator(),
+            ),
+            transitionType: PageTransitionType.scale,
           ),
         ),
         GoRoute(
           path: '/actions',
-          builder: (context, state) => ActionsPage(
-            uploadActionUseCase: serviceLocator(),
-            getCurrentLocationUseCase: serviceLocator(),
+          pageBuilder: (context, state) => buildPageWithTransition(
+            context,
+            state,
+            ActionsPage(
+              uploadActionUseCase: serviceLocator(),
+              getCurrentLocationUseCase: serviceLocator(),
+            ),
+            transitionType: PageTransitionType.slide,
           ),
         ),
         GoRoute(
           path: '/settings',
-          builder: (context, state) => SettingsPage(
-            key: UniqueKey(),
-            getUserUseCase: serviceLocator(),
+          pageBuilder: (context, state) => buildPageWithTransition(
+            context,
+            state,
+            SettingsPage(
+              key: UniqueKey(),
+              getUserUseCase: serviceLocator(),
+            ),
+            transitionType: PageTransitionType.cupertino,
           ),
         ),
       ],

@@ -98,37 +98,6 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-
-    // return SafeArea(
-    //   child: Scaffold(
-    //     backgroundColor: Colors.white,
-    //     appBar: _buildCustomAppbarWidget(),
-    //     bottomNavigationBar: _buildCustomNavbarWidget(),
-    //     resizeToAvoidBottomInset: false,
-    //     body: SingleChildScrollView(
-    //       child: Container(
-    //         padding: EdgeInsets.only(
-    //           left: 16.h,
-    //           right: 16.h,
-    //         ),
-    //         color: Colors.white,
-    //         child: Column(
-    //           children: [
-    //             _buildTitleWidget(),
-    //             _buildStreakWidget(),
-    //             SizedBox(height: 2.h),
-    //             _buildWeeklyChallengeWidget(),
-    //             SizedBox(height: 8.h),
-    //             _buildActionListButtonWidget(),
-    //             SizedBox(height: 8.h),
-    //             _buildNextAchievementWidget(),
-    //             SizedBox(height: 8.h),
-    //           ],
-    //         ),
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 
   Container _buildTitleWidget() {
