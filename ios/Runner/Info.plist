@@ -51,7 +51,9 @@
 	<key>NSCameraUsageDescription</key>
 	<string>Pick image from Camera</string>
 	<!--Geolocation-->
-	<key>NSLocationWhenInUseUsageDescription</key>
-    <string>We need your location to provide better services.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We use your location to track eco actions even when the app is in background.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>This app uses your location to help track eco-friendly activities.</string>
 </dict>
 </plist>
