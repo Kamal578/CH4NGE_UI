@@ -349,7 +349,7 @@ class _SignUpPageState extends State<SignUpPage> {
         "Sign Up",
         style: TextStyle(
           fontWeight: FontWeight.w600,
-          fontSize: 16.sp,
+          fontSize: 12.sp,
           color: Colors.white,
         ),
       ),

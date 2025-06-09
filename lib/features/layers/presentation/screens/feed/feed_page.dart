@@ -272,15 +272,15 @@ class _FeedPageState extends State<FeedPage> {
       );
     }
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: _buildCustomAppbarWidget(),
-        bottomNavigationBar: _buildCustomNavbarWidget(),
-        floatingActionButton: _buildNewPostWidget(),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        resizeToAvoidBottomInset: false,
-        body: RefreshIndicator(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _buildCustomAppbarWidget(),
+      bottomNavigationBar: _buildCustomNavbarWidget(),
+      floatingActionButton: _buildNewPostWidget(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: RefreshIndicator(
           onRefresh: _refreshFeed,
           color: const Color(0xFF7DD334),
           child: SingleChildScrollView(

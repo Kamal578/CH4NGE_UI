@@ -291,7 +291,8 @@ class _ModalContent extends StatelessWidget {
               radius: 40,
               backgroundImage: personDetails[name]?['avatarUrl'] == null ||
                       personDetails[name]?['avatarUrl'].isEmpty
-                  ? const AssetImage('assets/images/user_profile.png') as ImageProvider<Object>?
+                  ? const AssetImage('assets/images/user_profile.png')
+                      as ImageProvider<Object>?
                   : NetworkImage(personDetails[name]?['avatarUrl'] ?? ''),
             ),
           const SizedBox(height: 10),
@@ -318,7 +319,11 @@ class _ModalContent extends StatelessWidget {
                       return Icon(
                         Icons.square,
                         size: 20,
-                        color: index < (personDetails[name]?['GHGIndex'] / 25 ?? 0)
+                        color: index <
+                                ((personDetails[name]?['GHGIndex'] != null
+                                    ? (personDetails[name]?['GHGIndex'] / 25 ??
+                                        0)
+                                    : 0))
                             ? Colors.yellow
                             : Colors.grey,
                       );
@@ -409,23 +414,27 @@ class Person extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(4.0),
       decoration: BoxDecoration(
-        color: Colors.blueAccent.withAlpha(50), // Original color with 0.2 alpha
+        color: Colors.blueAccent.withAlpha(50),
         borderRadius: BorderRadius.circular(16.0),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(
-            width: 80, // Fixed size for consistent circle
+            width: 80,
             height: 80,
             child: _buildAvatar(),
           ),
           const SizedBox(height: 4),
-          Text(
-            name,
-            style: const TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+          SizedBox(
+            child: Text(
+              name,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 12.sp,
+                fontWeight: FontWeight.bold,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
           ),
         ],
@@ -436,7 +445,6 @@ class Person extends StatelessWidget {
   Widget _buildAvatar() {
     return CircleAvatar(
       key: ValueKey('avatar_$name'),
-      radius: 100,
       backgroundColor: Colors.transparent,
       child: ClipRRect(
         borderRadius: BorderRadius.circular(100),
@@ -444,8 +452,8 @@ class Person extends StatelessWidget {
             ? Image.network(
                 url,
                 fit: BoxFit.cover,
-                width: 80.w,
-                height: 80.h,
+                width: 80,
+                height: 80,
                 errorBuilder: (context, error, stackTrace) => _defaultAvatar(),
               )
             : _defaultAvatar(),
@@ -455,12 +463,12 @@ class Person extends StatelessWidget {
 
   Widget _defaultAvatar() {
     return Container(
-      color: const Color(0xFF7DD334).withValues(alpha: .5),
+      color: const Color(0xFF7DD334).withValues(alpha: 0.5),
       child: Image.asset(
         'assets/images/user_profile.png',
         fit: BoxFit.cover,
-        width: 80.w,
-        height: 80.h,
+        width: 80,
+        height: 80,
       ),
     );
   }

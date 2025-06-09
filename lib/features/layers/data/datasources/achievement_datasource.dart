@@ -30,7 +30,11 @@ class AchievementsRemote implements IAchievementsDatasource {
           .map((json) => AchievementModel.fromJson(json))
           .toList();
       
-      return achievementsModel.map((achievementModel) => achievementModel.toEntity()).toList();
+      final sortedAchievements = achievementsModel
+          .map((achievementModel) => achievementModel.toEntity())
+          .toList()
+        ..sort((a, b) => a.achievementId.compareTo(b.achievementId));
+      return sortedAchievements;
     }
 
     try {

@@ -251,7 +251,7 @@ class _SignInPageState extends State<SignInPage> {
         "Sign In",
         style: TextStyle(
           fontWeight: FontWeight.w600,
-          fontSize: 16.sp,
+          fontSize: 12.sp,
           color: Colors.white,
         ),
       ),

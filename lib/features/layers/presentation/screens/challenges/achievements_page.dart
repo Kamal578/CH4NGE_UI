@@ -76,25 +76,6 @@ class _AchievementsPageState extends State<AchievementsPage> {
         ),
       ),
     );
-
-    // return SafeArea(
-    //   child: Scaffold(
-    //     backgroundColor: Colors.white,
-    //     appBar: _buildCustomAppbarWidget(context),
-    //     bottomNavigationBar: _buildCustomNavbarWidget(),
-    //     resizeToAvoidBottomInset: false,
-    //     body: SingleChildScrollView(
-    //       padding: EdgeInsets.symmetric(horizontal: 16.w),
-    //       child: Column(
-    //         children: [
-    //           _buildTitleWidget(),
-    //           _buildAchievementsWidget(),
-    //           SizedBox(height: 12.h),
-    //         ],
-    //       ),
-    //     ),
-    //   ),
-    // );
   }
 
   Widget _buildTitleWidget() {

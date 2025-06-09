@@ -173,8 +173,8 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
       };
 
       final friendIds = friendIdToUsername.keys.toList();
-      final activities =
-          await widget.getFriendsActivitiesUseCase(friendIds.map((e) => e.toString()).toList());
+      final activities = await widget.getFriendsActivitiesUseCase(
+          friendIds.map((e) => e.toString()).toList());
 
       final Map<String, List<ActivityEntity>> result = {};
 
@@ -215,19 +215,19 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          if (_isSearchExpanded) {
-            _collapseSearch();
-          }
-        },
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          appBar: _buildCustomAppbarWidget(),
-          bottomNavigationBar: _buildCustomNavbarWidget(),
-          resizeToAvoidBottomInset: false,
-          body: Stack(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _buildCustomAppbarWidget(),
+      bottomNavigationBar: _buildCustomNavbarWidget(),
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: GestureDetector(
+          onTap: () {
+            if (_isSearchExpanded) {
+              _collapseSearch();
+            }
+          },
+          child: Stack(
             children: [
               GHGMap(users: friends!, activities: activities!),
               if (_isSearchExpanded)

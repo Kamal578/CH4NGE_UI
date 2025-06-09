@@ -21,6 +21,10 @@ class FriendsActivitySheet extends StatelessWidget {
     filteredActivities = Map.fromEntries(
       activities.entries.where((entry) => entry.key != username),
     );
+    
+    final totalActivities = filteredActivities.values
+        .fold(0, (sum, list) => sum + list.length);
+    
     return DraggableBottomSheet(
       minHeightRatio: 0.25,
       backgroundColor: Colors.white,
@@ -32,34 +36,72 @@ class FriendsActivitySheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 8.h),
-              ListView.separated(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: filteredActivities.values
-                    .fold(0, (sum, list) => sum + list.length),
-                separatorBuilder: (context, index) => SizedBox(
-                  height: 8.h,
-                ),
-                itemBuilder: (context, index) {
-                  int currentIndex = 0;
-                  for (var entry in filteredActivities.entries) {
-                    if (index < currentIndex + entry.value.length) {
-                      final activity = entry.value[index - currentIndex];
-                      return _buildActivityItem(
-                        username: entry.key,
-                        action: activity.title,
-                        points: activity.value,
-                      );
+              if (totalActivities == 0)
+                _buildEmptyState()
+              else
+                ListView.separated(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: totalActivities,
+                  separatorBuilder: (context, index) => SizedBox(
+                    height: 8.h,
+                  ),
+                  itemBuilder: (context, index) {
+                    int currentIndex = 0;
+                    for (var entry in filteredActivities.entries) {
+                      if (index < currentIndex + entry.value.length) {
+                        final activity = entry.value[index - currentIndex];
+                        return _buildActivityItem(
+                          username: entry.key,
+                          action: activity.title,
+                          points: activity.value,
+                        );
+                      }
+                      currentIndex += entry.value.length;
                     }
-                    currentIndex += entry.value.length;
-                  }
-                  return const SizedBox.shrink();
-                },
-              ),
+                    return const SizedBox.shrink();
+                  },
+                ),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildEmptyState() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 20.w),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.group_outlined,
+            size: 48.sp,
+            color: Colors.grey[400],
+          ),
+          SizedBox(height: 16.h),
+          Text(
+            "No friend activities yet",
+            style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w500,
+              color: Colors.grey[600],
+            ),
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            "When your friends complete activities,\nthey'll appear here",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: Colors.grey[500],
+              height: 1.4,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

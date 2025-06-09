@@ -37,7 +37,7 @@ Page<T> buildPageWithTransition<T extends Object?>(
   Widget child, {
   PageTransitionType transitionType = PageTransitionType.slide,
 }) {
-  if (Platform.isIOS) {
+  if (!kIsWeb && Platform.isIOS) {
     switch (transitionType) {
       case PageTransitionType.slide:
         return CustomTransitionPage<T>(

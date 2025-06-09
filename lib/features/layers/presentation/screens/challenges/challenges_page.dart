@@ -100,13 +100,13 @@ class _ChallengesPageState extends State<ChallengesPage> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: _buildCustomAppbarWidget(),
-        bottomNavigationBar: _buildCustomNavbarWidget(),
-        resizeToAvoidBottomInset: false,
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _buildCustomAppbarWidget(),
+      bottomNavigationBar: _buildCustomNavbarWidget(),
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: SingleChildScrollView(
           padding: EdgeInsets.only(
             left: 16.h,
             right: 16.h,
@@ -397,8 +397,9 @@ class _ChallengesPageState extends State<ChallengesPage> {
                         ? itemColor
                         : const Color.fromARGB(128, 144, 152, 177),
                 circleColor: itemColor,
-                bottomLineColor:
-                    index == 0 ? itemColor : const Color.fromARGB(128, 144, 152, 177),
+                bottomLineColor: index == 0
+                    ? itemColor
+                    : const Color.fromARGB(128, 144, 152, 177),
                 titleColor: titleColor,
                 title: achievement.title,
                 subtitle: achievement.subtitle,

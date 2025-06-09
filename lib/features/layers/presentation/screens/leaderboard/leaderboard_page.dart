@@ -57,14 +57,14 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     if (isLoading) {
       return const Center(child: CircularProgressIndicator());
     }
-    
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: _buildCustomAppbarWidget(),
-        bottomNavigationBar: _buildCustomNavbarWidget(),
-        resizeToAvoidBottomInset: false,
-        body: Stack(
+
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _buildCustomAppbarWidget(),
+      bottomNavigationBar: _buildCustomNavbarWidget(),
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: Stack(
           children: [
             _buildTitleWidget(),
             _buildTopUserWidget(),

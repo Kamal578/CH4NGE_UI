@@ -60,12 +60,12 @@ class _ActionsPageState extends State<ActionsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: _buildCustomAppbarWidget(context),
-        resizeToAvoidBottomInset: false,
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _buildCustomAppbarWidget(context),
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: SingleChildScrollView(
           padding: EdgeInsets.only(
             left: 16.h,
             right: 16.h,
@@ -155,6 +155,7 @@ class _ActionsPageState extends State<ActionsPage> {
                   );
 
                   _resetFormFields();
+                  _forceDataRefresh();
 
                   debugPrint("Recorded transport action: ${action.toString()}");
                 }
@@ -333,7 +334,7 @@ class _ActionsPageState extends State<ActionsPage> {
                     option: _selectedGreenAction!,
                     location: location ?? [0.0, 0.0],
                   );
-                  print(location.toString());
+                  print("LOCATION: ${location.toString()}");
                   widget.uploadActionUseCase(action);
                   _resetFormFields();
 
@@ -923,21 +924,21 @@ class _ExpandableActionCardState extends State<ExpandableActionCard> {
       ),
     );
   }
+}
 
-  Future<void> _forceDataRefresh() async {
-    final userDatasource = UserRemoteDatasource();
-    await userDatasource.clearCache();
+Future<void> _forceDataRefresh() async {
+  final userDatasource = UserRemoteDatasource();
+  await userDatasource.clearCache();
 
-    final achievementDatasource = AchievementsRemote();
-    await achievementDatasource.clearCache();
+  final achievementDatasource = AchievementsRemote();
+  await achievementDatasource.clearCache();
 
-    final miniChallengeDatasource = MiniChallengeRemote();
-    await miniChallengeDatasource.clearCache();
+  final miniChallengeDatasource = MiniChallengeRemote();
+  await miniChallengeDatasource.clearCache();
 
-    final weeklyChallengeDatasource = WeeklyChallengeRemote();
-    await weeklyChallengeDatasource.clearCache();
+  final weeklyChallengeDatasource = WeeklyChallengeRemote();
+  await weeklyChallengeDatasource.clearCache();
 
-    final activityDatasource = ActivityRemote();
-    await activityDatasource.clearCache();
-  }
+  final activityDatasource = ActivityRemote();
+  await activityDatasource.clearCache();
 }
