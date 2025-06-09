@@ -68,13 +68,13 @@ class _HomePageState extends State<HomePage> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: _buildCustomAppbarWidget(),
-        bottomNavigationBar: _buildCustomNavbarWidget(),
-        resizeToAvoidBottomInset: false,
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _buildCustomAppbarWidget(),
+      bottomNavigationBar: _buildCustomNavbarWidget(),
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: SingleChildScrollView(
           child: Container(
             padding: EdgeInsets.only(
               left: 16.h,
@@ -98,6 +98,37 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+
+    // return SafeArea(
+    //   child: Scaffold(
+    //     backgroundColor: Colors.white,
+    //     appBar: _buildCustomAppbarWidget(),
+    //     bottomNavigationBar: _buildCustomNavbarWidget(),
+    //     resizeToAvoidBottomInset: false,
+    //     body: SingleChildScrollView(
+    //       child: Container(
+    //         padding: EdgeInsets.only(
+    //           left: 16.h,
+    //           right: 16.h,
+    //         ),
+    //         color: Colors.white,
+    //         child: Column(
+    //           children: [
+    //             _buildTitleWidget(),
+    //             _buildStreakWidget(),
+    //             SizedBox(height: 2.h),
+    //             _buildWeeklyChallengeWidget(),
+    //             SizedBox(height: 8.h),
+    //             _buildActionListButtonWidget(),
+    //             SizedBox(height: 8.h),
+    //             _buildNextAchievementWidget(),
+    //             SizedBox(height: 8.h),
+    //           ],
+    //         ),
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   Container _buildTitleWidget() {
@@ -299,13 +330,13 @@ class _HomePageState extends State<HomePage> {
   Widget _buildCompletedWeeklyAchievementBar(BuildContext context) {
     if (weeklyChallenge == null) return const SizedBox.shrink();
     debugPrint(
-        'HOME PAGE: Weekly Challenge: ${weeklyChallenge!.title}, Current Value: ${weeklyChallenge!.currentValue}, Total Value: ${weeklyChallenge!.totalValue}',
-      );
+      'HOME PAGE: Weekly Challenge: ${weeklyChallenge!.title}, Current Value: ${weeklyChallenge!.currentValue}, Total Value: ${weeklyChallenge!.totalValue}',
+    );
 
     double percentageCompleted = weeklyChallenge!.totalValue > 0
         ? (weeklyChallenge!.currentValue / weeklyChallenge!.totalValue)
             .clamp(0.0, 1.0)
-        : 0.0;      
+        : 0.0;
 
     debugPrint(
       'HOME PAGE: Percentage Completed: $percentageCompleted',
