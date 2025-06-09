@@ -23,7 +23,7 @@ void main() async {
     await dotenv.load(fileName: '.env.dev');
   }
 
-  setupServiceLocator();
+  await setupServiceLocator();
   await serviceLocator.allReady();
   runApp(MyApp());
 }

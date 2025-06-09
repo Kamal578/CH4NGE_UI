@@ -42,7 +42,8 @@ class _AchievementsPageState extends State<AchievementsPage> {
       debugPrint('Error loading data: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to load data. Please try again.')),
+          const SnackBar(
+              content: Text('Failed to load data. Please try again.')),
         );
       }
     }
@@ -57,13 +58,13 @@ class _AchievementsPageState extends State<AchievementsPage> {
       );
     }
 
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Colors.white,
-        appBar: _buildCustomAppbarWidget(context),
-        bottomNavigationBar: _buildCustomNavbarWidget(),
-        resizeToAvoidBottomInset: false,
-        body: SingleChildScrollView(
+    return Scaffold(
+      backgroundColor: Colors.white,
+      appBar: _buildCustomAppbarWidget(context),
+      bottomNavigationBar: _buildCustomNavbarWidget(),
+      resizeToAvoidBottomInset: false,
+      body: SafeArea(
+        child: SingleChildScrollView(
           padding: EdgeInsets.symmetric(horizontal: 16.w),
           child: Column(
             children: [
@@ -75,6 +76,25 @@ class _AchievementsPageState extends State<AchievementsPage> {
         ),
       ),
     );
+
+    // return SafeArea(
+    //   child: Scaffold(
+    //     backgroundColor: Colors.white,
+    //     appBar: _buildCustomAppbarWidget(context),
+    //     bottomNavigationBar: _buildCustomNavbarWidget(),
+    //     resizeToAvoidBottomInset: false,
+    //     body: SingleChildScrollView(
+    //       padding: EdgeInsets.symmetric(horizontal: 16.w),
+    //       child: Column(
+    //         children: [
+    //           _buildTitleWidget(),
+    //           _buildAchievementsWidget(),
+    //           SizedBox(height: 12.h),
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
   }
 
   Widget _buildTitleWidget() {
@@ -114,39 +134,42 @@ class _AchievementsPageState extends State<AchievementsPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: achievements?.asMap().entries.map((entry) {
-              final index = entry.key;
-              final achievement = entry.value;
+                  final index = entry.key;
+                  final achievement = entry.value;
 
-              Color topLineColor = index == 0
-                  ? Colors.transparent
-                  : (achievement.isAchieved == true
+                  Color topLineColor = index == 0
+                      ? Colors.transparent
+                      : (achievement.isAchieved == true
+                          ? const Color.fromARGB(128, 125, 211, 52)
+                          : const Color.fromARGB(128, 144, 152, 177));
+                  Color circleColor = achievement.isAchieved == true
+                      ? const Color.fromARGB(255, 125, 211, 52)
+                      : const Color.fromARGB(128, 144, 152, 177);
+                  Color bottomLineColor = achievement.isAchieved == true
                       ? const Color.fromARGB(128, 125, 211, 52)
-                      : const Color.fromARGB(128, 144, 152, 177));
-              Color circleColor = achievement.isAchieved == true
-                  ? const Color.fromARGB(255, 125, 211, 52)
-                  : const Color.fromARGB(128, 144, 152, 177);
-              Color bottomLineColor = achievement.isAchieved == true
-                  ? const Color.fromARGB(128, 125, 211, 52)
-                  : const Color.fromARGB(128, 144, 152, 177);
-              bottomLineColor =
-                  index == achievements!.length - 1 ? Colors.transparent : bottomLineColor;
-              Color titleColor =
-                  achievement.isAchieved == true ? Colors.black : Colors.black.withAlpha(128);
+                      : const Color.fromARGB(128, 144, 152, 177);
+                  bottomLineColor = index == achievements!.length - 1
+                      ? Colors.transparent
+                      : bottomLineColor;
+                  Color titleColor = achievement.isAchieved == true
+                      ? Colors.black
+                      : Colors.black.withAlpha(128);
 
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _buildAchievementItem(
-                    topLineColor: topLineColor,
-                    circleColor: circleColor,
-                    bottomLineColor: bottomLineColor,
-                    titleColor: titleColor,
-                    title: achievement.title,
-                    subtitle: achievement.subtitle,
-                  ),
-                ],
-              );
-            }).toList() ?? [],
+                  return Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildAchievementItem(
+                        topLineColor: topLineColor,
+                        circleColor: circleColor,
+                        bottomLineColor: bottomLineColor,
+                        titleColor: titleColor,
+                        title: achievement.title,
+                        subtitle: achievement.subtitle,
+                      ),
+                    ],
+                  );
+                }).toList() ??
+                [],
           ),
         ],
       ),
