@@ -87,17 +87,7 @@ class _ActionsPageState extends State<ActionsPage> {
                     SnackBar(content: Text("Please select a transport mode")),
                   );
                 } else {
-                  final locationService = GetCurrentLocationUseCase();
-                  final result = await locationService.call();
-                  final location = [result.latitude!, result.longitude!];
-
-                  if (result.isSuccess) {
-                    debugPrint(
-                        'Location: ${result.latitude}, ${result.longitude}');
-                  } else {
-                    debugPrint('Error: ${result.error!.message}');
-                    if (result.error!.requiresSettingsAction) {}
-                  }
+                  final location = await widget.getCurrentLocationUseCase();
                   final distance =
                       double.tryParse(_distanceController.text) ?? 0.0;
                   final duration =
@@ -116,7 +106,7 @@ class _ActionsPageState extends State<ActionsPage> {
                       }
                       action = TransportationEntity.activeCommute(
                         vehicle: _selectedVehicle!,
-                        location: location,
+                        location: location ?? [0.0, 0.0],
                         distance: distance,
                         duration: duration,
                         distanceUnit: _selectedDistanceUnit,
@@ -125,7 +115,7 @@ class _ActionsPageState extends State<ActionsPage> {
                       break;
                     case "Private Vehicle":
                       action = TransportationEntity.privateVehicle(
-                        location: location,
+                        location: location ?? [0.0, 0.0],
                         distance: distance,
                         duration: duration,
                         distanceUnit: _selectedDistanceUnit,
@@ -141,7 +131,7 @@ class _ActionsPageState extends State<ActionsPage> {
                     case "Public Transport":
                       action = TransportationEntity.publicTransport(
                         publicTransportType: _selectedPublicTransport,
-                        location: location,
+                        location: location ?? [0.0, 0.0],
                         distance: distance,
                         duration: duration,
                         distanceUnit: _selectedDistanceUnit,
@@ -338,21 +328,10 @@ class _ActionsPageState extends State<ActionsPage> {
                     SnackBar(content: Text("Please select an action")),
                   );
                 } else {
-                  final locationService = GetCurrentLocationUseCase();
-                  final result = await locationService.call();
-                  final location = [result.latitude!, result.longitude!];
-
-                  if (result.isSuccess) {
-                    debugPrint(
-                        'Location: ${result.latitude}, ${result.longitude}');
-                  } else {
-                    debugPrint('Error: ${result.error!.message}');
-                    if (result.error!.requiresSettingsAction) {}
-                  }
-
+                  final location = await widget.getCurrentLocationUseCase();
                   final action = GreenEntity(
                     option: _selectedGreenAction!,
-                    location: location,
+                    location: location ?? [0.0, 0.0],
                   );
                   widget.uploadActionUseCase(action);
                   _resetFormFields();
