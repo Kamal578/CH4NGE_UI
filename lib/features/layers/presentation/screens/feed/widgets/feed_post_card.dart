@@ -35,7 +35,7 @@ class FeedPostCard extends StatefulWidget {
   FeedPostCardState createState() => FeedPostCardState();
 }
 
-class FeedPostCardState extends State<FeedPostCard> 
+class FeedPostCardState extends State<FeedPostCard>
     with TickerProviderStateMixin {
   final String userId = AuthManager.getId();
   bool _isLiking = false;
@@ -44,7 +44,7 @@ class FeedPostCardState extends State<FeedPostCard>
   late int _currentLikeCount;
   late int _currentShareCount;
   late List<int> _currentLikedBy;
-  
+
   // Animation controllers for smooth interactions
   late AnimationController _likeAnimationController;
   late AnimationController _shareAnimationController;
@@ -55,13 +55,13 @@ class FeedPostCardState extends State<FeedPostCard>
   @override
   void initState() {
     super.initState();
-    
+
     // Initialize state
     _currentLikedBy = List.from(widget.likedBy);
     _isLiked = _currentLikedBy.contains(int.parse(userId));
     _currentLikeCount = widget.likeCount;
     _currentShareCount = widget.shareCount;
-    
+
     // Initialize animations
     _setupAnimations();
   }
@@ -72,13 +72,13 @@ class FeedPostCardState extends State<FeedPostCard>
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    
+
     // Share animation controller
     _shareAnimationController = AnimationController(
       duration: const Duration(milliseconds: 200),
       vsync: this,
     );
-    
+
     // Scale animations for button press feedback
     _likeScaleAnimation = Tween<double>(
       begin: 1.0,
@@ -87,7 +87,7 @@ class FeedPostCardState extends State<FeedPostCard>
       parent: _likeAnimationController,
       curve: Curves.elasticOut,
     ));
-    
+
     _shareScaleAnimation = Tween<double>(
       begin: 1.0,
       end: 1.1,
@@ -95,7 +95,7 @@ class FeedPostCardState extends State<FeedPostCard>
       parent: _shareAnimationController,
       curve: Curves.easeInOut,
     ));
-    
+
     // Color animation for like button
     _likeColorAnimation = ColorTween(
       begin: Colors.grey[700],
@@ -106,21 +106,21 @@ class FeedPostCardState extends State<FeedPostCard>
   @override
   void didUpdateWidget(FeedPostCard oldWidget) {
     super.didUpdateWidget(oldWidget);
-    
+
     // Only update if not currently performing an action to avoid conflicts
     if (!_isLiking && !_isSharing) {
       bool shouldUpdate = false;
-      
+
       if (oldWidget.likeCount != widget.likeCount) {
         _currentLikeCount = widget.likeCount;
         shouldUpdate = true;
       }
-      
+
       if (oldWidget.shareCount != widget.shareCount) {
         _currentShareCount = widget.shareCount;
         shouldUpdate = true;
       }
-      
+
       if (oldWidget.likedBy != widget.likedBy) {
         _currentLikedBy = List.from(widget.likedBy);
         final newIsLiked = _currentLikedBy.contains(int.parse(userId));
@@ -135,7 +135,7 @@ class FeedPostCardState extends State<FeedPostCard>
           shouldUpdate = true;
         }
       }
-      
+
       if (shouldUpdate && mounted) {
         setState(() {});
       }
@@ -144,41 +144,41 @@ class FeedPostCardState extends State<FeedPostCard>
 
   Future<void> _handleLike() async {
     if (_isLiking) return;
-    
+
     final int currentUserId = int.parse(userId);
     final bool wasLiked = _isLiked;
     final int originalLikeCount = _currentLikeCount;
     final List<int> originalLikedBy = List.from(_currentLikedBy);
-    
+
     // Start animation immediately for instant feedback
     if (_isLiked) {
       _likeAnimationController.reverse();
     } else {
       _likeAnimationController.forward();
     }
-    
+
     // Optimistic UI update with smooth state change
     setState(() {
       _isLiking = true;
       _isLiked = !_isLiked;
-      
+
       if (_isLiked) {
         _currentLikeCount++;
         if (!_currentLikedBy.contains(currentUserId)) {
           _currentLikedBy.add(currentUserId);
         }
       } else {
-        _currentLikeCount = (_currentLikeCount - 1).clamp(0, double.infinity).toInt();
+        _currentLikeCount =
+            (_currentLikeCount - 1).clamp(0, double.infinity).toInt();
         _currentLikedBy.remove(currentUserId);
       }
     });
-    
+
     try {
       await widget.onLike(widget.post, userId);
-      
+
       // Add a small delay to show the animation
       await Future.delayed(const Duration(milliseconds: 100));
-      
     } catch (e) {
       // Revert optimistic update on error with smooth animation
       if (mounted) {
@@ -187,14 +187,14 @@ class FeedPostCardState extends State<FeedPostCard>
           _currentLikeCount = originalLikeCount;
           _currentLikedBy = originalLikedBy;
         });
-        
+
         // Revert animation
         if (wasLiked) {
           _likeAnimationController.forward();
         } else {
           _likeAnimationController.reverse();
         }
-        
+
         // Show error feedback
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -215,33 +215,32 @@ class FeedPostCardState extends State<FeedPostCard>
 
   Future<void> _handleShare() async {
     if (_isSharing) return;
-    
+
     final int originalShareCount = _currentShareCount;
-    
+
     // Start share animation
     _shareAnimationController.forward().then((_) {
       _shareAnimationController.reverse();
     });
-    
+
     // Optimistic UI update
     setState(() {
       _isSharing = true;
       _currentShareCount++;
     });
-    
+
     try {
       await widget.onShare(widget.post, userId);
-      
+
       // Add a small delay for better UX
       await Future.delayed(const Duration(milliseconds: 150));
-      
     } catch (e) {
       // Revert optimistic update on error
       if (mounted) {
         setState(() {
           _currentShareCount = originalShareCount;
         });
-        
+
         // Show error feedback
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
@@ -292,7 +291,8 @@ class FeedPostCardState extends State<FeedPostCard>
                   children: [
                     CircleAvatar(
                       radius: 18,
-                      backgroundImage: widget.profilePicUrl.isEmpty
+                      backgroundImage: widget.profilePicUrl.isEmpty ||
+                              widget.profilePicUrl == 'http://localhost:8080'
                           ? const AssetImage("assets/images/user_profile.png")
                           : NetworkImage(widget.profilePicUrl) as ImageProvider,
                     ),
@@ -345,8 +345,10 @@ class FeedPostCardState extends State<FeedPostCard>
                           child: IconButton(
                             icon: AnimatedSwitcher(
                               duration: const Duration(milliseconds: 200),
-                              transitionBuilder: (Widget child, Animation<double> animation) {
-                                return ScaleTransition(scale: animation, child: child);
+                              transitionBuilder:
+                                  (Widget child, Animation<double> animation) {
+                                return ScaleTransition(
+                                    scale: animation, child: child);
                               },
                               child: _isLiking
                                   ? SizedBox(
@@ -355,15 +357,22 @@ class FeedPostCardState extends State<FeedPostCard>
                                       height: 20,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
-                                          _likeColorAnimation.value ?? Colors.red,
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
+                                          _likeColorAnimation.value ??
+                                              Colors.red,
                                         ),
                                       ),
                                     )
                                   : Icon(
-                                      key: ValueKey(_isLiked ? 'liked' : 'not_liked'),
-                                      _isLiked ? Icons.favorite : Icons.favorite_border,
-                                      color: _isLiked ? Colors.red : Colors.grey[700],
+                                      key: ValueKey(
+                                          _isLiked ? 'liked' : 'not_liked'),
+                                      _isLiked
+                                          ? Icons.favorite
+                                          : Icons.favorite_border,
+                                      color: _isLiked
+                                          ? Colors.red
+                                          : Colors.grey[700],
                                       size: 28,
                                     ),
                             ),
@@ -372,11 +381,12 @@ class FeedPostCardState extends State<FeedPostCard>
                         );
                       },
                     ),
-                    
+
                     // Animated like count
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
-                      transitionBuilder: (Widget child, Animation<double> animation) {
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
                         return FadeTransition(
                           opacity: animation,
                           child: SlideTransition(
@@ -393,13 +403,14 @@ class FeedPostCardState extends State<FeedPostCard>
                         key: ValueKey(_currentLikeCount),
                         style: TextStyle(
                           color: _isLiked ? Colors.red : Colors.grey[700],
-                          fontWeight: _isLiked ? FontWeight.w600 : FontWeight.normal,
+                          fontWeight:
+                              _isLiked ? FontWeight.w600 : FontWeight.normal,
                         ),
                       ),
                     ),
-                    
+
                     const SizedBox(width: 16),
-                    
+
                     // Animated share button
                     AnimatedBuilder(
                       animation: _shareScaleAnimation,
@@ -416,7 +427,8 @@ class FeedPostCardState extends State<FeedPostCard>
                                       height: 20,
                                       child: CircularProgressIndicator(
                                         strokeWidth: 2,
-                                        valueColor: AlwaysStoppedAnimation<Color>(
+                                        valueColor:
+                                            AlwaysStoppedAnimation<Color>(
                                           Colors.blue,
                                         ),
                                       ),
@@ -433,11 +445,12 @@ class FeedPostCardState extends State<FeedPostCard>
                         );
                       },
                     ),
-                    
+
                     // Animated share count
                     AnimatedSwitcher(
                       duration: const Duration(milliseconds: 300),
-                      transitionBuilder: (Widget child, Animation<double> animation) {
+                      transitionBuilder:
+                          (Widget child, Animation<double> animation) {
                         return FadeTransition(
                           opacity: animation,
                           child: SlideTransition(

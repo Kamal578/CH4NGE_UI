@@ -48,7 +48,7 @@ class LeaderboardItem extends StatelessWidget {
           const SizedBox(width: 12),
           ClipRRect(
             borderRadius: BorderRadius.circular(100),
-            child: (entry.profilePicUrl.isEmpty)
+            child: (entry.profilePicUrl.isEmpty || entry.profilePicUrl == 'http://localhost:8080')
                 ? Image.asset(
                     'assets/images/user_profile.png',
                     fit: BoxFit.cover,

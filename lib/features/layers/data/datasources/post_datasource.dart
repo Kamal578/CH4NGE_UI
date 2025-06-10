@@ -2,11 +2,14 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:ch4nge/core/api/api_service.dart';
 import 'package:ch4nge/core/auth/auth_manager.dart';
+import 'package:ch4nge/core/di/service_locator.dart';
+import 'package:ch4nge/core/shared/config.dart';
 import 'package:ch4nge/features/layers/data/models/post/post_model.dart';
 import 'package:ch4nge/features/layers/data/models/post_form/post_form_model.dart';
 import 'package:ch4nge/features/layers/domain/entities/post_entity.dart';
 import 'package:ch4nge/features/layers/domain/entities/post_form_entity.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IPostDatasource {
@@ -79,6 +82,7 @@ class PostRemoteDatasource implements IPostDatasource {
 
   @override
   Future<List<PostEntity>> getRecentPosts() async {
+    final Config config = serviceLocator<Config>();
     final cachedData = await _getCachedData();
     if (cachedData != null) {
       return cachedData
@@ -99,11 +103,23 @@ class PostRemoteDatasource implements IPostDatasource {
 
       if (response.statusCode == 200 && response.data != null) {
         final List<dynamic> postsData = response.data as List<dynamic>;
+        for (final post in postsData) {
+          if (post is Map<String, dynamic>) {
+            post['imageUrl'] = '${config.apiBaseUrl}${post['imageUrl']}';
+            debugPrint(
+                'DATASOURCE Post image DATA URL: ${post['imageUrl']}'); // Debugging line
+          }
+        }
+
+        
+
         final posts =
             postsData.map((json) => PostModel.fromJson(json)).toList();
 
         // Cache the data
         await _cacheData(postsData);
+
+        debugPrint('DATASOURCE Post image MODELS URL: ${posts[0].imageUrl}'); // Debugging line
 
         return posts.map((post) => post.toEntity()).toList();
       } else {
@@ -142,7 +158,7 @@ class PostRemoteDatasource implements IPostDatasource {
 
         // Update cache with the new post data
         await _updatePostInCache(updatedPost);
-        
+
         return updatedPost.toEntity();
       } else {
         throw Exception('Failed to like post: ${response.statusCode}');

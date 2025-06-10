@@ -1,5 +1,6 @@
 import 'package:ch4nge/core/auth/auth_manager.dart';
 import 'package:ch4nge/features/layers/domain/use_cases/get_user.dart';
+import 'package:ch4nge/features/layers/domain/use_cases/update_profile_pic.dart';
 import 'package:ch4nge/features/layers/presentation/screens/authentication/bloc/auth_bloc.dart';
 import 'package:ch4nge/features/layers/presentation/screens/settings/widgets/custom_settings_widgets.dart';
 import 'package:ch4nge/features/layers/presentation/widgets/custom_appbar.dart';
@@ -15,9 +16,11 @@ class SettingsPage extends StatefulWidget {
   const SettingsPage({
     super.key,
     required this.getUserUseCase,
+    required this.updateProfilePicUseCase,
   });
 
   final GetUserUseCase getUserUseCase;
+  final UpdateProfilePicUseCase updateProfilePicUseCase;
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -100,9 +103,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       icon: Icons.photo_library_rounded,
                       title: 'Choose from Gallery',
                       subtitle: 'Select a photo from your gallery',
-                      onTap: () {
+                      onTap: () async {
                         Navigator.pop(context);
-                        _pickImageFromGallery();
+                        await _pickImageFromGallery();
+                        await _reloadUserData();
                       },
                     ),
                     SizedBox(height: 12.h),
@@ -110,9 +114,10 @@ class _SettingsPageState extends State<SettingsPage> {
                       icon: Icons.camera_alt_rounded,
                       title: 'Take Photo',
                       subtitle: 'Capture a new photo with camera',
-                      onTap: () {
+                      onTap: () async {
                         Navigator.pop(context);
-                        _pickImageFromCamera();
+                        await _pickImageFromCamera();
+                        await _reloadUserData();
                       },
                     ),
                     if (_selectedImagePath != null) ...[
@@ -124,6 +129,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         onTap: () {
                           Navigator.pop(context);
                           _removeProfilePicture();
+                          _reloadUserData();
                         },
                         isDestructive: true,
                       ),
@@ -252,15 +258,27 @@ class _SettingsPageState extends State<SettingsPage> {
     });
 
     try {
-      // Here you would typically upload the image to your server
-      // For now, we'll simulate the upload process
-      await Future.delayed(const Duration(seconds: 2));
+      final Either<String, String> result =
+          await widget.updateProfilePicUseCase(userId, imagePath);
 
-      setState(() {
-        _isUploadingImage = false;
-      });
-
-      _showSuccessSnackBar('Profile picture updated successfully!');
+      result.fold(
+        (error) {
+          setState(() {
+            _isUploadingImage = false;
+            _selectedImagePath = null;
+          });
+          _showErrorSnackBar('Failed to update profile picture: $error');
+        },
+        (newProfilePicUrl) {
+          // The success case should return the new URL from server
+          setState(() {
+            _profilePicUrl = newProfilePicUrl; // Use the server URL
+            _selectedImagePath = null;
+            _isUploadingImage = false;
+          });
+          _showSuccessSnackBar('Profile picture updated successfully!');
+        },
+      );
     } catch (e) {
       setState(() {
         _isUploadingImage = false;
@@ -270,9 +288,32 @@ class _SettingsPageState extends State<SettingsPage> {
     }
   }
 
+  Future<void> _reloadUserData() async {
+    try {
+      final result = await widget.getUserUseCase(userId);
+      result.fold(
+        (failure) {
+          debugPrint('Error reloading user data: $failure');
+        },
+        (userEntity) {
+        debugPrint('SETTINGS PAGE: User data reloaded successfully -- ${userEntity.profilePicUrl}');
+          setState(() {
+            _profilePicUrl = userEntity.profilePicUrl.isEmpty
+                ? 'assets/images/user_profile.png'
+                : userEntity.profilePicUrl;
+          });
+        },
+      );
+    } catch (e) {
+      debugPrint('Error reloading user data: $e');
+    }
+  }
+
+// Modified _removeProfilePicture method
   void _removeProfilePicture() {
     setState(() {
       _selectedImagePath = null;
+      _profilePicUrl = 'assets/images/user_profile.png'; // Reset to default
     });
     _showSuccessSnackBar('Profile picture removed successfully!');
   }

@@ -13,13 +13,14 @@ class GetPostsUseCase {
 
   Future<List<PostEntity>> call() async {
     final posts = await postRepository.getRecentPosts();
+
     for (var post in posts) {
       final user = await userRepository.getUser(post.userId.toString());
       if (user.isLeft) {
         continue;
       } else {
-          post.profileImageUrl = user.right.profilePicUrl;
-          post.username = user.right.username;
+        post.profileImageUrl = user.right.profilePicUrl;
+        post.username = user.right.username;
       }
     }
 

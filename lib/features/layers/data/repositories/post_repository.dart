@@ -3,6 +3,7 @@ import 'package:ch4nge/features/layers/domain/entities/post_entity.dart';
 import 'package:ch4nge/features/layers/domain/entities/post_form_entity.dart';
 import 'package:ch4nge/features/layers/domain/repositories/post_repository.dart';
 import 'package:either_dart/either.dart';
+import 'package:flutter/foundation.dart';
 
 class PostRepositoryImpl implements PostRepository {
   final IPostDatasource datasource;
@@ -14,7 +15,7 @@ class PostRepositoryImpl implements PostRepository {
     try {
       return await datasource.getRecentPosts();
     } catch (e) {
-      // Return empty list as fallback instead of throwing
+      debugPrint("Error fetching recent posts: ${e.toString()}");
       return [];
     }
   }

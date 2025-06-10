@@ -230,6 +230,7 @@ class MyApp extends StatelessWidget {
             SettingsPage(
               key: UniqueKey(),
               getUserUseCase: serviceLocator(),
+              updateProfilePicUseCase: serviceLocator(),
             ),
             transitionType: PageTransitionType.cupertino,
           ),

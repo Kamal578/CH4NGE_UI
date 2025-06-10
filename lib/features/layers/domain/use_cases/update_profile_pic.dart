@@ -1,11 +1,18 @@
 import 'package:ch4nge/features/layers/domain/repositories/user_repository.dart';
+import 'package:either_dart/either.dart';
 
 class UpdateProfilePicUseCase {
-  final UserRepository repository;
+  final UserRepository userRepository;
 
-  UpdateProfilePicUseCase(this.repository);
+  UpdateProfilePicUseCase(this.userRepository);
 
-  Future<void> call(String userId, String imagePath) async {
-    await repository.updateProfilePic(userId, imagePath);
+  Future<Either<String, String>> call(String userId, String imagePath) async {
+    try {
+      final newProfilePicUrl =
+          await userRepository.updateProfilePic(userId, imagePath);
+      return Right(newProfilePicUrl.right);
+    } catch (e) {
+      return Left(e.toString());
+    }
   }
 }

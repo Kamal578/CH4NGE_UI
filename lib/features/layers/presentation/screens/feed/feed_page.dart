@@ -83,6 +83,9 @@ class _FeedPageState extends State<FeedPage> {
       await postDatasource.clearCache();
 
       final fetchedPosts = await widget.getPostsUseCase();
+      for (var post in fetchedPosts) {
+        debugPrint('Fetched post: ${post.title} by ${post.imageUrl}');
+      }
 
       if (mounted) {
         setState(() {

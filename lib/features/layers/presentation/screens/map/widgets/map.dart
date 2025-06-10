@@ -327,7 +327,7 @@ class _ModalContent extends StatelessWidget {
               key: ValueKey('modal_avatar_$name'),
               radius: 40,
               backgroundImage: personDetails[name]?['avatarUrl'] == null ||
-                      personDetails[name]?['avatarUrl'].isEmpty
+                      personDetails[name]?['avatarUrl'].isEmpty ||  personDetails[name]?['avatarUrl'] == "http://localhost:8080"
                   ? const AssetImage('assets/images/user_profile.png')
                       as ImageProvider<Object>?
                   : NetworkImage(personDetails[name]?['avatarUrl'] ?? ''),

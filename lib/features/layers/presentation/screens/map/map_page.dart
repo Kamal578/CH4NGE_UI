@@ -459,7 +459,7 @@ floatingActionButton: Positioned(
             backgroundColor: const Color(0xFF7DD334).withValues(alpha: .1),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(24.r),
-              child: (user.profilePicUrl.isEmpty)
+              child: (user.profilePicUrl.isEmpty || user.profilePicUrl == 'http://localhost:8080')
                   ? Image.asset(
                       'assets/images/user_profile.png',
                       fit: BoxFit.cover,

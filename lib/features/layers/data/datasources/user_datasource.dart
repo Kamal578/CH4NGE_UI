@@ -2,9 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:ch4nge/core/api/api_service.dart';
 import 'package:ch4nge/core/auth/auth_manager.dart';
+import 'package:ch4nge/core/di/service_locator.dart';
+import 'package:ch4nge/core/shared/config.dart';
 import 'package:ch4nge/features/layers/data/models/user/user_model.dart';
 import 'package:ch4nge/features/layers/domain/entities/user_entity.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class IUserDatasource {
@@ -26,6 +29,7 @@ class UserRemoteDatasource implements IUserDatasource {
   @override
   Future<UserEntity> getUser(String userId) async {
     final cacheKey = '$_cacheKeyPrefix$userId';
+    final Config config = serviceLocator<Config>();
 
     // Try to get from cache first
     final cachedData = await _getCachedData(cacheKey);
@@ -45,7 +49,9 @@ class UserRemoteDatasource implements IUserDatasource {
       );
 
       if (response.statusCode == 200 && response.data != null) {
-        final Map<String, dynamic> userData = response.data;
+        Map<String, dynamic> userData = response.data;
+        userData["profilePicUrl"] =
+            '${config.apiBaseUrl}${userData["profilePicUrl"]}';
         final user = UserModel.fromJson(userData);
 
         await _cacheData(cacheKey, [userData]);
@@ -66,9 +72,10 @@ class UserRemoteDatasource implements IUserDatasource {
   @override
   Future<List<UserEntity>> getAllUsers() async {
     const cacheKey = _allUsersKey;
+    final Config config = serviceLocator<Config>();
 
     final cachedData = await _getCachedData(cacheKey);
-    if (cachedData != null ) {
+    if (cachedData != null) {
       return cachedData
           .map((json) => UserModel.fromJson(json).toEntity())
           .toList();
@@ -88,6 +95,11 @@ class UserRemoteDatasource implements IUserDatasource {
       if (response.statusCode == 200 && response.data != null) {
         final List<dynamic> usersData =
             (response.data as List<dynamic>).sublist(1);
+        for (var userData in usersData) {
+          userData["profilePicUrl"] =
+              '${config.apiBaseUrl}${userData["profilePicUrl"]}';
+        }
+
         final users =
             usersData.map((json) => UserModel.fromJson(json)).toList();
 
@@ -142,6 +154,11 @@ class UserRemoteDatasource implements IUserDatasource {
 
       if (response.statusCode == 200 && response.data != null) {
         final List<dynamic> friendsData = response.data as List<dynamic>;
+        for (var friendData in friendsData) {
+          friendData["profilePicUrl"] =
+              '${serviceLocator<Config>().apiBaseUrl}${friendData["profilePicUrl"]}';
+        }
+
         final friends =
             friendsData.map((json) => UserModel.fromJson(json)).toList();
 
@@ -228,8 +245,12 @@ class UserRemoteDatasource implements IUserDatasource {
       );
 
       if (response.statusCode == 200 && response.data != null) {
+        final Config config = serviceLocator<Config>();
+        debugPrint("BASE URL: ${config.apiBaseUrl}");
         final responseData = response.data as Map<String, dynamic>;
-        final newProfilePicUrl = responseData['profilePicUrl'] as String;
+        final newProfilePicUrl =
+            '${config.apiBaseUrl}${responseData['profilePicUrl']}';
+        debugPrint('New profile pic URL: $newProfilePicUrl');
 
         // Clear related caches to force refresh
         await _clearUserRelatedCaches(userId);
