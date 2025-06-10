@@ -36,6 +36,7 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
   List<UserEntity>? friends = [];
   Map<String, List<ActivityEntity>>? activities = {};
   bool isLoading = true;
+  bool isActivitiesLoading = false;
 
   // Search functionality
   final TextEditingController _searchController = TextEditingController();
@@ -89,9 +90,6 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
       setState(() {
         _isSearchExpanded = false;
         _filteredUsers.clear();
-        _loadData();
-        _setupAnimations();
-        _setupSearchListeners();
       });
     });
     _searchFocusNode.unfocus();
@@ -132,6 +130,9 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
         friendIds,
       );
 
+      // Refresh activities after friend list changes
+      await _loadActivitiesOnly();
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -154,44 +155,76 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
     }
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadActivitiesOnly() async {
+    if (friends == null || friends!.isEmpty) {
+      setState(() {
+        activities = {};
+        isActivitiesLoading = false;
+      });
+      return;
+    }
+
+    setState(() {
+      isActivitiesLoading = true;
+    });
+
     try {
-      final id = AuthManager.getId();
-
-      final friendsList = await widget.getFriendsUseCase(userId);
-      final friends = friendsList.right
-          .where((user) => user.userId != int.parse(id))
-          .toList();
-      final allUsers = await widget.getAllUsersUseCase();
-      debugPrint(
-          'All Users: ${allUsers.right.map((user) => user.username).toList()}');
-      debugPrint(
-          'Friends: ${friends.map((friend) => friend.username).toList()}');
-
       final friendIdToUsername = {
-        for (final user in friends) user.userId: user.username,
+        for (final user in friends!) user.userId: user.username,
       };
 
       final friendIds = friendIdToUsername.keys.toList();
-      final activities = await widget.getFriendsActivitiesUseCase(
+      final activitiesList = await widget.getFriendsActivitiesUseCase(
           friendIds.map((e) => e.toString()).toList());
 
       final Map<String, List<ActivityEntity>> result = {};
 
-      for (final activity in activities) {
+      for (final activity in activitiesList) {
         final username = friendIdToUsername[activity.userId] ?? 'Unknown';
         result.putIfAbsent(username, () => []).add(activity);
       }
+
+      debugPrint('Loaded activities for ${result.keys.length} friends');
+      debugPrint('Activities: ${result.entries.map((e) => '${e.key}: ${e.value.length} activities').join(', ')}');
+
+      setState(() {
+        activities = result;
+        isActivitiesLoading = false;
+      });
+    } catch (e) {
+      setState(() => isActivitiesLoading = false);
+      debugPrint('Error loading activities: $e');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to load activities. Please try again.')),
+      );
+    }
+  }
+
+  Future<void> _loadData() async {
+    try {
+      final id = AuthManager.getId();
+
+      // Load friends and users first
+      final friendsList = await widget.getFriendsUseCase(userId);
+      final friendsFiltered = friendsList.right
+          .where((user) => user.userId != int.parse(id))
+          .toList();
+      final allUsers = await widget.getAllUsersUseCase();
+      
+      debugPrint('All Users: ${allUsers.right.map((user) => user.username).toList()}');
+      debugPrint('Friends: ${friendsFiltered.map((friend) => friend.username).toList()}');
 
       setState(() {
         users = allUsers.right.where((element) {
           return element.userId.toString() != id;
         }).toList();
-
-        this.friends = friends;
-        this.activities = result;
+        friends = friendsFiltered;
         isLoading = false;
       });
+
+      // Load activities after friends are set
+      await _loadActivitiesOnly();
+
     } catch (e) {
       setState(() => isLoading = false);
       debugPrint('Error loading data: $e');
@@ -199,6 +232,13 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
         const SnackBar(content: Text('Failed to load data. Please try again.')),
       );
     }
+  }
+
+  Future<void> _refreshData() async {
+    setState(() {
+      isLoading = true;
+    });
+    await _loadData();
   }
 
   @override
@@ -212,7 +252,9 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
-      return const Center(child: CircularProgressIndicator());
+      return const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
     }
 
     return Scaffold(
@@ -229,7 +271,24 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
           },
           child: Stack(
             children: [
-              GHGMap(users: friends!, activities: activities!),
+              // Only render map when activities are loaded
+              if (!isActivitiesLoading)
+                GHGMap(
+                  users: friends!,
+                  activities: activities!,
+                  key: ValueKey('map_${friends!.length}_${activities!.length}'),
+                )
+              else
+                const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(height: 16),
+                      Text('Loading activities...'),
+                    ],
+                  ),
+                ),
               if (_isSearchExpanded)
                 Positioned.fill(
                   child: GestureDetector(
@@ -241,9 +300,23 @@ class _MapPageState extends State<MapPage> with TickerProviderStateMixin {
                   ),
                 ),
               _buildExpandableSearchWidget(),
-              FriendsActivitySheet(users: friends!, activities: activities!),
+              if (!isActivitiesLoading)
+                FriendsActivitySheet(
+                  users: friends!,
+                  activities: activities!,
+                  key: ValueKey('sheet_${friends!.length}_${activities!.length}'),
+                ),
             ],
           ),
+        ),
+      ),
+floatingActionButton: Positioned(
+        bottom: 500.0,
+        right: 16.0,
+        child: FloatingActionButton(
+          mini: true,
+          onPressed: _refreshData,
+          child: const Icon(Icons.refresh),
         ),
       ),
     );

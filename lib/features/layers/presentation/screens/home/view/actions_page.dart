@@ -334,7 +334,7 @@ class _ActionsPageState extends State<ActionsPage> {
                     option: _selectedGreenAction!,
                     location: location ?? [0.0, 0.0],
                   );
-                  print("LOCATION: ${location.toString()}");
+                  debugPrint("LOCATION: ${location.toString()}");
                   widget.uploadActionUseCase(action);
                   _resetFormFields();
 

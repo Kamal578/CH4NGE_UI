@@ -67,8 +67,13 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
         child: Stack(
           children: [
             _buildTitleWidget(),
-            _buildTopUserWidget(),
-            LeaderboardSheet(entries: leaderboardData.sublist(3)),
+            if (leaderboardData.isNotEmpty) _buildTopUserWidget(),
+            LeaderboardSheet(
+              entries: leaderboardData.length > 3 
+                ? leaderboardData.sublist(3) 
+                : [],
+              hasEnoughUsers: leaderboardData.length > 3,
+            ),
           ],
         ),
       ),
@@ -99,8 +104,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.center, // Center the main row
-        crossAxisAlignment: CrossAxisAlignment.end, // Align items at the bottom
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
           // Second place (left)
           Expanded(
@@ -108,9 +113,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: EdgeInsets.only(top: 40.h),
-                child: TopUserContainer(
-                  entry: leaderboardData[1],
-                ),
+                child: leaderboardData.length > 1
+                  ? TopUserContainer(entry: leaderboardData[1])
+                  : _buildPlaceholderContainer("2nd"),
               ),
             ),
           ),
@@ -119,9 +124,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           Expanded(
             child: Align(
               alignment: Alignment.topCenter,
-              child: TopUserContainer(
-                entry: leaderboardData[0],
-              ),
+              child: leaderboardData.isNotEmpty
+                ? TopUserContainer(entry: leaderboardData[0])
+                : _buildPlaceholderContainer("1st"),
             ),
           ),
 
@@ -131,10 +136,41 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: EdgeInsets.only(top: 40.h),
-                child: TopUserContainer(
-                  entry: leaderboardData[2],
-                ),
+                child: leaderboardData.length > 2
+                  ? TopUserContainer(entry: leaderboardData[2])
+                  : _buildPlaceholderContainer("3rd"),
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildPlaceholderContainer(String position) {
+    return Container(
+      width: 80.w,
+      height: 100.h,
+      decoration: BoxDecoration(
+        color: Colors.grey[200],
+        borderRadius: BorderRadius.circular(12.r),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.person_outline,
+            size: 32.sp,
+            color: Colors.grey[400],
+          ),
+          SizedBox(height: 4.h),
+          Text(
+            position,
+            style: TextStyle(
+              fontSize: 12.sp,
+              color: Colors.grey[500],
+              fontWeight: FontWeight.w500,
             ),
           ),
         ],
@@ -158,10 +194,12 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 // 1. Draggable Bottom Sheet
 class LeaderboardSheet extends StatelessWidget {
   final List<LeaderboardEntry> entries;
+  final bool hasEnoughUsers;
 
   const LeaderboardSheet({
     super.key,
     required this.entries,
+    required this.hasEnoughUsers,
   });
 
   @override
@@ -180,15 +218,54 @@ class LeaderboardSheet extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               SizedBox(height: 4.h),
-              LeaderboardList(
-                entries: entries,
-                separatorColor: Colors.grey[300],
-                separatorHeight: 0.5,
-              ),
+              if (hasEnoughUsers)
+                LeaderboardList(
+                  entries: entries,
+                  separatorColor: Colors.grey[300],
+                  separatorHeight: 0.5,
+                )
+              else
+                _buildPlaceholderContent(),
             ],
           ),
         );
       },
+    );
+  }
+
+  Widget _buildPlaceholderContent() {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.symmetric(vertical: 40.h, horizontal: 20.w),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.emoji_events_outlined,
+            size: 64.sp,
+            color: Colors.white.withValues(alpha: 0.7),
+          ),
+          SizedBox(height: 16.h),
+          Text(
+            "More competitors needed!",
+            style: TextStyle(
+              fontSize: 18.sp,
+              fontWeight: FontWeight.w600,
+              color: Colors.white,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          SizedBox(height: 8.h),
+          Text(
+            "Invite more friends to see the full leaderboard",
+            style: TextStyle(
+              fontSize: 14.sp,
+              color: Colors.white.withValues(alpha: 0.8),
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ],
+      ),
     );
   }
 }

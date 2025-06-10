@@ -74,26 +74,24 @@ class _HomePageState extends State<HomePage> {
       bottomNavigationBar: _buildCustomNavbarWidget(),
       resizeToAvoidBottomInset: false,
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Container(
-            padding: EdgeInsets.only(
-              left: 16.h,
-              right: 16.h,
-            ),
-            color: Colors.white,
-            child: Column(
-              children: [
-                _buildTitleWidget(),
-                _buildStreakWidget(),
-                SizedBox(height: 2.h),
-                _buildWeeklyChallengeWidget(),
-                SizedBox(height: 8.h),
-                _buildActionListButtonWidget(),
-                SizedBox(height: 8.h),
-                _buildNextAchievementWidget(),
-                SizedBox(height: 8.h),
-              ],
-            ),
+        child: Container(
+          padding: EdgeInsets.only(
+            left: 16.h,
+            right: 16.h,
+          ),
+          color: Colors.white,
+          child: Column(
+            children: [
+              _buildTitleWidget(),
+              _buildStreakWidget(),
+              SizedBox(height: 2.h),
+              _buildWeeklyChallengeWidget(),
+              SizedBox(height: 8.h),
+              _buildActionListButtonWidget(),
+              SizedBox(height: 8.h),
+              _buildNextAchievementWidget(),
+              SizedBox(height: 8),
+            ],
           ),
         ),
       ),
@@ -121,7 +119,7 @@ class _HomePageState extends State<HomePage> {
   Container _buildStreakWidget() {
     return Container(
       width: double.maxFinite,
-      height: 180.h,
+      height: 170.h,
       alignment: Alignment.centerLeft,
       decoration: const BoxDecoration(
         image: DecorationImage(

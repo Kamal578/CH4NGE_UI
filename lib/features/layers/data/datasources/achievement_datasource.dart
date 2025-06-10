@@ -23,18 +23,17 @@ class AchievementsRemote implements IAchievementsDatasource {
   @override
   Future<List<AchievementEntity>> getAllAchievements(String userId) async {
     final cacheKey = '${_cacheKeyPrefix}all_$userId';
-    
+
     final cachedData = await _getCachedData(cacheKey);
     if (cachedData != null) {
       List<AchievementModel> achievementsModel = cachedData
           .map((json) => AchievementModel.fromJson(json))
-          .toList();
-      
-      final sortedAchievements = achievementsModel
-          .map((achievementModel) => achievementModel.toEntity())
           .toList()
         ..sort((a, b) => a.achievementId.compareTo(b.achievementId));
-      return sortedAchievements;
+
+      return achievementsModel
+          .map((achievementModel) => achievementModel.toEntity())
+          .toList();
     }
 
     try {
@@ -48,20 +47,21 @@ class AchievementsRemote implements IAchievementsDatasource {
           validateStatus: (status) => status! < 500,
         ),
       );
-      
+
       if (response.statusCode == 200 && response.data != null) {
         final List<dynamic> achievementsData = response.data as List<dynamic>;
         final achievements = achievementsData
             .map((json) => AchievementModel.fromJson(json))
-            .toList();
-        
+            .toList()
+          ..sort((a, b) => a.achievementId.compareTo(b.achievementId));
+
         // Cache the data
         await _cacheData(cacheKey, achievementsData);
 
         List<AchievementEntity> achivementsEntities = achievements
             .map((achievementModel) => achievementModel.toEntity())
             .toList();
-        
+
         return achivementsEntities;
       } else {
         throw Exception('Failed to fetch achievements: ${response.statusCode}');
@@ -71,9 +71,12 @@ class AchievementsRemote implements IAchievementsDatasource {
       final cachedData = await _getCachedData(cacheKey, ignoreExpiry: true);
       if (cachedData != null) {
         List<AchievementModel> achievementsModel = cachedData
-          .map((json) => AchievementModel.fromJson(json))
-          .toList();      
-        return achievementsModel.map((achievementModel) => achievementModel.toEntity()).toList();
+            .map((json) => AchievementModel.fromJson(json))
+            .toList()
+          ..sort((a, b) => a.achievementId.compareTo(b.achievementId));
+        return achievementsModel
+            .map((achievementModel) => achievementModel.toEntity())
+            .toList();
       }
       rethrow;
     }
@@ -82,7 +85,7 @@ class AchievementsRemote implements IAchievementsDatasource {
   @override
   Future<AchievementEntity> getNextAchievement(String userId) async {
     final cacheKey = '$_nextAchievementKey$userId';
-    
+
     // Try to get from cache first
     final cachedData = await _getCachedData(cacheKey);
     if (cachedData != null && cachedData.isNotEmpty) {
@@ -93,26 +96,27 @@ class AchievementsRemote implements IAchievementsDatasource {
       // Fetch from API
       final response = await _apiService.get(
         '/users/$userId/achievements/next',
-         options: Options(
+        options: Options(
           headers: {
             'Authorization': 'Bearer ${AuthManager.readAuth()}',
           },
           validateStatus: (status) => status! < 500,
         ),
       );
-      
+
       if (response.statusCode == 200 && response.data != null) {
         final achievementData = response.data as Map<String, dynamic>;
         final achievement = AchievementModel.fromJson(achievementData);
-        
+
         // Cache the data
         await _cacheData(cacheKey, [achievementData]);
 
         AchievementEntity achievementEntity = achievement.toEntity();
-        
+
         return achievementEntity;
       } else {
-        throw Exception('Failed to fetch next achievement: ${response.statusCode}');
+        throw Exception(
+            'Failed to fetch next achievement: ${response.statusCode}');
       }
     } catch (e) {
       // If API fails and we have no cache, rethrow
@@ -127,11 +131,22 @@ class AchievementsRemote implements IAchievementsDatasource {
   @override
   Future<List<AchievementEntity>> getAchievementProgress(String userId) async {
     final cacheKey = '$_progressKey$userId';
-    
+
     // Try to get from cache first
     final cachedData = await _getCachedData(cacheKey);
     if (cachedData != null) {
-      return cachedData.map((json) => AchievementModel.fromJson(json).toEntity()).toList();
+      final achievements =
+          cachedData.map((json) => AchievementModel.fromJson(json)).toList()
+            ..sort((a, b) {
+              if (a.isAchieved != b.isAchieved) {
+                return a.isAchieved ? -1 : 1;
+              }
+              return a.achievementId.compareTo(b.achievementId);
+            });
+
+      return achievements
+          .map((achievementModel) => achievementModel.toEntity())
+          .toList();
     }
 
     try {
@@ -142,16 +157,21 @@ class AchievementsRemote implements IAchievementsDatasource {
           headers: {
             'Authorization': 'Bearer ${AuthManager.readAuth()}',
           },
-        validateStatus: (status) => status! < 500,
+          validateStatus: (status) => status! < 500,
         ),
       );
-      
+
       if (response.statusCode == 200 && response.data != null) {
         final List<dynamic> progressData = response.data as List<dynamic>;
-        final progress = progressData
-            .map((json) => AchievementModel.fromJson(json))
-            .toList();
-        
+        final progress =
+            progressData.map((json) => AchievementModel.fromJson(json)).toList()
+              ..sort((a, b) {
+                if (a.isAchieved != b.isAchieved) {
+                  return a.isAchieved ? -1 : 1;
+                }
+                return a.achievementId.compareTo(b.achievementId);
+              });
+
         // Cache the data
         await _cacheData(cacheKey, progressData);
 
@@ -161,13 +181,21 @@ class AchievementsRemote implements IAchievementsDatasource {
 
         return progressEntities;
       } else {
-        throw Exception('Failed to fetch achievement progress: ${response.statusCode}');
+        throw Exception(
+            'Failed to fetch achievement progress: ${response.statusCode}');
       }
     } catch (e) {
       // If API fails and we have no cache, return empty list or rethrow
       final cachedData = await _getCachedData(cacheKey, ignoreExpiry: true);
       if (cachedData != null) {
-        return cachedData.map((json) => AchievementModel.fromJson(json).toEntity()).toList();
+        final achievements = cachedData
+            .map((json) => AchievementModel.fromJson(json))
+            .toList()
+          ..sort((a, b) => a.achievementId.compareTo(b.achievementId));
+
+        return achievements
+            .map((achievementModel) => achievementModel.toEntity())
+            .toList();
       }
       rethrow;
     }
@@ -177,34 +205,37 @@ class AchievementsRemote implements IAchievementsDatasource {
   Future<void> clearCache() async {
     final prefs = await SharedPreferences.getInstance();
     final keys = prefs.getKeys();
-    
+
     // Remove all achievement-related cache keys
     for (final key in keys) {
-      if (key.startsWith(_cacheKeyPrefix) || 
-          key.startsWith(_nextAchievementKey) || 
+      if (key.startsWith(_cacheKeyPrefix) ||
+          key.startsWith(_nextAchievementKey) ||
           key.startsWith(_progressKey)) {
         await prefs.remove(key);
       }
     }
   }
 
-  Future<List<dynamic>?> _getCachedData(String key, {bool ignoreExpiry = false}) async {
+  Future<List<dynamic>?> _getCachedData(String key,
+      {bool ignoreExpiry = false}) async {
     try {
       final prefs = await SharedPreferences.getInstance();
       final cachedString = prefs.getString(key);
-      
+
       if (cachedString == null) return null;
-      
+
       final cachedMap = jsonDecode(cachedString) as Map<String, dynamic>;
-      final timestamp = DateTime.fromMillisecondsSinceEpoch(cachedMap['timestamp']);
+      final timestamp =
+          DateTime.fromMillisecondsSinceEpoch(cachedMap['timestamp']);
       final data = cachedMap['data'] as List<dynamic>;
-      
+
       // Check if cache is still valid
-      if (!ignoreExpiry && DateTime.now().difference(timestamp) > _cacheValidityDuration) {
+      if (!ignoreExpiry &&
+          DateTime.now().difference(timestamp) > _cacheValidityDuration) {
         await prefs.remove(key);
         return null;
       }
-      
+
       return data;
     } catch (e) {
       // If there's any error reading cache, return null
@@ -219,7 +250,7 @@ class AchievementsRemote implements IAchievementsDatasource {
         'timestamp': DateTime.now().millisecondsSinceEpoch,
         'data': data,
       };
-      
+
       await prefs.setString(key, jsonEncode(cacheMap));
     } catch (e) {
       // If caching fails, continue without caching

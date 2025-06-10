@@ -229,34 +229,41 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  Widget _signInButton(TextEditingController emailController,
-      TextEditingController passwordController) {
-    return ElevatedButton(
-      onPressed: () {
-        if (_formKey.currentState!.validate()) {
-          BlocProvider.of<AuthBloc>(context).add(
-              AuthLoginRequest(emailController.text, passwordController.text));
-        }
-      },
-      style: ElevatedButton.styleFrom(
-        elevation: 3,
-        backgroundColor: const Color(0xFF7DD334),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(5.h),
-        ),
-        padding: EdgeInsets.all(20.h),
-        fixedSize: Size(double.maxFinite, 50.h),
+Widget _signInButton(
+    TextEditingController emailController,
+    TextEditingController passwordController,
+  ) {
+  return ElevatedButton(
+    onPressed: () {
+      if (_formKey.currentState!.validate()) {
+        BlocProvider.of<AuthBloc>(context).add(
+          AuthLoginRequest(emailController.text, passwordController.text),
+        );
+      }
+    },
+    style: ElevatedButton.styleFrom(
+      elevation: 3,
+      backgroundColor: const Color(0xFF7DD334),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(5.h),
       ),
+      padding: EdgeInsets.symmetric(vertical: 12.h),
+      minimumSize: Size(double.infinity, 50.h), 
+    ),
+    child: Padding(
+      padding: EdgeInsets.only(bottom: 2.h), 
       child: Text(
         "Sign In",
         style: TextStyle(
           fontWeight: FontWeight.w600,
-          fontSize: 12.sp,
+          fontSize: 14.sp, 
           color: Colors.white,
         ),
       ),
-    );
-  }
+    ),
+  );
+}
+
 
   Widget _signUpGestureDetector(BuildContext context) {
     return GestureDetector(

@@ -82,7 +82,8 @@ class _SignUpPageState extends State<SignUpPage> {
                   if (state is AuthLoadingState) {
                     return Stack(
                       children: [
-                        _signUpButton(usernameController, emailController, passwordController, confirmPasswordController),
+                        _signUpButton(usernameController, emailController,
+                            passwordController, confirmPasswordController),
                         Center(
                           child: CircularProgressIndicator(
                             color: Colors.white,
@@ -342,15 +343,18 @@ class _SignUpPageState extends State<SignUpPage> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.h),
         ),
-        padding: EdgeInsets.all(20.h),
-        fixedSize: Size(double.maxFinite, 50.h),
+        padding: EdgeInsets.symmetric(vertical: 12.h),
+        minimumSize: Size(double.infinity, 50.h),
       ),
-      child: Text(
-        "Sign Up",
-        style: TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 12.sp,
-          color: Colors.white,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: 2.h),
+        child: Text(
+          "Sign Up",
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            fontSize: 14.sp,
+            color: Colors.white,
+          ),
         ),
       ),
     );

@@ -116,7 +116,7 @@ class _ChallengesPageState extends State<ChallengesPage> {
               _buildTitleWidget(),
               SizedBox(height: 20.h),
               _buildWeeklyChallengeWidget(),
-              SizedBox(height: 8.h),
+              SizedBox(height: 12.h),
               _buildAchievementsWidget(),
               SizedBox(height: 8.h),
               _buildMiniChallengesWidget(),

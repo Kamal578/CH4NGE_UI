@@ -52,6 +52,20 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
   }
 
   @override
+  void didUpdateWidget(GHGMap oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Rebuild person details when activities change
+    if (oldWidget.activities != widget.activities ||
+        oldWidget.users != widget.users) {
+      _buildPersonDetails();
+      // Force rebuild of the map
+      if (mounted) {
+        setState(() {});
+      }
+    }
+  }
+
+  @override
   void dispose() {
     _rebuildStream.close();
     super.dispose();
@@ -124,12 +138,17 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
   }
 
   void _buildPersonDetails() {
+    debugPrint('Building person details for ${widget.users.length} users');
+    debugPrint('Activities available for: ${widget.activities.keys.toList()}');
+
     personDetails = {
       for (var user in widget.users)
         user.username: {
           "avatarUrl": user.profilePicUrl,
           "GHGIndex": user.ghgIndex,
           "lastActivities": widget.activities[user.username]?.map((activity) {
+                debugPrint(
+                    'Activity for ${user.username}: ${activity.title}, value: ${activity.value}');
                 return {
                   "label": activity.title,
                   "type": activity.value > 0 ? "good" : "bad",
@@ -138,6 +157,12 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
               <Map<String, dynamic>>[],
         }
     };
+
+    // Debug print the final person details
+    for (var entry in personDetails.entries) {
+      debugPrint(
+          '${entry.key}: ${entry.value["lastActivities"]?.length ?? 0} activities');
+    }
   }
 
   void _showModal(String name, bool isSensor) {
@@ -154,6 +179,8 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
         name: name,
         isSensor: isSensor,
         personDetails: personDetails,
+        key: ValueKey(
+            'modal_${name}_${personDetails[name]?["lastActivities"]?.length ?? 0}'),
       ),
     ).then((_) {
       if (mounted) {
@@ -190,7 +217,8 @@ class _GHGMapState extends State<GHGMap> with SingleTickerProviderStateMixin {
 
     final userMarkers = widget.users
         .map((user) => Marker(
-              key: ValueKey('user_${user.username}'),
+              key: ValueKey(
+                  'user_${user.username}_${widget.activities[user.username]?.length ?? 0}'),
               point: user.location,
               width: 120.0,
               height: 120.0,
@@ -249,6 +277,7 @@ class _ModalContent extends StatelessWidget {
   final Map<String, Map<String, dynamic>> personDetails;
 
   const _ModalContent({
+    super.key,
     required this.name,
     required this.isSensor,
     required this.personDetails,
@@ -256,6 +285,14 @@ class _ModalContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Debug print for modal content
+    debugPrint('Modal opening for $name');
+    debugPrint('Person details available: ${personDetails.containsKey(name)}');
+    if (personDetails.containsKey(name)) {
+      debugPrint(
+          'Activities count: ${personDetails[name]?["lastActivities"]?.length ?? 0}');
+    }
+
     return Container(
       margin: const EdgeInsets.only(top: 100),
       padding: const EdgeInsets.all(16.0),
@@ -304,99 +341,103 @@ class _ModalContent extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Text(
-                'GHG Index',
-                style: TextStyle(fontSize: 16),
-              ),
-              const SizedBox(width: 10),
-              Flexible(
-                child: Row(
-                  children: [
-                    ...List.generate(5, (index) {
-                      return Icon(
-                        Icons.square,
-                        size: 20,
-                        color: index <
-                                ((personDetails[name]?['GHGIndex'] != null
-                                    ? (personDetails[name]?['GHGIndex'] / 25 ??
-                                        0)
-                                    : 0))
-                            ? Colors.yellow
-                            : Colors.grey,
-                      );
-                    }),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          if (isSensor)
-            const Column(
+          if (!isSensor) ...[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Row(
-                  children: [
-                    Text('CO2 Emission: '),
-                    Spacer(),
-                    Text('400 ppm'),
-                  ],
+                const Text(
+                  'GHG Index',
+                  style: TextStyle(fontSize: 16),
                 ),
-                Row(
-                  children: [
-                    Text('Methane Emission: '),
-                    Spacer(),
-                    Text('1.8 ppm'),
-                  ],
-                ),
-                Row(
-                  children: [
-                    Text('Nitrous Oxide Emission: '),
-                    Spacer(),
-                    Text('0.3 ppm'),
-                  ],
+                const SizedBox(width: 10),
+                Flexible(
+                  child: Row(
+                    children: [
+                      ...List.generate(5, (index) {
+                        return Icon(
+                          Icons.square,
+                          size: 20,
+                          color: index <
+                                  ((personDetails[name]?['GHGIndex'] != null
+                                      ? (personDetails[name]?['GHGIndex'] /
+                                              25 ??
+                                          0)
+                                      : 0))
+                              ? Colors.yellow
+                              : Colors.grey,
+                        );
+                      }),
+                    ],
+                  ),
                 ),
               ],
             ),
-          if (!isSensor)
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Recent Activities",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
+            const SizedBox(height: 20),
+            if (isSensor)
+              const Column(
+                children: [
+                  Row(
+                    children: [
+                      Text('CO2 Emission: '),
+                      Spacer(),
+                      Text('400 ppm'),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Methane Emission: '),
+                      Spacer(),
+                      Text('1.8 ppm'),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text('Nitrous Oxide Emission: '),
+                      Spacer(),
+                      Text('0.3 ppm'),
+                    ],
+                  ),
+                ],
+              ),
+            if (!isSensor)
+              const Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  "Recent Activities",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                  ),
                 ),
               ),
-            ),
-          const SizedBox(height: 10),
-          if (!isSensor)
-            SizedBox(
-              height: 200,
-              child: ListView.builder(
-                itemCount: personDetails[name]?['lastActivities']?.length ?? 0,
-                itemBuilder: (context, index) {
-                  final activity =
-                      personDetails[name]?['lastActivities'][index];
-                  return Row(
-                    children: [
-                      Icon(
-                        activity['type'] == "good"
-                            ? Icons.arrow_upward
-                            : Icons.arrow_downward,
-                        color: activity['type'] == "good"
-                            ? Colors.green
-                            : Colors.red,
-                      ),
-                      const SizedBox(width: 8),
-                      Text(activity['label'] ?? ''),
-                    ],
-                  );
-                },
+            const SizedBox(height: 10),
+            if (!isSensor)
+              SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  itemCount:
+                      personDetails[name]?['lastActivities']?.length ?? 0,
+                  itemBuilder: (context, index) {
+                    final activity =
+                        personDetails[name]?['lastActivities'][index];
+                    return Row(
+                      children: [
+                        Icon(
+                          activity['type'] == "good"
+                              ? Icons.arrow_upward
+                              : Icons.arrow_downward,
+                          color: activity['type'] == "good"
+                              ? Colors.green
+                              : Colors.red,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(activity['label'] ?? ''),
+                      ],
+                    );
+                  },
+                ),
               ),
-            ),
+          ],
         ],
       ),
     );
