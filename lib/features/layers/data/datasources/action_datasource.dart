@@ -3,6 +3,7 @@ import 'package:ch4nge/core/auth/auth_manager.dart';
 import 'package:ch4nge/features/layers/data/models/action/actions/green_model.dart/green_model.dart';
 import 'package:ch4nge/features/layers/data/models/action/actions/transportation_model.dart/transportation_model.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 
 abstract class IActionDatasource {
   Future<void> uploadGreenAction(GreenModel action);
@@ -29,6 +30,8 @@ class ActionRemoteDatasource implements IActionDatasource {
           validateStatus: (status) => status! < 500,
         ),
       );
+
+      debugPrint("SENDING TRANSPORTATION ACTION: $jsonData");
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception(
@@ -60,6 +63,8 @@ class ActionRemoteDatasource implements IActionDatasource {
           validateStatus: (status) => status! < 500,
         ),
       );
+
+      debugPrint("SENDING GREEN ACTION: $jsonData");
 
       if (response.statusCode != 200 && response.statusCode != 201) {
         throw Exception(
