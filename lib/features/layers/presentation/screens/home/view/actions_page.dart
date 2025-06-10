@@ -106,7 +106,7 @@ class _ActionsPageState extends State<ActionsPage> {
                       }
                       action = TransportationEntity.activeCommute(
                         vehicle: _selectedVehicle!,
-                        location: location ?? [0.0, 0.0],
+                        location: location!,
                         distance: distance,
                         duration: duration,
                         distanceUnit: _selectedDistanceUnit,
@@ -332,7 +332,7 @@ class _ActionsPageState extends State<ActionsPage> {
                   final location = await widget.getCurrentLocationUseCase();
                   final action = GreenEntity(
                     option: _selectedGreenAction!,
-                    location: location ?? [0.0, 0.0],
+                    location: location!,
                   );
                   debugPrint("LOCATION: ${location.toString()}");
                   widget.uploadActionUseCase(action);
